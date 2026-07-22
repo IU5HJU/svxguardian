@@ -1,22 +1,57 @@
 """
-System monitoring functions for SVX Guardian.
+System Monitor
+
+Collects information about the Raspberry Pi operating system.
 """
 
-import shutil
+import socket
+from pathlib import Path
+
+import psutil
+
+from modules.base import BaseMonitor
+from state import NodeState
 
 
-def get_disk_usage():
+class SystemMonitor(BaseMonitor):
     """
-    Restituisce le informazioni sull'utilizzo del disco.
+    Collects system information and updates NodeState.
     """
 
-    total, used, free = shutil.disk_usage("/")
+    def check(self, state: NodeState) -> None:
+        """
+        Update the current system status.
+        """
 
-    percent = round((used / total) * 100, 1)
+        # Hostname
+        state.hostname = socket.gethostname()
 
-    return {
-        "total": total,
-        "used": used,
-        "free": free,
-        "percent": percent,
-    }
+        # CPU usage
+        state.cpu_usage = psutil.cpu_percent(interval=0.2)
+
+        # RAM usage
+        state.ram_usage = psutil.virtual_memory().percent
+
+        # Disk usage
+        state.disk_usage = psutil.disk_usage("/").percent
+
+        # CPU temperature
+        thermal = Path("/sys/class/thermal/thermal_zone0/temp")
+
+        if thermal.exists():
+            state.cpu_temp = int(thermal.read_text().strip()) / 1000
+        else:
+            state.cpu_temp = 0.0
+
+        # Uptime
+        with open("/proc/uptime", "r", encoding="utf-8") as file:
+            uptime_seconds = int(float(file.readline().split()[0]))
+
+        days = uptime_seconds // 86400
+        hours = (uptime_seconds % 86400) // 3600
+        minutes = (uptime_seconds % 3600) // 60
+
+        if days > 0:
+            state.uptime = f"{days}d {hours}h {minutes}m"
+        else:
+            state.uptime = f"{hours}h {minutes}m"

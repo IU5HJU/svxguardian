@@ -1,38 +1,42 @@
-#!/usr/bin/env python3
-
 """
 SVX Guardian
+
+Application entry point.
 """
 
-import platform
-from datetime import datetime
-
-from config import SvxConfig
-
-VERSION = "0.3.0"
+from guardian import Guardian
+from modules.system import SystemMonitor
 
 
-def main():
+def main() -> None:
+    """
+    Application entry point.
+    """
 
-    cfg = SvxConfig()
-    cfg.load()
+    guardian = Guardian()
 
-    print("=" * 60)
-    print(f"SVX Guardian {VERSION}")
-    print("=" * 60)
+    # Register monitors
+    guardian.register(SystemMonitor())
 
-    print("Hostname :", platform.node())
-    print("Date     :", datetime.now())
+    # Execute monitors
+    guardian.run()
 
-    print()
-    print("===== SvxLink configuration =====")
-
-    print("Callsign :", cfg.get("ReflectorLogic", "CALLSIGN"))
-    print("Host     :", cfg.get("ReflectorLogic", "HOSTS"))
-    print("TG       :", cfg.get("ReflectorLogic", "DEFAULT_TG"))
-    print("Language :", cfg.get("ReflectorLogic", "DEFAULT_LANG"))
+    state = guardian.state
 
     print("=" * 60)
+    print("SVX Guardian v0.1.0")
+    print("=" * 60)
+
+    print(f"Hostname      : {state.hostname}")
+    print(f"CPU Temp      : {state.cpu_temp:.1f} °C")
+    print(f"CPU Usage     : {state.cpu_usage:.1f} %")
+    print(f"RAM Usage     : {state.ram_usage:.1f} %")
+    print(f"Disk Usage    : {state.disk_usage:.1f} %")
+    print(f"Uptime        : {state.uptime}")
+
+    print("-" * 60)
+    print(f"Monitors      : {len(guardian.monitors)}")
+    print("SVX Guardian ready.")
 
 
 if __name__ == "__main__":
