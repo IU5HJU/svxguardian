@@ -43,9 +43,13 @@ class SystemMonitor(BaseMonitor):
         else:
             state.cpu_temp = 0.0
 
-        # Uptime
-        with open("/proc/uptime", "r", encoding="utf-8") as file:
-            uptime_seconds = int(float(file.readline().split()[0]))
+        # System uptime
+        uptime_file = Path("/proc/uptime")
+
+        if uptime_file.exists():
+            uptime_seconds = int(float(uptime_file.read_text().split()[0]))
+        else:
+            uptime_seconds = 0
 
         days = uptime_seconds // 86400
         hours = (uptime_seconds % 86400) // 3600
