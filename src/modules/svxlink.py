@@ -1,20 +1,36 @@
 """
-Modulo per il controllo del servizio SvxLink.
+SvxLink Monitor
+
+Checks the status of the SvxLink service.
 """
 
 import subprocess
 
+from modules.base import BaseMonitor
+from state import NodeState
 
-def get_service_status(service_name="svxlink"):
+
+class SvxLinkMonitor(BaseMonitor):
     """
-    Restituisce True se il servizio è attivo,
-    False in caso contrario.
+    Monitor responsible for checking the SvxLink service.
     """
 
-    result = subprocess.run(
-        ["systemctl", "is-active", service_name],
-        capture_output=True,
-        text=True
-    )
+    def check(self, state: NodeState) -> None:
+        """
+        Update SvxLink status.
+        """
 
-    return result.stdout.strip() == "active"
+        try:
+            result = subprocess.run(
+                ["systemctl", "is-active", "svxlink"],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+            state.svxlink_running = (
+                result.stdout.strip() == "active"
+            )
+
+        except Exception:
+            state.svxlink_running = False

@@ -1,0 +1,162 @@
+# SVX Guardian
+
+> **Built by radio amateurs, for radio amateurs.**
+
+SVX Guardian is an open-source monitoring platform for **SvxLink** radio nodes.
+
+It provides real-time monitoring of the Raspberry Pi system, SvxLink services, EchoLink registration, Reflector connectivity and overall node health through a modern web dashboard.
+
+The project is designed to be modular, lightweight and easy to extend.
+
+---
+
+## Features
+
+Current features:
+
+- Raspberry Pi system monitoring
+- CPU temperature
+- CPU usage
+- RAM usage
+- Disk usage
+- System uptime
+
+Planned features:
+
+- SvxLink service monitoring
+- EchoLink monitoring
+- Reflector monitoring
+- Log analyzer
+- REST API
+- Responsive web dashboard
+- Telegram notifications
+- Email notifications
+- MQTT support
+- Multi-language interface
+- Automatic installer
+
+---
+
+## Project Status
+
+Current version:
+
+**v0.1.0**
+
+Current development stage:
+
+- Core framework completed
+- System monitoring completed
+- SvxLink monitor in development
+
+See the project roadmap:
+
+```
+docs/ROADMAP.md
+```
+
+---
+
+## Project Structure
+
+```
+svxguardian/
+├── config/
+├── docs/
+├── src/
+├── systemd/
+├── tests/
+├── web/
+└── requirements.txt
+```
+
+---
+
+## Requirements
+
+- Raspberry Pi OS
+- Python 3.13+
+- SvxLink
+- Git
+
+---
+
+## Installation
+
+Clone the repository:
+
+```bash
+git clone git@github.com:IU5HJU/svxguardian.git
+cd svxguardian
+```
+
+Create the virtual environment:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Run the application:
+
+```bash
+python src/main.py
+```
+
+---
+
+## Development
+
+Every new feature follows the same workflow:
+
+1. Design
+2. Implementation
+3. Testing
+4. Git Commit
+5. GitHub Push
+
+The project is developed incrementally to ensure every version remains stable.
+
+---
+
+## Roadmap
+
+See:
+
+```
+docs/ROADMAP.md
+```
+
+---
+
+## Contributing
+
+Contributions, ideas and bug reports are welcome.
+
+SVX Guardian is an open-source project created to improve monitoring and management of SvxLink radio nodes.
+
+---
+
+## License
+
+This project is released under the MIT License.
+
+---
+
+## Author
+
+**Michele Maccaoni – IU5HJU**
+
+GitHub:
+
+https://github.com/IU5HJU
+
+---
+
+73!
