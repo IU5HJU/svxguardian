@@ -1,7 +1,3 @@
-"""
-SVX Guardian state model.
-"""
-
 from dataclasses import dataclass
 from datetime import datetime
 
@@ -9,15 +5,19 @@ from datetime import datetime
 @dataclass
 class NodeState:
     """
-    Represents the current state of the SVXLink node.
+    Stato corrente del nodo SvxLink.
     """
 
-    # General
+    # Informazioni generali
     hostname: str = ""
     callsign: str = ""
     last_update: datetime | None = None
 
-    # System
+    # Stato globale del sistema
+    health: str = "UNKNOWN"
+    health_reason: str = ""
+
+    # Sistema
     cpu_temp: float = 0.0
     cpu_usage: float = 0.0
     ram_usage: float = 0.0
