@@ -1,17 +1,24 @@
 """
-SVX Guardian Web API
+SVX Guardian Web Application
 
-First REST API implementation.
+Main Flask application.
 """
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 
 from guardian import Guardian
 from exporter import StateExporter
+
 from modules.system import SystemMonitor
 from modules.svxlink import SvxLinkMonitor
 
+
 app = Flask(__name__)
+
+
+# --------------------------------------------------------------------
+# Guardian initialization
+# --------------------------------------------------------------------
 
 guardian = Guardian()
 
@@ -19,28 +26,47 @@ guardian.register(SystemMonitor())
 guardian.register(SvxLinkMonitor())
 
 
+# --------------------------------------------------------------------
+# Routes
+# --------------------------------------------------------------------
+
 @app.route("/")
-def home():
+def dashboard():
     """
-    Simple welcome page.
+    Main dashboard.
     """
-    return "<h1>SVX Guardian Web API</h1>"
+
+    guardian.run()
+
+    return render_template(
+        "dashboard/dashboard.html",
+        state=guardian.state
+    )
 
 
 @app.route("/api/state")
 def api_state():
     """
-    Returns current node state as JSON.
+    REST API.
+
+    Returns current node status as JSON.
     """
 
     guardian.run()
 
     return jsonify(
-        StateExporter.to_dict(guardian.state)
+        StateExporter.to_dict(
+            guardian.state
+        )
     )
 
 
+# --------------------------------------------------------------------
+# Main
+# --------------------------------------------------------------------
+
 if __name__ == "__main__":
+
     app.run(
         host="0.0.0.0",
         port=8080,

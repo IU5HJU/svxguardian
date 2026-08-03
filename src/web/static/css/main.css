@@ -1,0 +1,24 @@
+body {
+    min-height: 100vh;
+}
+
+.card {
+    border: none;
+    border-radius: 14px;
+}
+
+.card-header {
+    font-weight: 600;
+}
+
+.health-good {
+    color: #198754;
+}
+
+.health-warning {
+    color: #ffc107;
+}
+
+.health-critical {
+    color: #dc3545;
+}
