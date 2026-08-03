@@ -6,14 +6,14 @@
 
             <img
                 src="{{ url_for('static', filename='img/svxguardian-readme.png') }}"
-                alt="SVX Guardian"
+                alt="{{ t('APP_NAME') }}"
                 height="42"
                 class="me-3">
 
             <div>
 
                 <div class="fw-bold">
-                    SVX Guardian
+                    {{ t("APP_NAME") }}
                 </div>
 
                 <small class="text-secondary">
@@ -27,21 +27,30 @@
         <div class="d-flex align-items-center gap-3">
 
             <span class="text-light fw-semibold">
-
                 {{ state.callsign if state.callsign else "NOCALL" }}
-
             </span>
 
+            <a
+                class="btn btn-outline-light btn-sm"
+                href="{{ url_for('dashboard', lang='it') }}"
+                title="Italiano">
+
+                IT
+
+            </a>
+
+            <a
+                class="btn btn-outline-light btn-sm"
+                href="{{ url_for('dashboard', lang='en') }}"
+                title="English">
+
+                EN
+
+            </a>
+
             <button
                 class="btn btn-outline-light btn-sm"
-                title="Language">
-
-                <i class="fa-solid fa-language"></i>
-
-            </button>
-
-            <button
-                class="btn btn-outline-light btn-sm"
+                type="button"
                 title="Theme">
 
                 <i class="fa-solid fa-moon"></i>
@@ -50,6 +59,7 @@
 
             <button
                 class="btn btn-outline-light btn-sm"
+                type="button"
                 title="Settings">
 
                 <i class="fa-solid fa-gear"></i>
