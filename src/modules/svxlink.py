@@ -6,8 +6,8 @@ Checks the status of the SvxLink service.
 
 import subprocess
 
-from modules.base import BaseMonitor
-from state import NodeState
+from ..core.state import NodeState
+from .base import BaseMonitor
 
 
 class SvxLinkMonitor(BaseMonitor):
@@ -17,20 +17,29 @@ class SvxLinkMonitor(BaseMonitor):
 
     def check(self, state: NodeState) -> None:
         """
-        Update SvxLink status.
+        Update the SvxLink service status.
         """
 
         try:
             result = subprocess.run(
-                ["systemctl", "is-active", "svxlink"],
+                [
+                    "systemctl",
+                    "is-active",
+                    "svxlink.service",
+                ],
                 capture_output=True,
                 text=True,
                 check=False,
+                timeout=5,
             )
 
             state.svxlink_running = (
-                result.stdout.strip() == "active"
+                result.returncode == 0
+                and result.stdout.strip() == "active"
             )
 
-        except Exception:
+        except (
+            FileNotFoundError,
+            subprocess.SubprocessError,
+        ):
             state.svxlink_running = False

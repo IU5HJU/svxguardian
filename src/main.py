@@ -4,9 +4,9 @@ SVX Guardian
 Application entry point.
 """
 
-from guardian import Guardian
-from modules.system import SystemMonitor
-from modules.svxlink import SvxLinkMonitor
+from .core.guardian import Guardian
+from .modules.svxlink import SvxLinkMonitor
+from .modules.system import SystemMonitor
 
 
 def main() -> None:
@@ -16,11 +16,9 @@ def main() -> None:
 
     guardian = Guardian()
 
-    # Register monitors
     guardian.register(SystemMonitor())
     guardian.register(SvxLinkMonitor())
 
-    # Execute monitors
     guardian.run()
 
     state = guardian.state
@@ -38,7 +36,13 @@ def main() -> None:
 
     print("-" * 60)
 
-    print(f"SvxLink       : {'RUNNING' if state.svxlink_running else 'STOPPED'}")
+    print(
+        f"SvxLink       : "
+        f"{'RUNNING' if state.svxlink_running else 'STOPPED'}"
+    )
+
+    print(f"Health        : {state.health}")
+    print(f"Reason        : {state.health_reason}")
 
     print("-" * 60)
 

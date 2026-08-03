@@ -3,7 +3,8 @@ Base class for all SVX Guardian monitors.
 """
 
 from abc import ABC, abstractmethod
-from state import NodeState
+
+from ..core.state import NodeState
 
 
 class BaseMonitor(ABC):
@@ -16,4 +17,5 @@ class BaseMonitor(ABC):
         """
         Update the current node state.
         """
-        pass
+
+        raise NotImplementedError

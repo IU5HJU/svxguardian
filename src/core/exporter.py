@@ -1,27 +1,26 @@
 """
 State Exporter
 
-Converts NodeState into a serializable dictionary.
+Converts NodeState into serializable data.
 """
 
 from dataclasses import asdict
 
-from state import NodeState
+from .state import NodeState
 
 
 class StateExporter:
     """
-    Export NodeState to Python dictionary.
+    Exports NodeState to a Python dictionary.
     """
 
     @staticmethod
     def to_dict(state: NodeState) -> dict:
+        """
+        Convert NodeState into a serializable dictionary.
+        """
 
         data = asdict(state)
-
-        #
-        # datetime is not JSON serializable.
-        #
 
         if state.last_update is not None:
             data["last_update"] = state.last_update.isoformat()

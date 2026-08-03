@@ -1,19 +1,21 @@
 """
 SVX Guardian Engine.
+
+Coordinates monitors and evaluates the overall node health.
 """
 
 from datetime import datetime
 
-from health import HealthEngine
-from state import NodeState
+from .health import HealthEngine
+from .state import NodeState
 
 
 class Guardian:
     """
-    Main Guardian engine.
+    Main SVX Guardian engine.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.state = NodeState()
         self.monitors = []
         self.health_engine = HealthEngine()
@@ -22,18 +24,17 @@ class Guardian:
         """
         Register a monitor.
         """
+
         self.monitors.append(monitor)
 
     def run(self) -> None:
         """
-        Execute every registered monitor and evaluate system health.
+        Execute all registered monitors and evaluate node health.
         """
 
         self.state.last_update = datetime.now()
 
-        # Execute all monitors
         for monitor in self.monitors:
             monitor.check(self.state)
 
-        # Evaluate overall health
         self.health_engine.evaluate(self.state)

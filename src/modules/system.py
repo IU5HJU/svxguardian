@@ -9,8 +9,8 @@ from pathlib import Path
 
 import psutil
 
-from modules.base import BaseMonitor
-from state import NodeState
+from ..core.state import NodeState
+from .base import BaseMonitor
 
 
 class SystemMonitor(BaseMonitor):
@@ -23,31 +23,35 @@ class SystemMonitor(BaseMonitor):
         Update the current system status.
         """
 
-        # Hostname
         state.hostname = socket.gethostname()
 
-        # CPU usage
         state.cpu_usage = psutil.cpu_percent(interval=0.2)
 
-        # RAM usage
         state.ram_usage = psutil.virtual_memory().percent
 
-        # Disk usage
         state.disk_usage = psutil.disk_usage("/").percent
 
-        # CPU temperature
-        thermal = Path("/sys/class/thermal/thermal_zone0/temp")
+        thermal_file = Path(
+            "/sys/class/thermal/thermal_zone0/temp"
+        )
 
-        if thermal.exists():
-            state.cpu_temp = int(thermal.read_text().strip()) / 1000
+        if thermal_file.exists():
+            temperature = thermal_file.read_text(
+                encoding="utf-8"
+            ).strip()
+
+            state.cpu_temp = int(temperature) / 1000
         else:
             state.cpu_temp = 0.0
 
-        # System uptime
         uptime_file = Path("/proc/uptime")
 
         if uptime_file.exists():
-            uptime_seconds = int(float(uptime_file.read_text().split()[0]))
+            uptime_data = uptime_file.read_text(
+                encoding="utf-8"
+            ).split()
+
+            uptime_seconds = int(float(uptime_data[0]))
         else:
             uptime_seconds = 0
 
