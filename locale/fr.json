@@ -1,0 +1,31 @@
+{
+    "APP_NAME": "SVX Guardian",
+
+    "STATUS_HEALTHY": "Opérationnel",
+    "STATUS_WARNING": "Attention",
+    "STATUS_CRITICAL": "Critique",
+    "STATUS_UNKNOWN": "Inconnu",
+
+    "REASON_NONE": "Tous les systèmes fonctionnent normalement",
+    "REASON_CPU_TEMP_HIGH": "Température du processeur élevée",
+    "REASON_CPU_TEMP_CRITICAL": "Température du processeur critique",
+    "REASON_SVXLINK_STOPPED": "Le service SvxLink n'est pas en cours d'exécution",
+
+    "SYSTEM": "Système",
+    "RADIO": "Radio",
+
+    "HOSTNAME": "Nom d'hôte",
+    "CPU_TEMP": "Température du processeur",
+    "CPU_USAGE": "Utilisation du processeur",
+    "RAM_USAGE": "Utilisation de la RAM",
+    "DISK_USAGE": "Utilisation du disque",
+    "UPTIME": "Temps de fonctionnement",
+
+    "SVXLINK": "SvxLink",
+    "ECHOLINK": "EchoLink",
+    "REFLECTOR": "Reflector",
+
+    "RUNNING": "Actif",
+    "STOPPED": "Arrêté",
+    "NOT_MONITORED": "Non surveillé"
+}

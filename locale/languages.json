@@ -1,0 +1,32 @@
+{
+    "it": {
+        "name": "Italian",
+        "native_name": "Italiano",
+        "enabled": true
+    },
+    "en": {
+        "name": "English",
+        "native_name": "English",
+        "enabled": true
+    },
+    "fr": {
+        "name": "French",
+        "native_name": "Français",
+        "enabled": true
+    },
+    "es": {
+        "name": "Spanish",
+        "native_name": "Español",
+        "enabled": true
+    },
+    "de": {
+        "name": "German",
+        "native_name": "Deutsch",
+        "enabled": true
+    },
+    "ru": {
+        "name": "Russian",
+        "native_name": "Русский",
+        "enabled": true
+    }
+}

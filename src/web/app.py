@@ -4,6 +4,10 @@ SVX Guardian Web Application
 Main Flask application.
 """
 
+import json
+from pathlib import Path
+from typing import Any
+
 from flask import Flask, jsonify, render_template, request
 
 from ..core.exporter import StateExporter
@@ -20,26 +24,90 @@ guardian.register(SystemMonitor())
 guardian.register(SvxLinkMonitor())
 
 
-def get_language() -> str:
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+LOCALE_DIRECTORY = PROJECT_ROOT / "locale"
+LANGUAGES_FILE = LOCALE_DIRECTORY / "languages.json"
+
+
+def load_languages() -> dict[str, dict[str, Any]]:
+    """
+    Load enabled languages from locale/languages.json.
+    """
+
+    if not LANGUAGES_FILE.exists():
+        return {
+            "en": {
+                "name": "English",
+                "native_name": "English",
+                "enabled": True,
+            }
+        }
+
+    try:
+        with LANGUAGES_FILE.open(
+            "r",
+            encoding="utf-8",
+        ) as file:
+            data = json.load(file)
+    except (
+        OSError,
+        json.JSONDecodeError,
+    ):
+        return {
+            "en": {
+                "name": "English",
+                "native_name": "English",
+                "enabled": True,
+            }
+        }
+
+    if not isinstance(data, dict):
+        return {}
+
+    enabled_languages: dict[str, dict[str, Any]] = {}
+
+    for language_code, metadata in data.items():
+        if not isinstance(language_code, str):
+            continue
+
+        if not isinstance(metadata, dict):
+            continue
+
+        if metadata.get("enabled") is not True:
+            continue
+
+        locale_file = LOCALE_DIRECTORY / f"{language_code}.json"
+
+        if not locale_file.exists():
+            continue
+
+        enabled_languages[language_code] = metadata
+
+    return enabled_languages
+
+
+def get_language(
+    languages: dict[str, dict[str, Any]],
+) -> str:
     """
     Return the requested interface language.
-
-    The language can be selected with:
-    ?lang=it
-    ?lang=en
     """
 
-    language = request.args.get("lang", "it").lower()
-
-    supported_languages = {
-        "en",
+    requested_language = request.args.get(
+        "lang",
         "it",
-    }
+    ).lower()
 
-    if language not in supported_languages:
+    if requested_language in languages:
+        return requested_language
+
+    if "en" in languages:
         return "en"
 
-    return language
+    if languages:
+        return next(iter(languages))
+
+    return "en"
 
 
 @app.route("/")
@@ -50,13 +118,15 @@ def dashboard():
 
     guardian.run()
 
-    language = get_language()
+    languages = load_languages()
+    language = get_language(languages)
     translator = TranslationManager(language)
 
     return render_template(
         "dashboard/dashboard.html",
         state=guardian.state,
         language=language,
+        languages=languages,
         t=translator.gettext,
     )
 

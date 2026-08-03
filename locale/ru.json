@@ -1,0 +1,31 @@
+{
+    "APP_NAME": "SVX Guardian",
+
+    "STATUS_HEALTHY": "Работает нормально",
+    "STATUS_WARNING": "Предупреждение",
+    "STATUS_CRITICAL": "Критическое состояние",
+    "STATUS_UNKNOWN": "Неизвестно",
+
+    "REASON_NONE": "Все системы работают нормально",
+    "REASON_CPU_TEMP_HIGH": "Повышенная температура процессора",
+    "REASON_CPU_TEMP_CRITICAL": "Критическая температура процессора",
+    "REASON_SVXLINK_STOPPED": "Служба SvxLink не запущена",
+
+    "SYSTEM": "Система",
+    "RADIO": "Радио",
+
+    "HOSTNAME": "Имя узла",
+    "CPU_TEMP": "Температура процессора",
+    "CPU_USAGE": "Загрузка процессора",
+    "RAM_USAGE": "Использование оперативной памяти",
+    "DISK_USAGE": "Использование диска",
+    "UPTIME": "Время работы",
+
+    "SVXLINK": "SvxLink",
+    "ECHOLINK": "EchoLink",
+    "REFLECTOR": "Reflector",
+
+    "RUNNING": "Работает",
+    "STOPPED": "Остановлено",
+    "NOT_MONITORED": "Не контролируется"
+}

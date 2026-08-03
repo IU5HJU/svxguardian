@@ -2,7 +2,9 @@
 
     <div class="container-fluid">
 
-        <a class="navbar-brand d-flex align-items-center" href="/">
+        <a
+            class="navbar-brand d-flex align-items-center"
+            href="{{ url_for('dashboard', lang=language) }}">
 
             <img
                 src="{{ url_for('static', filename='img/svxguardian-readme.png') }}"
@@ -30,23 +32,42 @@
                 {{ state.callsign if state.callsign else "NOCALL" }}
             </span>
 
-            <a
-                class="btn btn-outline-light btn-sm"
-                href="{{ url_for('dashboard', lang='it') }}"
-                title="Italiano">
+            <div class="dropdown">
 
-                IT
+                <button
+                    class="btn btn-outline-light btn-sm dropdown-toggle"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                    title="Language">
 
-            </a>
+                    <i class="fa-solid fa-language me-1"></i>
 
-            <a
-                class="btn btn-outline-light btn-sm"
-                href="{{ url_for('dashboard', lang='en') }}"
-                title="English">
+                    {{ languages[language]["native_name"] }}
 
-                EN
+                </button>
 
-            </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+
+                    {% for language_code, metadata in languages.items() %}
+
+                        <li>
+
+                            <a
+                                class="dropdown-item {% if language_code == language %}active{% endif %}"
+                                href="{{ url_for('dashboard', lang=language_code) }}">
+
+                                {{ metadata["native_name"] }}
+
+                            </a>
+
+                        </li>
+
+                    {% endfor %}
+
+                </ul>
+
+            </div>
 
             <button
                 class="btn btn-outline-light btn-sm"
