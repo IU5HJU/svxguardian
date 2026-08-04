@@ -103,6 +103,50 @@ def get_language(
     return next(iter(languages))
 
 
+def export_node_info() -> dict[str, Any]:
+    """
+    Export the static node configuration as a dictionary.
+    """
+
+    node = guardian.node_info
+
+    return {
+        "callsign": node.callsign,
+        "description": node.description,
+        "node_location": node.node_location,
+        "node_class": node.node_class,
+        "hidden": node.hidden,
+        "sysop": node.sysop,
+        "qth": node.qth,
+        "locator": node.locator,
+        "latitude": node.latitude,
+        "longitude": node.longitude,
+        "rx_name": node.rx_name,
+        "rx_frequency": node.rx_frequency,
+        "rx_sql_type": node.rx_sql_type,
+        "rx_ctcss_frequencies": node.rx_ctcss_frequencies,
+        "tx_name": node.tx_name,
+        "tx_frequency": node.tx_frequency,
+        "tx_power": node.tx_power,
+        "tx_ctcss_frequency": node.tx_ctcss_frequency,
+        "ctcss": node.ctcss,
+        "echolink_number": node.echolink_number,
+        "reflector_configured": node.reflector_configured,
+        "reflector_hosts": node.reflector_hosts,
+        "reflector_port": node.reflector_port,
+        "reflector_default_tg": node.reflector_default_tg,
+        "reflector_mode": node.reflector_mode,
+        "reflector_logic_name": node.reflector_logic_name,
+        "reflector": node.reflector,
+        "logics": node.logics,
+        "modules": node.modules,
+        "tone_to_talkgroup": node.tone_to_talkgroup,
+        "svxlink_version": node.svxlink_version,
+        "config_file": node.config_file,
+        "node_info_file": node.node_info_file,
+    }
+
+
 @app.route("/")
 def dashboard():
     """
@@ -128,27 +172,13 @@ def dashboard():
 @app.route("/api/state")
 def api_state():
     """
-    Return the current node state as JSON.
+    Return the current node state and node information as JSON.
     """
 
     guardian.run()
 
     data = StateExporter.to_dict(guardian.state)
-
-    data["node"] = {
-        "callsign": guardian.node_info.callsign,
-        "description": guardian.node_info.description,
-        "qth": guardian.node_info.qth,
-        "locator": guardian.node_info.locator,
-        "rx_frequency": guardian.node_info.rx_frequency,
-        "tx_frequency": guardian.node_info.tx_frequency,
-        "ctcss": guardian.node_info.ctcss,
-        "echolink_number": guardian.node_info.echolink_number,
-        "reflector": guardian.node_info.reflector,
-        "modules": guardian.node_info.modules,
-        "svxlink_version": guardian.node_info.svxlink_version,
-        "config_file": guardian.node_info.config_file,
-    }
+    data["node"] = export_node_info()
 
     return jsonify(data)
 

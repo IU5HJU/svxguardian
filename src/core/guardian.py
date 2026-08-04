@@ -8,6 +8,7 @@ and evaluates the overall node health.
 from datetime import datetime
 
 from ..modules.configreader import ConfigReader
+from ..modules.nodeinforeader import NodeInfoReader
 from .health import HealthEngine
 from .nodeinfo import NodeInfo
 from .state import NodeState
@@ -26,6 +27,7 @@ class Guardian:
 
         self.health_engine = HealthEngine()
         self.config_reader = ConfigReader()
+        self.node_info_reader = NodeInfoReader()
 
         self.load_node_info()
 
@@ -38,10 +40,16 @@ class Guardian:
 
     def load_node_info(self) -> None:
         """
-        Load the static SvxLink node information.
+        Load and merge the static SvxLink node information.
+
+        Data is first read from svxlink.conf and then enriched
+        with values from node_info.json.
         """
 
-        self.node_info = self.config_reader.load()
+        node = self.config_reader.load()
+        node = self.node_info_reader.enrich(node)
+
+        self.node_info = node
 
         if self.node_info.callsign:
             self.state.callsign = self.node_info.callsign

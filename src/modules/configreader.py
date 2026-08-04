@@ -7,12 +7,24 @@ Reads the SvxLink configuration and populates a NodeInfo object.
 from __future__ import annotations
 
 from configparser import ConfigParser
+from ipaddress import ip_address
 from pathlib import Path
+from socket import gaierror, gethostbyname
 
 from ..core.nodeinfo import NodeInfo
 
 
 DEFAULT_CONFIG = Path("/etc/svxlink/svxlink.conf")
+
+LOCAL_HOSTNAMES = {
+    "localhost",
+    "localhost.localdomain",
+}
+
+LOCAL_IP_ADDRESSES = {
+    "127.0.0.1",
+    "::1",
+}
 
 
 class ConfigReader:
@@ -57,7 +69,7 @@ class ConfigReader:
         ):
             return node
 
-        logic_names = self._get_list(
+        node.logics = self._get_list(
             parser,
             "GLOBAL",
             "LOGICS",
@@ -65,12 +77,12 @@ class ConfigReader:
 
         primary_logic = self._find_primary_logic(
             parser,
-            logic_names,
+            node.logics,
         )
 
         reflector_logic = self._find_logic_by_type(
             parser,
-            logic_names,
+            node.logics,
             "Reflector",
         )
 
@@ -94,30 +106,11 @@ class ConfigReader:
                 "CALLSIGN",
             )
 
-        if reflector_logic:
-            reflector_hosts = self._get_value(
-                parser,
-                reflector_logic,
-                "HOSTS",
-            )
-
-            reflector_port = self._get_value(
-                parser,
-                reflector_logic,
-                "HOST_PORT",
-            )
-
-            default_tg = self._get_value(
-                parser,
-                reflector_logic,
-                "DEFAULT_TG",
-            )
-
-            node.reflector = self._format_reflector(
-                reflector_hosts,
-                reflector_port,
-                default_tg,
-            )
+        self._read_reflector_configuration(
+            node,
+            parser,
+            reflector_logic,
+        )
 
         node.qth = self._get_value(
             parser,
@@ -138,6 +131,53 @@ class ConfigReader:
         )
 
         return node
+
+    def _read_reflector_configuration(
+        self,
+        node: NodeInfo,
+        parser: ConfigParser,
+        reflector_logic: str,
+    ) -> None:
+        """
+        Read structured Reflector configuration data.
+        """
+
+        if not reflector_logic:
+            node.reflector_configured = False
+            node.reflector_mode = "disabled"
+            node.reflector = ""
+            return
+
+        node.reflector_configured = True
+        node.reflector_logic_name = reflector_logic
+
+        node.reflector_hosts = self._get_list(
+            parser,
+            reflector_logic,
+            "HOSTS",
+        )
+
+        node.reflector_port = self._get_optional_int(
+            parser,
+            reflector_logic,
+            "HOST_PORT",
+        )
+
+        node.reflector_default_tg = self._get_optional_int(
+            parser,
+            reflector_logic,
+            "DEFAULT_TG",
+        )
+
+        node.reflector_mode = self._classify_reflector_mode(
+            node.reflector_hosts
+        )
+
+        node.reflector = self._format_reflector(
+            node.reflector_hosts,
+            node.reflector_port,
+            node.reflector_default_tg,
+        )
 
     @staticmethod
     def _get_value(
@@ -187,6 +227,31 @@ class ConfigReader:
         ]
 
     @classmethod
+    def _get_optional_int(
+        cls,
+        parser: ConfigParser,
+        section: str,
+        option: str,
+    ) -> int | None:
+        """
+        Return an integer configuration value when valid.
+        """
+
+        value = cls._get_value(
+            parser,
+            section,
+            option,
+        )
+
+        if not value:
+            return None
+
+        try:
+            return int(value)
+        except ValueError:
+            return None
+
+    @classmethod
     def _find_primary_logic(
         cls,
         parser: ConfigParser,
@@ -209,7 +274,7 @@ class ConfigReader:
                 "CALLSIGN",
             )
 
-            if callsign and logic_type.lower() != "reflector":
+            if callsign and logic_type.casefold() != "reflector":
                 return logic_name
 
         for logic_name in logic_names:
@@ -249,25 +314,95 @@ class ConfigReader:
 
         return ""
 
-    @staticmethod
-    def _format_reflector(
-        hosts: str,
-        port: str,
-        default_tg: str,
+    @classmethod
+    def _classify_reflector_mode(
+        cls,
+        hosts: list[str],
     ) -> str:
         """
-        Format the available Reflector connection information.
+        Classify configured Reflector hosts.
+
+        The classification describes configuration only.
+        It does not prove connectivity or service availability.
         """
 
-        connection = hosts
+        if not hosts:
+            return "unknown"
 
-        if connection and port:
-            connection = f"{connection}:{port}"
+        local_count = 0
+        remote_count = 0
 
-        if connection and default_tg:
-            return f"{connection} - TG {default_tg}"
+        for host in hosts:
+            if cls._is_local_host(host):
+                local_count += 1
+            else:
+                remote_count += 1
 
-        if default_tg:
+        if local_count and remote_count:
+            return "mixed"
+
+        if local_count:
+            return "local"
+
+        if remote_count:
+            return "remote"
+
+        return "unknown"
+
+    @classmethod
+    def _is_local_host(
+        cls,
+        host: str,
+    ) -> bool:
+        """
+        Return True when a host clearly refers to the local machine.
+        """
+
+        normalized = host.strip().casefold()
+
+        if not normalized:
+            return False
+
+        if normalized in LOCAL_HOSTNAMES:
+            return True
+
+        if normalized in LOCAL_IP_ADDRESSES:
+            return True
+
+        try:
+            parsed_ip = ip_address(normalized)
+        except ValueError:
+            parsed_ip = None
+
+        if parsed_ip is not None:
+            return parsed_ip.is_loopback
+
+        try:
+            resolved_ip = gethostbyname(normalized)
+        except gaierror:
+            return False
+
+        return resolved_ip in LOCAL_IP_ADDRESSES
+
+    @staticmethod
+    def _format_reflector(
+        hosts: list[str],
+        port: int | None,
+        default_tg: int | None,
+    ) -> str:
+        """
+        Build a temporary human-readable Reflector summary.
+        """
+
+        host_text = ", ".join(hosts)
+
+        if host_text and port is not None:
+            host_text = f"{host_text}:{port}"
+
+        if host_text and default_tg is not None:
+            return f"{host_text} - TG {default_tg}"
+
+        if default_tg is not None:
             return f"TG {default_tg}"
 
-        return connection
+        return host_text
