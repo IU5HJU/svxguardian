@@ -1,61 +1,79 @@
-<header class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+<header class="svx-header">
 
-    <div class="container-fluid">
+    <div class="svx-header-inner">
 
+        <!-- Logo -->
         <a
-            class="navbar-brand d-flex align-items-center"
+            class="svx-header-brand"
             href="{{ url_for('dashboard', lang=language) }}">
 
             <img
-                src="{{ url_for('static', filename='img/svxguardian-readme.png') }}"
+                src="{{ url_for(
+                    'static',
+                    filename='img/logos/logo-light.png'
+                ) }}"
                 alt="{{ t('APP_NAME') }}"
-                height="42"
-                class="me-3">
-
-            <div>
-
-                <div class="fw-bold">
-                    {{ t("APP_NAME") }}
-                </div>
-
-                <small class="text-secondary">
-                    Monitor • Protect • Connect
-                </small>
-
-            </div>
+                class="svx-header-logo">
 
         </a>
 
-        <div class="d-flex align-items-center gap-3">
 
-            <span class="text-light fw-semibold">
+        <!-- Controlli -->
+        <div class="svx-header-controls">
+
+            <span class="svx-header-callsign">
                 {{ state.callsign if state.callsign else "NOCALL" }}
             </span>
 
-            <div class="dropdown">
+
+            <!-- Lingua -->
+            <div class="dropdown svx-header-dropdown">
 
                 <button
-                    class="btn btn-outline-light btn-sm dropdown-toggle"
+                    class="svx-header-button dropdown-toggle"
                     type="button"
+                    id="languageDropdown"
                     data-bs-toggle="dropdown"
+                    data-bs-auto-close="true"
                     aria-expanded="false"
+                    aria-label="Language"
                     title="Language">
 
-                    <i class="fa-solid fa-language me-1"></i>
+                    <i class="fa-solid fa-language"></i>
 
-                    {{ languages[language]["native_name"] }}
+                    <span class="svx-header-language-name">
+                        {{ languages[language]["native_name"] }}
+                    </span>
 
                 </button>
 
-                <ul class="dropdown-menu dropdown-menu-end">
+                <ul
+                    class="dropdown-menu dropdown-menu-end svx-language-menu"
+                    aria-labelledby="languageDropdown">
 
                     {% for language_code, metadata in languages.items() %}
 
                         <li>
 
                             <a
-                                class="dropdown-item {% if language_code == language %}active{% endif %}"
-                                href="{{ url_for('dashboard', lang=language_code) }}">
+                                class="dropdown-item
+                                {% if language_code == language %}
+                                    active
+                                {% endif %}"
+                                href="{{ url_for(
+                                    'dashboard',
+                                    lang=language_code
+                                ) }}">
+
+                                <span class="svx-language-check">
+
+                                    {% if language_code == language %}
+
+                                        <i class="fa-solid fa-check"></i>
+
+                                    {% endif %}
+
+                                </span>
 
                                 {{ metadata["native_name"] }}
 
@@ -69,18 +87,26 @@
 
             </div>
 
+
+            <!-- Tema -->
             <button
-                class="btn btn-outline-light btn-sm"
+                class="svx-header-button"
                 type="button"
+                id="themeToggle"
+                aria-label="Theme"
                 title="Theme">
 
                 <i class="fa-solid fa-moon"></i>
 
             </button>
 
+
+            <!-- Impostazioni -->
             <button
-                class="btn btn-outline-light btn-sm"
+                class="svx-header-button"
                 type="button"
+                id="settingsButton"
+                aria-label="Settings"
                 title="Settings">
 
                 <i class="fa-solid fa-gear"></i>

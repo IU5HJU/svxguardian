@@ -1,24 +1,1031 @@
-body {
-    min-height: 100vh;
+/*
+ * SVX Guardian Dashboard
+ *
+ * Main visual system and responsive dashboard layout.
+ */
+
+
+/* ==========================================================
+   Design variables
+   ========================================================== */
+
+:root {
+    --svx-primary: #0d6efd;
+    --svx-primary-dark: #0754bd;
+
+    --svx-success: #28a745;
+    --svx-warning: #ffc107;
+    --svx-danger: #dc3545;
+    --svx-info: #007bff;
+
+    --svx-background: #f4f7fb;
+    --svx-surface: #ffffff;
+    --svx-surface-secondary: #f8f9fa;
+
+    --svx-border: #dfe5ec;
+    --svx-text: #17202a;
+    --svx-text-secondary: #6c757d;
+
+    --svx-header-background: #071321;
+    --svx-header-border: rgba(255, 255, 255, 0.08);
+
+    --svx-sidebar-background: #0a1b2d;
+    --svx-sidebar-width: 220px;
+
+    --svx-radius-small: 8px;
+    --svx-radius-medium: 12px;
+    --svx-radius-large: 16px;
+
+    --svx-shadow-small:
+        0 2px 8px rgba(15, 23, 42, 0.06);
+
+    --svx-shadow-medium:
+        0 8px 24px rgba(15, 23, 42, 0.08);
+
+    --svx-transition: 180ms ease;
 }
 
+
+/* ==========================================================
+   Document
+   ========================================================== */
+
+html {
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    margin: 0;
+
+    background:
+        linear-gradient(
+            180deg,
+            #f8fafc 0%,
+            var(--svx-background) 100%
+        );
+
+    color: var(--svx-text);
+
+    font-family:
+        "Inter",
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    font-size: 0.94rem;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+    text-decoration: none;
+}
+
+
+/* ==========================================================
+   Header
+   ========================================================== */
+
+.svx-header {
+    position: relative;
+    z-index: 1030;
+
+    width: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            #06111e 0%,
+            #0a1d31 55%,
+            #06111e 100%
+        );
+
+    border-bottom:
+        1px solid var(--svx-header-border);
+
+    box-shadow:
+        0 4px 18px rgba(0, 0, 0, 0.26);
+}
+
+.svx-header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+    max-width: 1600px;
+    min-height: 94px;
+
+    margin: 0 auto;
+    padding: 0.55rem 1.25rem;
+}
+
+.svx-header-brand {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+
+    min-width: 0;
+    max-width: 560px;
+}
+
+.svx-header-logo {
+    display: block;
+
+    width: auto;
+    max-width: 430px;
+    height: 82px;
+
+    object-fit: contain;
+    object-position: left center;
+
+    filter:
+        drop-shadow(
+            0 3px 7px rgba(0, 0, 0, 0.48)
+        );
+}
+
+.svx-header-controls {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 0.6rem;
+    margin-left: auto;
+}
+
+.svx-header-callsign {
+    max-width: 145px;
+    margin-right: 0.2rem;
+
+    overflow: hidden;
+
+    color: #ffffff;
+
+    font-size: 0.92rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.svx-header-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 40px;
+    min-height: 38px;
+
+    padding: 0.45rem 0.7rem;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+
+    background:
+        rgba(255, 255, 255, 0.03);
+
+    color: #ffffff;
+
+    font: inherit;
+    line-height: 1;
+
+    cursor: pointer;
+
+    transition:
+        background-color var(--svx-transition),
+        border-color var(--svx-transition),
+        transform var(--svx-transition);
+}
+
+.svx-header-button:hover,
+.svx-header-button:focus {
+    border-color: rgba(255, 255, 255, 0.75);
+
+    background:
+        rgba(255, 255, 255, 0.12);
+
+    color: #ffffff;
+
+    transform: translateY(-1px);
+}
+
+.svx-header-language-name {
+    margin-left: 0.45rem;
+    white-space: nowrap;
+}
+
+.svx-header-dropdown {
+    position: relative;
+}
+
+.svx-language-menu {
+    right: 0 !important;
+    left: auto !important;
+
+    min-width: 190px;
+    max-width: calc(100vw - 1rem);
+
+    margin-top: 0.55rem;
+    padding: 0.45rem;
+
+    border: 1px solid var(--svx-border);
+    border-radius: var(--svx-radius-medium);
+
+    box-shadow: var(--svx-shadow-medium);
+}
+
+.svx-language-menu .dropdown-item {
+    display: flex;
+    align-items: center;
+
+    min-height: 40px;
+    padding: 0.55rem 0.75rem;
+
+    border-radius: var(--svx-radius-small);
+}
+
+.svx-language-menu .dropdown-item.active {
+    background-color: var(--svx-primary);
+}
+
+.svx-language-check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 1rem;
+    margin-right: 0.55rem;
+}
+
+
+/* ==========================================================
+   Main content container
+   ========================================================== */
+
+main.container-fluid {
+    width: 100%;
+    max-width: none;
+
+    margin: 0;
+    padding: 0 !important;
+}
+
+
+/* ==========================================================
+   Dashboard structure
+   ========================================================== */
+
+.svx-dashboard-layout {
+    display: grid;
+    grid-template-columns:
+        var(--svx-sidebar-width)
+        minmax(0, 1fr);
+
+    min-height: calc(100vh - 94px);
+}
+
+
+/* ==========================================================
+   Sidebar
+   ========================================================== */
+
+.svx-sidebar {
+    background:
+        linear-gradient(
+            180deg,
+            #0a1b2d 0%,
+            #071522 100%
+        );
+
+    border-right:
+        1px solid rgba(255, 255, 255, 0.06);
+
+    box-shadow:
+        3px 0 12px rgba(15, 23, 42, 0.08);
+}
+
+.svx-sidebar-nav {
+    position: sticky;
+    top: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 0.35rem;
+
+    padding: 1rem 0.75rem;
+}
+
+.svx-sidebar-link {
+    display: flex;
+    align-items: center;
+
+    min-height: 44px;
+
+    padding: 0.7rem 0.85rem;
+
+    border-radius: var(--svx-radius-small);
+
+    color: #b9c5d2;
+
+    font-size: 0.88rem;
+    font-weight: 550;
+
+    transition:
+        color var(--svx-transition),
+        background-color var(--svx-transition),
+        transform var(--svx-transition);
+}
+
+.svx-sidebar-link i {
+    width: 24px;
+    margin-right: 0.55rem;
+
+    color: #8fa8c2;
+
+    text-align: center;
+}
+
+.svx-sidebar-link:hover {
+    background:
+        rgba(255, 255, 255, 0.07);
+
+    color: #ffffff;
+
+    transform: translateX(2px);
+}
+
+.svx-sidebar-link.active {
+    background:
+        linear-gradient(
+            90deg,
+            var(--svx-primary) 0%,
+            #2d7ff0 100%
+        );
+
+    color: #ffffff;
+
+    box-shadow:
+        0 5px 14px rgba(13, 110, 253, 0.24);
+}
+
+.svx-sidebar-link.active i {
+    color: #ffffff;
+}
+
+
+/* ==========================================================
+   Dashboard content
+   ========================================================== */
+
+.svx-dashboard-content {
+    min-width: 0;
+
+    padding: 1.25rem;
+
+    background:
+        linear-gradient(
+            180deg,
+            #f8fafc 0%,
+            var(--svx-background) 100%
+        );
+}
+
+
+/* ==========================================================
+   Cards
+   ========================================================== */
+
 .card {
-    border: none;
-    border-radius: 14px;
+    overflow: hidden;
+
+    border: 1px solid var(--svx-border);
+    border-radius: var(--svx-radius-medium);
+
+    background-color: var(--svx-surface);
+
+    box-shadow: var(--svx-shadow-small);
+
+    transition:
+        box-shadow var(--svx-transition),
+        border-color var(--svx-transition);
+}
+
+.card:hover {
+    border-color: #cbd5e1;
+
+    box-shadow: var(--svx-shadow-medium);
 }
 
 .card-header {
-    font-weight: 600;
+    padding: 0.8rem 1rem;
+
+    border-bottom: 1px solid var(--svx-border);
+
+    background-color: var(--svx-surface-secondary);
+
+    color: #243244;
+
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.045em;
+    text-transform: uppercase;
 }
 
-.health-good {
-    color: #198754;
+.card-header i {
+    width: 20px;
+    margin-right: 0.35rem;
+
+    color: var(--svx-primary);
+
+    text-align: center;
 }
 
-.health-warning {
-    color: #ffc107;
+.card-body {
+    padding: 1rem;
 }
 
-.health-critical {
-    color: #dc3545;
+.card-body h4 {
+    margin: 0;
+
+    color: #122033;
+
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+
+/* ==========================================================
+   Health banner
+   ========================================================== */
+
+.health-banner {
+    position: relative;
+
+    overflow: hidden;
+
+    min-height: 116px;
+
+    border: 0;
+    border-radius: var(--svx-radius-large);
+
+    color: #ffffff;
+}
+
+.health-banner::after {
+    position: absolute;
+    top: -55px;
+    right: -40px;
+
+    width: 230px;
+    height: 230px;
+
+    border:
+        2px solid rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+
+    content: "";
+}
+
+.health-banner.health-healthy {
+    background:
+        linear-gradient(
+            120deg,
+            #23963d 0%,
+            #2eb34e 58%,
+            #218838 100%
+        );
+
+    box-shadow:
+        0 10px 26px rgba(40, 167, 69, 0.24);
+}
+
+.health-banner.health-warning {
+    background:
+        linear-gradient(
+            120deg,
+            #d89c00 0%,
+            #ffc107 60%,
+            #ce9000 100%
+        );
+
+    color: #212529;
+
+    box-shadow:
+        0 10px 26px rgba(255, 193, 7, 0.24);
+}
+
+.health-banner.health-critical {
+    background:
+        linear-gradient(
+            120deg,
+            #b92d3a 0%,
+            #dc3545 60%,
+            #a91f2d 100%
+        );
+
+    box-shadow:
+        0 10px 26px rgba(220, 53, 69, 0.25);
+}
+
+.health-banner.health-unknown {
+    background:
+        linear-gradient(
+            120deg,
+            #56616d 0%,
+            #6c757d 60%,
+            #4b545d 100%
+        );
+
+    box-shadow:
+        0 10px 26px rgba(108, 117, 125, 0.23);
+}
+
+.health-banner .card-body {
+    position: relative;
+    z-index: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 116px;
+    padding: 1.35rem;
+}
+
+.health-banner h2 {
+    margin-bottom: 0.35rem;
+
+    color: inherit !important;
+
+    font-size: 1.65rem;
+    font-weight: 750;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+}
+
+.health-banner h2 i {
+    margin-right: 0.55rem;
+}
+
+.health-banner .lead {
+    font-size: 0.95rem;
+    font-weight: 450;
+}
+
+
+/* ==========================================================
+   Metrics
+   ========================================================== */
+
+.svx-metric-row {
+    display: grid;
+    grid-template-columns:
+        minmax(120px, 1fr)
+        auto;
+
+    gap: 0.45rem 1rem;
+
+    margin-bottom: 1.15rem;
+}
+
+.svx-metric-label {
+    color: #344255;
+
+    font-size: 0.84rem;
+    font-weight: 650;
+}
+
+.svx-metric-value {
+    color: #17202a;
+
+    font-size: 0.84rem;
+    font-weight: 700;
+
+    text-align: right;
+}
+
+.svx-metric-row .progress {
+    grid-column: 1 / -1;
+}
+
+
+/* ==========================================================
+   Services
+   ========================================================== */
+
+.svx-service-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 1rem;
+
+    min-height: 48px;
+    margin-bottom: 0.75rem;
+    padding: 0.7rem 0.8rem;
+
+    border: 1px solid #e8edf3;
+    border-radius: var(--svx-radius-small);
+
+    background-color: #fafbfd;
+}
+
+.svx-service-name {
+    color: #26364a;
+
+    font-size: 0.88rem;
+    font-weight: 650;
+}
+
+
+/* ==========================================================
+   Events
+   ========================================================== */
+
+.svx-event-row {
+    display: grid;
+    grid-template-columns: 58px minmax(0, 1fr);
+
+    gap: 0.75rem;
+
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.75rem;
+
+    border-bottom: 1px solid #edf1f5;
+}
+
+.svx-event-time {
+    color: var(--svx-primary);
+
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.svx-event-text {
+    min-width: 0;
+
+    color: #3a4859;
+
+    font-size: 0.84rem;
+}
+
+
+/* ==========================================================
+   Chart placeholder
+   ========================================================== */
+
+.svx-chart-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 180px;
+
+    border:
+        1px dashed #ccd6e2;
+    border-radius: var(--svx-radius-medium);
+
+    background:
+        linear-gradient(
+            180deg,
+            #fbfcfe 0%,
+            #f5f8fb 100%
+        );
+
+    color: #8794a3;
+
+    text-align: center;
+}
+
+.svx-chart-placeholder i {
+    margin-bottom: 0.65rem;
+
+    color: var(--svx-primary);
+
+    font-size: 2.2rem;
+}
+
+.svx-chart-placeholder span {
+    font-size: 0.84rem;
+}
+
+
+/* ==========================================================
+   Status badges
+   ========================================================== */
+
+.badge {
+    padding: 0.52em 0.78em;
+
+    border-radius: 999px;
+
+    font-weight: 650;
+    letter-spacing: 0.025em;
+}
+
+.badge.bg-success {
+    background-color: var(--svx-success) !important;
+}
+
+.badge.bg-warning {
+    background-color: var(--svx-warning) !important;
+
+    color: #212529;
+}
+
+.badge.bg-danger {
+    background-color: var(--svx-danger) !important;
+}
+
+.badge.bg-secondary {
+    background-color: #7b8794 !important;
+}
+
+
+/* ==========================================================
+   Progress bars
+   ========================================================== */
+
+.progress {
+    height: 8px;
+
+    overflow: hidden;
+
+    border-radius: 999px;
+
+    background-color: #e9eef4;
+}
+
+.progress-bar {
+    border-radius: 999px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #23963d,
+            #36bd57
+        );
+}
+
+
+/* ==========================================================
+   Tablet
+   ========================================================== */
+
+@media (max-width: 991.98px) {
+    .svx-header-inner {
+        min-height: 80px;
+        padding: 0.45rem 0.8rem;
+    }
+
+    .svx-header-brand {
+        max-width: 400px;
+    }
+
+    .svx-header-logo {
+        max-width: 320px;
+        height: 68px;
+    }
+
+    .svx-header-language-name {
+        display: none;
+    }
+
+    .svx-dashboard-layout {
+        grid-template-columns: 72px minmax(0, 1fr);
+
+        min-height: calc(100vh - 80px);
+    }
+
+    .svx-sidebar {
+        width: 72px;
+    }
+
+    .svx-sidebar-nav {
+        align-items: center;
+
+        padding:
+            0.85rem
+            0.5rem;
+    }
+
+    .svx-sidebar-link {
+        justify-content: center;
+
+        width: 48px;
+        min-height: 46px;
+
+        padding: 0.65rem;
+    }
+
+    .svx-sidebar-link i {
+        width: auto;
+        margin: 0;
+
+        font-size: 1rem;
+    }
+
+    .svx-sidebar-link span {
+        display: none;
+    }
+
+    .svx-dashboard-content {
+        padding: 1rem;
+    }
+}
+
+
+/* ==========================================================
+   Mobile
+   ========================================================== */
+
+@media (max-width: 575.98px) {
+    body {
+        font-size: 0.88rem;
+    }
+
+    .svx-header-inner {
+        min-height: 68px;
+
+        padding: 0.35rem 0.45rem;
+    }
+
+    .svx-header-brand {
+        max-width: calc(100% - 126px);
+    }
+
+    .svx-header-logo {
+        max-width: 205px;
+        height: 58px;
+    }
+
+    .svx-header-controls {
+        gap: 0.28rem;
+    }
+
+    .svx-header-callsign {
+        display: none;
+    }
+
+    .svx-header-button {
+        min-width: 34px;
+        min-height: 32px;
+
+        padding: 0.3rem 0.42rem;
+    }
+
+    .svx-header-button.dropdown-toggle::after {
+        display: none;
+    }
+
+    .svx-language-menu {
+        position: absolute !important;
+
+        right: 0 !important;
+        left: auto !important;
+
+        min-width: 175px;
+        max-width: calc(100vw - 0.8rem);
+
+        transform: none !important;
+    }
+
+    .svx-dashboard-layout {
+        display: block;
+
+        min-height: auto;
+    }
+
+    .svx-sidebar {
+        width: 100%;
+
+        overflow-x: auto;
+
+        border-right: 0;
+        border-bottom:
+            1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .svx-sidebar-nav {
+        position: static;
+
+        flex-direction: row;
+
+        width: max-content;
+        min-width: 100%;
+
+        gap: 0.3rem;
+
+        padding: 0.45rem;
+    }
+
+    .svx-sidebar-link {
+        flex-direction: column;
+        justify-content: center;
+
+        min-width: 68px;
+        min-height: 58px;
+
+        padding:
+            0.45rem
+            0.55rem;
+
+        font-size: 0.66rem;
+    }
+
+    .svx-sidebar-link i {
+        width: auto;
+        margin: 0 0 0.25rem;
+
+        font-size: 0.92rem;
+    }
+
+    .svx-sidebar-link span {
+        display: block;
+    }
+
+    .svx-dashboard-content {
+        padding: 0.75rem;
+    }
+
+    .health-banner {
+        min-height: 104px;
+    }
+
+    .health-banner .card-body {
+        min-height: 104px;
+        padding: 1rem;
+    }
+
+    .health-banner h2 {
+        font-size: 1.25rem;
+    }
+
+    .health-banner .lead {
+        font-size: 0.84rem;
+    }
+
+    .svx-service-row {
+        min-height: 44px;
+    }
+
+    .svx-chart-placeholder {
+        min-height: 145px;
+    }
+}
+
+
+/* ==========================================================
+   Very small displays
+   ========================================================== */
+
+@media (max-width: 380px) {
+    .svx-header-brand {
+        max-width: calc(100% - 112px);
+    }
+
+    .svx-header-logo {
+        max-width: 165px;
+        height: 50px;
+    }
+
+    .svx-header-controls {
+        gap: 0.18rem;
+    }
+
+    .svx-header-button {
+        min-width: 31px;
+
+        padding: 0.26rem 0.35rem;
+    }
+
+    .svx-sidebar-link {
+        min-width: 62px;
+    }
+}
+
+
+/* ==========================================================
+   Reduced motion
+   ========================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+    }
 }
