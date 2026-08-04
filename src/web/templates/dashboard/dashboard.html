@@ -4,7 +4,6 @@
 
 <div class="svx-dashboard-layout">
 
-    <!-- Sidebar -->
     <aside class="svx-sidebar">
 
         <nav class="svx-sidebar-nav">
@@ -54,10 +53,8 @@
     </aside>
 
 
-    <!-- Main dashboard -->
     <section class="svx-dashboard-content">
 
-        <!-- Health banner -->
         <div class="row mb-4">
 
             <div class="col-12">
@@ -123,76 +120,200 @@
         </div>
 
 
-        <!-- Node information -->
         <div class="row g-4 mb-4">
 
-            <div class="col-xl-3 col-md-6">
+            <div class="col-xl-8">
+
+                <div class="card h-100 svx-node-panel">
+
+                    <div class="card-header">
+
+                        <i class="fa-solid fa-tower-cell"></i>
+
+                        Node Identity
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="svx-node-panel-grid">
+
+                            <div class="svx-node-identity">
+
+                                <div class="svx-node-callsign">
+                                    {{ node.callsign or "NOCALL" }}
+                                </div>
+
+                                <div class="svx-node-description">
+                                    {{ node.description or "SvxLink Radio Node" }}
+                                </div>
+
+                                <div class="svx-node-meta">
+
+                                    {% if node.qth %}
+
+                                        <span>
+                                            <i class="fa-solid fa-location-dot"></i>
+                                            {{ node.qth }}
+                                        </span>
+
+                                    {% endif %}
+
+                                    {% if node.locator %}
+
+                                        <span>
+                                            <i class="fa-solid fa-map"></i>
+                                            {{ node.locator }}
+                                        </span>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="svx-node-details">
+
+                                <div class="svx-node-detail-row">
+
+                                    <span class="svx-node-detail-label">
+                                        {{ t("REFLECTOR") }}
+                                    </span>
+
+                                    <span class="svx-node-detail-value">
+                                        {{ node.reflector or t("NOT_MONITORED") }}
+                                    </span>
+
+                                </div>
+
+
+                                <div class="svx-node-detail-row">
+
+                                    <span class="svx-node-detail-label">
+                                        Modules
+                                    </span>
+
+                                    <div class="svx-node-module-list">
+
+                                        {% if node.modules %}
+
+                                            {% for module in node.modules %}
+
+                                                <span class="badge bg-primary">
+                                                    {{ module }}
+                                                </span>
+
+                                            {% endfor %}
+
+                                        {% else %}
+
+                                            <span class="badge bg-secondary">
+                                                {{ t("NOT_MONITORED") }}
+                                            </span>
+
+                                        {% endif %}
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="svx-node-detail-row">
+
+                                    <span class="svx-node-detail-label">
+                                        SvxLink Version
+                                    </span>
+
+                                    <span class="svx-node-detail-value">
+                                        {{ node.svxlink_version or "Not available" }}
+                                    </span>
+
+                                </div>
+
+
+                                <div class="svx-node-detail-row mb-0">
+
+                                    <span class="svx-node-detail-label">
+                                        Configuration
+                                    </span>
+
+                                    <span class="svx-node-detail-value svx-node-config-path">
+                                        {{ node.config_file }}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-xl-4">
 
                 <div class="card h-100">
 
                     <div class="card-header">
                         <i class="fa-solid fa-server"></i>
-                        {{ t("HOSTNAME") }}
+                        Node Status
                     </div>
 
                     <div class="card-body">
-                        <h4>{{ state.hostname }}</h4>
-                    </div>
 
-                </div>
+                        <div class="svx-service-row">
 
-            </div>
+                            <span class="svx-service-name">
+                                {{ t("HOSTNAME") }}
+                            </span>
 
+                            <span class="svx-status-value">
+                                {{ state.hostname }}
+                            </span>
 
-            <div class="col-xl-3 col-md-6">
-
-                <div class="card h-100">
-
-                    <div class="card-header">
-                        <i class="fa-solid fa-id-badge"></i>
-                        Callsign
-                    </div>
-
-                    <div class="card-body">
-                        <h4>
-                            {{ state.callsign if state.callsign else "NOCALL" }}
-                        </h4>
-                    </div>
-
-                </div>
-
-            </div>
+                        </div>
 
 
-            <div class="col-xl-3 col-md-6">
+                        <div class="svx-service-row">
 
-                <div class="card h-100">
+                            <span class="svx-service-name">
+                                {{ t("UPTIME") }}
+                            </span>
 
-                    <div class="card-header">
-                        <i class="fa-solid fa-clock"></i>
-                        {{ t("UPTIME") }}
-                    </div>
+                            <span class="svx-status-value">
+                                {{ state.uptime }}
+                            </span>
 
-                    <div class="card-body">
-                        <h4>{{ state.uptime }}</h4>
-                    </div>
-
-                </div>
-
-            </div>
+                        </div>
 
 
-            <div class="col-xl-3 col-md-6">
+                        <div class="svx-service-row mb-0">
 
-                <div class="card h-100">
+                            <span class="svx-service-name">
+                                {{ t("SVXLINK") }}
+                            </span>
 
-                    <div class="card-header">
-                        <i class="fa-brands fa-raspberry-pi"></i>
-                        Raspberry Pi
-                    </div>
+                            {% if state.svxlink_running %}
 
-                    <div class="card-body">
-                        <h4>{{ "%.1f"|format(state.cpu_temp) }} °C</h4>
+                                <span class="badge bg-success">
+                                    {{ t("RUNNING") }}
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge bg-danger">
+                                    {{ t("STOPPED") }}
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
                     </div>
 
                 </div>
@@ -202,10 +323,8 @@
         </div>
 
 
-        <!-- System and radio -->
         <div class="row g-4 mb-4">
 
-            <!-- System status -->
             <div class="col-xl-7">
 
                 <div class="card h-100">
@@ -303,7 +422,6 @@
             </div>
 
 
-            <!-- Radio services -->
             <div class="col-xl-5">
 
                 <div class="card h-100">
@@ -322,13 +440,17 @@
                             </span>
 
                             {% if state.svxlink_running %}
+
                                 <span class="badge bg-success">
                                     {{ t("RUNNING") }}
                                 </span>
+
                             {% else %}
+
                                 <span class="badge bg-danger">
                                     {{ t("STOPPED") }}
                                 </span>
+
                             {% endif %}
 
                         </div>
@@ -340,9 +462,19 @@
                                 {{ t("ECHOLINK") }}
                             </span>
 
-                            <span class="badge bg-secondary">
-                                {{ t("NOT_MONITORED") }}
-                            </span>
+                            {% if "ModuleEchoLink" in node.modules %}
+
+                                <span class="badge bg-primary">
+                                    Module loaded
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge bg-secondary">
+                                    {{ t("NOT_MONITORED") }}
+                                </span>
+
+                            {% endif %}
 
                         </div>
 
@@ -353,9 +485,19 @@
                                 {{ t("REFLECTOR") }}
                             </span>
 
-                            <span class="badge bg-secondary">
-                                {{ t("NOT_MONITORED") }}
-                            </span>
+                            {% if node.reflector %}
+
+                                <span class="badge bg-info">
+                                    Configured
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge bg-secondary">
+                                    {{ t("NOT_MONITORED") }}
+                                </span>
+
+                            {% endif %}
 
                         </div>
 
@@ -368,7 +510,6 @@
         </div>
 
 
-        <!-- Events and chart -->
         <div class="row g-4">
 
             <div class="col-xl-5">

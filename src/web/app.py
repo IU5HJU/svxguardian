@@ -34,14 +34,16 @@ def load_languages() -> dict[str, dict[str, Any]]:
     Load enabled languages from locale/languages.json.
     """
 
-    if not LANGUAGES_FILE.exists():
-        return {
-            "en": {
-                "name": "English",
-                "native_name": "English",
-                "enabled": True,
-            }
+    fallback_languages = {
+        "en": {
+            "name": "English",
+            "native_name": "English",
+            "enabled": True,
         }
+    }
+
+    if not LANGUAGES_FILE.is_file():
+        return fallback_languages
 
     try:
         with LANGUAGES_FILE.open(
@@ -53,16 +55,10 @@ def load_languages() -> dict[str, dict[str, Any]]:
         OSError,
         json.JSONDecodeError,
     ):
-        return {
-            "en": {
-                "name": "English",
-                "native_name": "English",
-                "enabled": True,
-            }
-        }
+        return fallback_languages
 
     if not isinstance(data, dict):
-        return {}
+        return fallback_languages
 
     enabled_languages: dict[str, dict[str, Any]] = {}
 
@@ -78,12 +74,12 @@ def load_languages() -> dict[str, dict[str, Any]]:
 
         locale_file = LOCALE_DIRECTORY / f"{language_code}.json"
 
-        if not locale_file.exists():
+        if not locale_file.is_file():
             continue
 
         enabled_languages[language_code] = metadata
 
-    return enabled_languages
+    return enabled_languages or fallback_languages
 
 
 def get_language(
@@ -104,10 +100,7 @@ def get_language(
     if "en" in languages:
         return "en"
 
-    if languages:
-        return next(iter(languages))
-
-    return "en"
+    return next(iter(languages))
 
 
 @app.route("/")
@@ -125,6 +118,7 @@ def dashboard():
     return render_template(
         "dashboard/dashboard.html",
         state=guardian.state,
+        node=guardian.node_info,
         language=language,
         languages=languages,
         t=translator.gettext,
@@ -139,9 +133,24 @@ def api_state():
 
     guardian.run()
 
-    return jsonify(
-        StateExporter.to_dict(guardian.state)
-    )
+    data = StateExporter.to_dict(guardian.state)
+
+    data["node"] = {
+        "callsign": guardian.node_info.callsign,
+        "description": guardian.node_info.description,
+        "qth": guardian.node_info.qth,
+        "locator": guardian.node_info.locator,
+        "rx_frequency": guardian.node_info.rx_frequency,
+        "tx_frequency": guardian.node_info.tx_frequency,
+        "ctcss": guardian.node_info.ctcss,
+        "echolink_number": guardian.node_info.echolink_number,
+        "reflector": guardian.node_info.reflector,
+        "modules": guardian.node_info.modules,
+        "svxlink_version": guardian.node_info.svxlink_version,
+        "config_file": guardian.node_info.config_file,
+    }
+
+    return jsonify(data)
 
 
 if __name__ == "__main__":

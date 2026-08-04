@@ -1,0 +1,251 @@
+/*
+ * SVX Guardian Dashboard
+ *
+ * Dashboard-specific components.
+ */
+
+
+/* ==========================================================
+   Node identity panel
+   ========================================================== */
+
+.svx-node-panel .card-body {
+    padding: 1.2rem;
+}
+
+.svx-node-panel-grid {
+    display: grid;
+    grid-template-columns:
+        minmax(220px, 0.9fr)
+        minmax(0, 1.6fr);
+
+    gap: 1.5rem;
+    align-items: stretch;
+}
+
+.svx-node-identity {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    min-height: 220px;
+
+    padding: 1.4rem;
+
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #0b1f34 0%,
+            #12385d 62%,
+            #0d2742 100%
+        );
+
+    color: #ffffff;
+
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+        0 10px 24px rgba(10, 31, 52, 0.18);
+}
+
+.svx-node-callsign {
+    margin-bottom: 0.5rem;
+
+    font-size: clamp(2rem, 4vw, 3.3rem);
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    line-height: 1;
+}
+
+.svx-node-description {
+    color: #c7d6e5;
+
+    font-size: 1rem;
+    font-weight: 550;
+}
+
+.svx-node-meta {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 0.65rem 1rem;
+
+    margin-top: 1.25rem;
+
+    color: #d6e3ee;
+
+    font-size: 0.82rem;
+}
+
+.svx-node-meta span {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 0.4rem;
+}
+
+.svx-node-meta i {
+    color: #67a9ff;
+}
+
+
+/* ==========================================================
+   Node details
+   ========================================================== */
+
+.svx-node-details {
+    display: flex;
+    flex-direction: column;
+
+    gap: 0.75rem;
+}
+
+.svx-node-detail-row {
+    display: grid;
+    grid-template-columns:
+        minmax(120px, 0.7fr)
+        minmax(0, 1.3fr);
+
+    gap: 1rem;
+    align-items: start;
+
+    padding: 0.9rem 1rem;
+
+    border: 1px solid #e5ebf2;
+    border-radius: 10px;
+
+    background-color: #fbfcfe;
+}
+
+.svx-node-detail-label {
+    color: #506075;
+
+    font-size: 0.75rem;
+    font-weight: 750;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.svx-node-detail-value {
+    min-width: 0;
+
+    color: #17202a;
+
+    font-size: 0.86rem;
+    font-weight: 650;
+
+    overflow-wrap: anywhere;
+}
+
+.svx-node-config-path {
+    color: #5f6d7c;
+
+    font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        Monaco,
+        Consolas,
+        monospace;
+
+    font-size: 0.78rem;
+}
+
+.svx-node-module-list,
+.svx-module-list {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 0.4rem;
+}
+
+.svx-node-module-list .badge,
+.svx-module-list .badge {
+    max-width: 100%;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* ==========================================================
+   Node status values
+   ========================================================== */
+
+.svx-status-value {
+    min-width: 0;
+
+    color: #26364a;
+
+    font-size: 0.86rem;
+    font-weight: 700;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* ==========================================================
+   Tablet
+   ========================================================== */
+
+@media (max-width: 1199.98px) {
+    .svx-node-panel-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .svx-node-identity {
+        min-height: 175px;
+    }
+}
+
+
+/* ==========================================================
+   Mobile
+   ========================================================== */
+
+@media (max-width: 575.98px) {
+    .svx-node-panel .card-body {
+        padding: 0.85rem;
+    }
+
+    .svx-node-panel-grid {
+        gap: 0.85rem;
+    }
+
+    .svx-node-identity {
+        min-height: 145px;
+
+        padding: 1rem;
+    }
+
+    .svx-node-callsign {
+        font-size: 2rem;
+    }
+
+    .svx-node-description {
+        font-size: 0.88rem;
+    }
+
+    .svx-node-detail-row {
+        grid-template-columns: 1fr;
+
+        gap: 0.35rem;
+
+        padding: 0.8rem;
+    }
+
+    .svx-node-detail-label {
+        font-size: 0.7rem;
+    }
+
+    .svx-node-detail-value {
+        font-size: 0.82rem;
+    }
+
+    .svx-node-config-path {
+        font-size: 0.72rem;
+    }
+}

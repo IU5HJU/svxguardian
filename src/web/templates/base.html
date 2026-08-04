@@ -23,7 +23,7 @@
 
     <!-- Google Font -->
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
 
     <!-- SVX Guardian -->
@@ -31,13 +31,17 @@
         rel="stylesheet"
         href="{{ url_for('static', filename='css/main.css') }}">
 
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/dashboard.css') }}">
+
 </head>
 
 <body>
 
     {% include "components/header.html" %}
 
-    <main class="container-fluid py-4">
+    <main class="container-fluid">
 
         {% block content %}
         {% endblock %}
