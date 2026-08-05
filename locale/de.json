@@ -6,10 +6,10 @@
     "STATUS_CRITICAL": "Kritisch",
     "STATUS_UNKNOWN": "Unbekannt",
 
-    "REASON_NONE": "Alle Systeme arbeiten ordnungsgemäß",
-    "REASON_CPU_TEMP_HIGH": "CPU-Temperatur erhöht",
-    "REASON_CPU_TEMP_CRITICAL": "CPU-Temperatur kritisch",
-    "REASON_SVXLINK_STOPPED": "Der SvxLink-Dienst wird nicht ausgeführt",
+    "REASON_NONE": "System arbeitet normal",
+    "REASON_CPU_TEMP_HIGH": "CPU-Temperatur ist hoch",
+    "REASON_CPU_TEMP_CRITICAL": "CPU-Temperatur ist kritisch",
+    "REASON_SVXLINK_STOPPED": "Der SvxLink-Dienst läuft nicht",
 
     "SYSTEM": "System",
     "RADIO": "Funk",
@@ -18,7 +18,7 @@
     "CPU_TEMP": "CPU-Temperatur",
     "CPU_USAGE": "CPU-Auslastung",
     "RAM_USAGE": "RAM-Auslastung",
-    "DISK_USAGE": "Festplattenauslastung",
+    "DISK_USAGE": "Festplattennutzung",
     "UPTIME": "Betriebszeit",
 
     "SVXLINK": "SvxLink",
@@ -27,5 +27,23 @@
 
     "RUNNING": "Aktiv",
     "STOPPED": "Gestoppt",
-    "NOT_MONITORED": "Nicht überwacht"
+    "NOT_MONITORED": "Nicht überwacht",
+
+    "DASHBOARD": "Dashboard",
+    "LOGS": "Protokolle",
+    "CONFIGURATION": "Konfiguration",
+    "ABOUT": "Informationen",
+    "NODE_IDENTITY": "Knotenidentität",
+    "NODE_STATUS": "Knotenstatus",
+    "MODULES": "Module",
+    "SVXLINK_VERSION": "SvxLink-Version",
+    "NOT_AVAILABLE": "Nicht verfügbar",
+    "MODULE_LOADED": "Modul geladen",
+    "CONFIGURED": "Konfiguriert",
+    "LAST_EVENTS": "Letzte Ereignisse",
+    "GUARDIAN_STARTED": "SVX Guardian gestartet",
+    "CPU_TEMP_HISTORY": "CPU-Temperaturverlauf",
+    "HISTORICAL_CHART_SOON": "Das Verlaufsdiagramm wird bald verfügbar sein",
+    "CALLSIGN": "Rufzeichen",
+    "NODE": "Knoten"
 }

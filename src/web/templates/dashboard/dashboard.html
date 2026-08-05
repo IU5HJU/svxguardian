@@ -10,7 +10,7 @@
 
             <a class="svx-sidebar-link active" href="#">
                 <i class="fa-solid fa-gauge-high"></i>
-                <span>Dashboard</span>
+                <span>{{ t("DASHBOARD") }}</span>
             </a>
 
             <a class="svx-sidebar-link" href="#">
@@ -35,17 +35,17 @@
 
             <a class="svx-sidebar-link" href="#">
                 <i class="fa-solid fa-list"></i>
-                <span>Logs</span>
+                <span>{{ t("LOGS") }}</span>
             </a>
 
             <a class="svx-sidebar-link" href="#">
                 <i class="fa-solid fa-sliders"></i>
-                <span>Configuration</span>
+                <span>{{ t("CONFIGURATION") }}</span>
             </a>
 
             <a class="svx-sidebar-link" href="#">
                 <i class="fa-solid fa-circle-info"></i>
-                <span>About</span>
+                <span>{{ t("ABOUT") }}</span>
             </a>
 
         </nav>
@@ -130,7 +130,7 @@
 
                         <i class="fa-solid fa-tower-cell"></i>
 
-                        Node Identity
+                        {{ t("NODE_IDENTITY") }}
 
                     </div>
 
@@ -145,7 +145,7 @@
                                 </div>
 
                                 <div class="svx-node-description">
-                                    {{ node.description or "SvxLink Radio Node" }}
+                                    {{ node.description or t("NODE") }}
                                 </div>
 
                                 <div class="svx-node-meta">
@@ -191,7 +191,7 @@
                                 <div class="svx-node-detail-row">
 
                                     <span class="svx-node-detail-label">
-                                        Modules
+                                        {{ t("MODULES") }}
                                     </span>
 
                                     <div class="svx-node-module-list">
@@ -222,11 +222,11 @@
                                 <div class="svx-node-detail-row">
 
                                     <span class="svx-node-detail-label">
-                                        SvxLink Version
+                                        {{ t("SVXLINK_VERSION") }}
                                     </span>
 
                                     <span class="svx-node-detail-value">
-                                        {{ node.svxlink_version or "Not available" }}
+                                        {{ node.svxlink_version or t("NOT_AVAILABLE") }}
                                     </span>
 
                                 </div>
@@ -235,7 +235,7 @@
                                 <div class="svx-node-detail-row mb-0">
 
                                     <span class="svx-node-detail-label">
-                                        Configuration
+                                        {{ t("CONFIGURATION") }}
                                     </span>
 
                                     <span class="svx-node-detail-value svx-node-config-path">
@@ -261,7 +261,7 @@
 
                     <div class="card-header">
                         <i class="fa-solid fa-server"></i>
-                        Node Status
+                        {{ t("NODE_STATUS") }}
                     </div>
 
                     <div class="card-body">
@@ -465,7 +465,7 @@
                             {% if "ModuleEchoLink" in node.modules %}
 
                                 <span class="badge bg-primary">
-                                    Module loaded
+                                    {{ t("MODULE_LOADED") }}
                                 </span>
 
                             {% else %}
@@ -485,10 +485,10 @@
                                 {{ t("REFLECTOR") }}
                             </span>
 
-                            {% if node.reflector %}
+                            {% if node.reflector_configured %}
 
                                 <span class="badge bg-info">
-                                    Configured
+                                    {{ t("CONFIGURED") }}
                                 </span>
 
                             {% else %}
@@ -518,20 +518,22 @@
 
                     <div class="card-header">
                         <i class="fa-solid fa-clock-rotate-left"></i>
-                        Last Events
+                        {{ t("LAST_EVENTS") }}
                     </div>
 
                     <div class="card-body">
 
                         <div class="svx-event-row">
                             <span class="svx-event-time">--:--</span>
+
                             <span class="svx-event-text">
-                                SVX Guardian started
+                                {{ t("GUARDIAN_STARTED") }}
                             </span>
                         </div>
 
                         <div class="svx-event-row">
                             <span class="svx-event-time">--:--</span>
+
                             <span class="svx-event-text">
                                 {{ t("SVXLINK") }}
                                 {{ t("RUNNING") }}
@@ -540,6 +542,7 @@
 
                         <div class="svx-event-row mb-0">
                             <span class="svx-event-time">--:--</span>
+
                             <span class="svx-event-text">
                                 {{ t("REASON_NONE") }}
                             </span>
@@ -558,7 +561,7 @@
 
                     <div class="card-header">
                         <i class="fa-solid fa-chart-area"></i>
-                        CPU Temperature History
+                        {{ t("CPU_TEMP_HISTORY") }}
                     </div>
 
                     <div class="card-body">
@@ -568,7 +571,7 @@
                             <i class="fa-solid fa-chart-line"></i>
 
                             <span>
-                                Historical chart will be available soon
+                                {{ t("HISTORICAL_CHART_SOON") }}
                             </span>
 
                         </div>

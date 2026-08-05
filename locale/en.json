@@ -7,9 +7,9 @@
     "STATUS_UNKNOWN": "Unknown",
 
     "REASON_NONE": "Everything operating normally",
-    "REASON_CPU_TEMP_HIGH": "CPU temperature too high",
-    "REASON_CPU_TEMP_CRITICAL": "CPU temperature critical",
-    "REASON_SVXLINK_STOPPED": "SvxLink service is not running",
+    "REASON_CPU_TEMP_HIGH": "CPU temperature is high",
+    "REASON_CPU_TEMP_CRITICAL": "CPU temperature is critical",
+    "REASON_SVXLINK_STOPPED": "The SvxLink service is not running",
 
     "SYSTEM": "System",
     "RADIO": "Radio",
@@ -27,5 +27,23 @@
 
     "RUNNING": "Running",
     "STOPPED": "Stopped",
-    "NOT_MONITORED": "Not monitored"
+    "NOT_MONITORED": "Not monitored",
+
+    "DASHBOARD": "Dashboard",
+    "LOGS": "Logs",
+    "CONFIGURATION": "Configuration",
+    "ABOUT": "About",
+    "NODE_IDENTITY": "Node Identity",
+    "NODE_STATUS": "Node Status",
+    "MODULES": "Modules",
+    "SVXLINK_VERSION": "SvxLink Version",
+    "NOT_AVAILABLE": "Not available",
+    "MODULE_LOADED": "Module loaded",
+    "CONFIGURED": "Configured",
+    "LAST_EVENTS": "Last Events",
+    "GUARDIAN_STARTED": "SVX Guardian started",
+    "CPU_TEMP_HISTORY": "CPU Temperature History",
+    "HISTORICAL_CHART_SOON": "Historical chart will be available soon",
+    "CALLSIGN": "Callsign",
+    "NODE": "Node"
 }

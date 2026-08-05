@@ -9,7 +9,7 @@
     "REASON_NONE": "Sistema operativo regolarmente",
     "REASON_CPU_TEMP_HIGH": "Temperatura CPU elevata",
     "REASON_CPU_TEMP_CRITICAL": "Temperatura CPU critica",
-    "REASON_SVXLINK_STOPPED": "Il servizio SvxLink non è in esecuzione",
+    "REASON_SVXLINK_STOPPED": "Il servizio SvxLink non è attivo",
 
     "SYSTEM": "Sistema",
     "RADIO": "Radio",
@@ -18,7 +18,7 @@
     "CPU_TEMP": "Temperatura CPU",
     "CPU_USAGE": "Utilizzo CPU",
     "RAM_USAGE": "Utilizzo RAM",
-    "DISK_USAGE": "Utilizzo Disco",
+    "DISK_USAGE": "Utilizzo disco",
     "UPTIME": "Tempo di attività",
 
     "SVXLINK": "SvxLink",
@@ -27,5 +27,23 @@
 
     "RUNNING": "Attivo",
     "STOPPED": "Arrestato",
-    "NOT_MONITORED": "Non monitorato"
+    "NOT_MONITORED": "Non monitorato",
+
+    "DASHBOARD": "Pannello di controllo",
+    "LOGS": "Registri",
+    "CONFIGURATION": "Configurazione",
+    "ABOUT": "Informazioni",
+    "NODE_IDENTITY": "Identità del nodo",
+    "NODE_STATUS": "Stato del nodo",
+    "MODULES": "Moduli",
+    "SVXLINK_VERSION": "Versione di SvxLink",
+    "NOT_AVAILABLE": "Non disponibile",
+    "MODULE_LOADED": "Modulo caricato",
+    "CONFIGURED": "Configurato",
+    "LAST_EVENTS": "Ultimi eventi",
+    "GUARDIAN_STARTED": "SVX Guardian avviato",
+    "CPU_TEMP_HISTORY": "Storico temperatura CPU",
+    "HISTORICAL_CHART_SOON": "Il grafico storico sarà disponibile a breve",
+    "CALLSIGN": "Nominativo",
+    "NODE": "Nodo"
 }

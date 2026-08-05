@@ -7,7 +7,7 @@
     "STATUS_UNKNOWN": "Неизвестно",
 
     "REASON_NONE": "Все системы работают нормально",
-    "REASON_CPU_TEMP_HIGH": "Повышенная температура процессора",
+    "REASON_CPU_TEMP_HIGH": "Высокая температура процессора",
     "REASON_CPU_TEMP_CRITICAL": "Критическая температура процессора",
     "REASON_SVXLINK_STOPPED": "Служба SvxLink не запущена",
 
@@ -27,5 +27,23 @@
 
     "RUNNING": "Работает",
     "STOPPED": "Остановлено",
-    "NOT_MONITORED": "Не контролируется"
+    "NOT_MONITORED": "Не контролируется",
+
+    "DASHBOARD": "Панель управления",
+    "LOGS": "Журналы",
+    "CONFIGURATION": "Конфигурация",
+    "ABOUT": "Информация",
+    "NODE_IDENTITY": "Идентификация узла",
+    "NODE_STATUS": "Состояние узла",
+    "MODULES": "Модули",
+    "SVXLINK_VERSION": "Версия SvxLink",
+    "NOT_AVAILABLE": "Недоступно",
+    "MODULE_LOADED": "Модуль загружен",
+    "CONFIGURED": "Настроено",
+    "LAST_EVENTS": "Последние события",
+    "GUARDIAN_STARTED": "SVX Guardian запущен",
+    "CPU_TEMP_HISTORY": "История температуры процессора",
+    "HISTORICAL_CHART_SOON": "Исторический график скоро будет доступен",
+    "CALLSIGN": "Позывной",
+    "NODE": "Узел"
 }

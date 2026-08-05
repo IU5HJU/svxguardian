@@ -27,5 +27,23 @@
 
     "RUNNING": "Actif",
     "STOPPED": "Arrêté",
-    "NOT_MONITORED": "Non surveillé"
+    "NOT_MONITORED": "Non surveillé",
+
+    "DASHBOARD": "Tableau de bord",
+    "LOGS": "Journaux",
+    "CONFIGURATION": "Configuration",
+    "ABOUT": "À propos",
+    "NODE_IDENTITY": "Identité du nœud",
+    "NODE_STATUS": "État du nœud",
+    "MODULES": "Modules",
+    "SVXLINK_VERSION": "Version de SvxLink",
+    "NOT_AVAILABLE": "Non disponible",
+    "MODULE_LOADED": "Module chargé",
+    "CONFIGURED": "Configuré",
+    "LAST_EVENTS": "Derniers événements",
+    "GUARDIAN_STARTED": "SVX Guardian démarré",
+    "CPU_TEMP_HISTORY": "Historique de la température du processeur",
+    "HISTORICAL_CHART_SOON": "Le graphique historique sera bientôt disponible",
+    "CALLSIGN": "Indicatif",
+    "NODE": "Nœud"
 }
