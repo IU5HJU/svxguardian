@@ -7,6 +7,7 @@ Application entry point.
 import logging
 
 from .core.bootstrap import BootstrapEngine
+from .core.console import ConsoleRenderer
 from .core.guardian import Guardian
 from .modules.svxlink import SvxLinkMonitor
 from .modules.system import SystemMonitor
@@ -22,8 +23,7 @@ def main() -> None:
         format="%(message)s",
     )
 
-    bootstrap = BootstrapEngine()
-    bootstrap.run()
+    BootstrapEngine().run()
 
     guardian = Guardian()
 
@@ -32,29 +32,10 @@ def main() -> None:
 
     guardian.run()
 
-    state = guardian.state
-
-    print(f"Hostname      : {state.hostname}")
-    print(f"CPU Temp      : {state.cpu_temp:.1f} °C")
-    print(f"CPU Usage     : {state.cpu_usage:.1f} %")
-    print(f"RAM Usage     : {state.ram_usage:.1f} %")
-    print(f"Disk Usage    : {state.disk_usage:.1f} %")
-    print(f"Uptime        : {state.uptime}")
-
-    print("-" * 60)
-
-    print(
-        f"SvxLink       : "
-        f"{'RUNNING' if state.svxlink_running else 'STOPPED'}"
+    ConsoleRenderer().show(
+        guardian.state,
+        len(guardian.monitors),
     )
-
-    print(f"Health        : {state.health}")
-    print(f"Reason        : {state.health_reason}")
-
-    print("-" * 60)
-
-    print(f"Monitors      : {len(guardian.monitors)}")
-    print("SVX Guardian ready.")
 
 
 if __name__ == "__main__":
