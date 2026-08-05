@@ -4,8 +4,6 @@ SVX Guardian
 Application entry point.
 """
 
-import logging
-
 from .core.bootstrap import BootstrapEngine
 from .core.console import ConsoleRenderer
 from .core.guardian import Guardian
@@ -17,11 +15,6 @@ def main() -> None:
     """
     Application entry point.
     """
-
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(message)s",
-    )
 
     BootstrapEngine().run()
 

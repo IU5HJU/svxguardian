@@ -6,6 +6,8 @@ Handles the initial application startup sequence.
 
 import logging
 
+from .logger import LoggerManager
+
 
 class BootstrapEngine:
     """
@@ -21,11 +23,14 @@ class BootstrapEngine:
         """
 
         self.logger = logging.getLogger(__name__)
+        self.logger_manager = LoggerManager()
 
     def run(self) -> None:
         """
         Execute the bootstrap sequence.
         """
+
+        self.logger_manager.configure()
 
         self.show_startup_banner()
 
