@@ -4,6 +4,9 @@ SVX Guardian
 Application entry point.
 """
 
+import logging
+
+from .core.bootstrap import BootstrapEngine
 from .core.guardian import Guardian
 from .modules.svxlink import SvxLinkMonitor
 from .modules.system import SystemMonitor
@@ -14,6 +17,14 @@ def main() -> None:
     Application entry point.
     """
 
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(message)s",
+    )
+
+    bootstrap = BootstrapEngine()
+    bootstrap.run()
+
     guardian = Guardian()
 
     guardian.register(SystemMonitor())
@@ -22,10 +33,6 @@ def main() -> None:
     guardian.run()
 
     state = guardian.state
-
-    print("=" * 60)
-    print("SVX Guardian v0.2.0-dev")
-    print("=" * 60)
 
     print(f"Hostname      : {state.hostname}")
     print(f"CPU Temp      : {state.cpu_temp:.1f} °C")
