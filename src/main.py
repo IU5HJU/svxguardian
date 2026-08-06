@@ -8,6 +8,7 @@ from .core.bootstrap import BootstrapEngine
 from .core.console import ConsoleRenderer
 from .core.guardian import Guardian
 from .modules.echolink import EchoLinkMonitor
+from .modules.reflector import ReflectorMonitor
 from .modules.svxlink import SvxLinkMonitor
 from .modules.system import SystemMonitor
 
@@ -24,6 +25,7 @@ def main() -> None:
     guardian.register(SystemMonitor())
     guardian.register(SvxLinkMonitor())
     guardian.register(EchoLinkMonitor())
+    guardian.register(ReflectorMonitor())
 
     guardian.run()
 

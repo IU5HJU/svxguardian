@@ -14,6 +14,7 @@ from ..core.exporter import StateExporter
 from ..core.guardian import Guardian
 from ..core.i18n import TranslationManager
 from ..modules.echolink import EchoLinkMonitor
+from ..modules.reflector import ReflectorMonitor
 from ..modules.svxlink import SvxLinkMonitor
 from ..modules.system import SystemMonitor
 
@@ -24,6 +25,7 @@ guardian = Guardian()
 guardian.register(SystemMonitor())
 guardian.register(SvxLinkMonitor())
 guardian.register(EchoLinkMonitor())
+guardian.register(ReflectorMonitor())
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]

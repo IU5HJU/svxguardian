@@ -53,15 +53,20 @@ class NodeState:
     # Reflector
     reflector_status: ReflectorStatus = ReflectorStatus.UNKNOWN
     reflector_host: str = ""
+    reflector_port: int = 0
     reflector_tg: int = 0
+    reflector_encrypted: bool = False
+    reflector_connected_nodes: list[str] = field(
+        default_factory=list
+    )
+    reflector_connection_count: int = 0
+    reflector_last_error: str = ""
+    reflector_last_disconnect_reason: str = ""
 
     @property
     def svxlink_running(self) -> bool:
         """
         Return whether the SvxLink service is running.
-
-        This compatibility property is derived from the canonical
-        ServiceStatus value.
         """
 
         return self.svxlink_status is ServiceStatus.RUNNING
@@ -70,9 +75,6 @@ class NodeState:
     def echolink_registered(self) -> bool:
         """
         Return whether EchoLink is registered with the directory.
-
-        This compatibility property is derived from the canonical
-        EchoLinkStatus value.
         """
 
         return self.echolink_status is EchoLinkStatus.ONLINE
@@ -81,9 +83,6 @@ class NodeState:
     def reflector_connected(self) -> bool:
         """
         Return whether the Reflector connection is established.
-
-        This compatibility property is derived from the canonical
-        ReflectorStatus value.
         """
 
         return self.reflector_status is ReflectorStatus.CONNECTED
