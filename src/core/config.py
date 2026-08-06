@@ -1,10 +1,44 @@
 """
 SVX Guardian configuration manager.
 
-Provides centralized access to application configuration.
+Provides centralized access to application settings and filesystem paths.
 """
 
+from dataclasses import dataclass
 from pathlib import Path
+
+
+@dataclass(frozen=True)
+class ApplicationConfig:
+    """
+    General application information.
+    """
+
+    name: str = "SVX Guardian"
+    version: str = "0.2.0-dev"
+
+
+@dataclass(frozen=True)
+class PathConfig:
+    """
+    Filesystem paths used by SVX Guardian.
+    """
+
+    root_directory: Path = Path("/")
+    log_directory: Path = Path("/var/log")
+    cache_directory: Path = Path("/var/cache/svxguardian")
+    runtime_directory: Path = Path("/run/svxguardian")
+
+
+@dataclass(frozen=True)
+class SvxLinkConfig:
+    """
+    SvxLink configuration paths.
+    """
+
+    directory: Path = Path("/etc/svxlink")
+    config_file: Path = Path("/etc/svxlink/svxlink.conf")
+    node_info_file: Path = Path("/etc/svxlink/node_info.json")
 
 
 class ConfigManager:
@@ -12,21 +46,95 @@ class ConfigManager:
     Centralized configuration for SVX Guardian.
     """
 
-    APPLICATION_NAME = "SVX Guardian"
-    APPLICATION_VERSION = "0.2.0-dev"
+    def __init__(self) -> None:
+        """
+        Initialize the application configuration.
+        """
 
-    ROOT_DIRECTORY = Path("/")
+        self.application = ApplicationConfig()
+        self.paths = PathConfig()
+        self.svxlink = SvxLinkConfig()
 
-    ETC_DIRECTORY = ROOT_DIRECTORY / "etc"
+    @property
+    def APPLICATION_NAME(self) -> str:
+        """
+        Return the application name.
 
-    SVXLINK_DIRECTORY = ETC_DIRECTORY / "svxlink"
+        This property preserves compatibility with existing components.
+        """
 
-    SVXLINK_CONFIG_FILE = SVXLINK_DIRECTORY / "svxlink.conf"
+        return self.application.name
 
-    NODE_INFO_FILE = SVXLINK_DIRECTORY / "node_info.json"
+    @property
+    def APPLICATION_VERSION(self) -> str:
+        """
+        Return the application version.
 
-    LOG_DIRECTORY = Path("/var/log")
+        This property preserves compatibility with existing components.
+        """
 
-    CACHE_DIRECTORY = Path("/var/cache/svxguardian")
+        return self.application.version
 
-    RUNTIME_DIRECTORY = Path("/run/svxguardian")
+    @property
+    def ROOT_DIRECTORY(self) -> Path:
+        """
+        Return the filesystem root directory.
+        """
+
+        return self.paths.root_directory
+
+    @property
+    def ETC_DIRECTORY(self) -> Path:
+        """
+        Return the system configuration directory.
+        """
+
+        return self.paths.root_directory / "etc"
+
+    @property
+    def SVXLINK_DIRECTORY(self) -> Path:
+        """
+        Return the SvxLink configuration directory.
+        """
+
+        return self.svxlink.directory
+
+    @property
+    def SVXLINK_CONFIG_FILE(self) -> Path:
+        """
+        Return the main SvxLink configuration file.
+        """
+
+        return self.svxlink.config_file
+
+    @property
+    def NODE_INFO_FILE(self) -> Path:
+        """
+        Return the SvxLink node information file.
+        """
+
+        return self.svxlink.node_info_file
+
+    @property
+    def LOG_DIRECTORY(self) -> Path:
+        """
+        Return the log directory.
+        """
+
+        return self.paths.log_directory
+
+    @property
+    def CACHE_DIRECTORY(self) -> Path:
+        """
+        Return the cache directory.
+        """
+
+        return self.paths.cache_directory
+
+    @property
+    def RUNTIME_DIRECTORY(self) -> Path:
+        """
+        Return the runtime directory.
+        """
+
+        return self.paths.runtime_directory

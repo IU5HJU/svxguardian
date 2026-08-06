@@ -30,7 +30,6 @@ class BootstrapEngine:
         """
 
         self.logger_manager.configure()
-
         self.show_startup_banner()
 
     def show_startup_banner(self) -> None:
@@ -41,7 +40,7 @@ class BootstrapEngine:
         self.logger.info("=" * 60)
         self.logger.info(
             "%s v%s",
-            self.config.APPLICATION_NAME,
-            self.config.APPLICATION_VERSION,
+            self.config.application.name,
+            self.config.application.version,
         )
         self.logger.info("=" * 60)

@@ -17,20 +17,9 @@ class ConsoleRenderer:
     SEPARATOR_LENGTH = 60
 
     def __init__(self) -> None:
-        """
-        Initialize the console renderer.
-        """
-
         self.config = ConfigManager()
 
     def show(self, state: Any, monitor_count: int) -> None:
-        """
-        Display the current node state.
-
-        Args:
-            state: Current SVX Guardian node state.
-            monitor_count: Number of registered monitors.
-        """
 
         print(f"Hostname      : {state.hostname}")
         print(f"CPU Temp      : {state.cpu_temp:.1f} °C")
@@ -46,10 +35,13 @@ class ConsoleRenderer:
             f"{'RUNNING' if state.svxlink_running else 'STOPPED'}"
         )
 
+        print(f"PID           : {state.svxlink_pid}")
+        print(f"Service Up    : {state.svxlink_uptime}")
+
         print(f"Health        : {state.health}")
         print(f"Reason        : {state.health_reason}")
 
         print("-" * self.SEPARATOR_LENGTH)
 
         print(f"Monitors      : {monitor_count}")
-        print(f"{self.config.APPLICATION_NAME} ready.")
+        print(f"{self.config.application.name} ready.")
