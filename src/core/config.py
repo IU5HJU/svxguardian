@@ -1,28 +1,32 @@
 """
-Lettura della configurazione di SvxLink.
+SVX Guardian configuration manager.
+
+Provides centralized access to application configuration.
 """
 
-import configparser
 from pathlib import Path
 
 
-DEFAULT_CONFIG = "/etc/svxlink/svxlink.conf"
+class ConfigManager:
+    """
+    Centralized configuration for SVX Guardian.
+    """
 
+    APPLICATION_NAME = "SVX Guardian"
+    APPLICATION_VERSION = "0.2.0-dev"
 
-class SvxConfig:
+    ROOT_DIRECTORY = Path("/")
 
-    def __init__(self, filename=DEFAULT_CONFIG):
+    ETC_DIRECTORY = ROOT_DIRECTORY / "etc"
 
-        self.filename = filename
-        self.config = configparser.ConfigParser()
+    SVXLINK_DIRECTORY = ETC_DIRECTORY / "svxlink"
 
-    def load(self):
+    SVXLINK_CONFIG_FILE = SVXLINK_DIRECTORY / "svxlink.conf"
 
-        if not Path(self.filename).exists():
-            raise FileNotFoundError(self.filename)
+    NODE_INFO_FILE = SVXLINK_DIRECTORY / "node_info.json"
 
-        self.config.read(self.filename)
+    LOG_DIRECTORY = Path("/var/log")
 
-    def get(self, section, option, fallback=None):
+    CACHE_DIRECTORY = Path("/var/cache/svxguardian")
 
-        return self.config.get(section, option, fallback=fallback)
+    RUNTIME_DIRECTORY = Path("/run/svxguardian")

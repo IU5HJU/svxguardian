@@ -6,6 +6,8 @@ Provides formatted console output for the current node state.
 
 from typing import Any
 
+from .config import ConfigManager
+
 
 class ConsoleRenderer:
     """
@@ -13,6 +15,13 @@ class ConsoleRenderer:
     """
 
     SEPARATOR_LENGTH = 60
+
+    def __init__(self) -> None:
+        """
+        Initialize the console renderer.
+        """
+
+        self.config = ConfigManager()
 
     def show(self, state: Any, monitor_count: int) -> None:
         """
@@ -43,4 +52,4 @@ class ConsoleRenderer:
         print("-" * self.SEPARATOR_LENGTH)
 
         print(f"Monitors      : {monitor_count}")
-        print("SVX Guardian ready.")
+        print(f"{self.config.APPLICATION_NAME} ready.")
