@@ -2,11 +2,12 @@
 EchoLink monitor.
 
 Reads the SvxLink log and determines the latest EchoLink
-directory registration status.
+directory registration status and active station connections.
 """
 
 from collections.abc import Iterator
 from pathlib import Path
+import re
 
 from ..core.state import NodeState
 from ..core.status import EchoLinkStatus
@@ -15,7 +16,7 @@ from .base import BaseMonitor
 
 class EchoLinkMonitor(BaseMonitor):
     """
-    Monitor the EchoLink directory registration status.
+    Monitor EchoLink directory registration and active stations.
     """
 
     LOG_FILE = Path("/var/log/svxlink")
@@ -23,6 +24,16 @@ class EchoLinkMonitor(BaseMonitor):
 
     DIRECTORY_STATUS_PREFIX = (
         "EchoLink directory status changed to "
+    )
+
+    MODULE_START_MESSAGE = (
+        "Module EchoLink"
+    )
+
+    CONNECTION_PATTERN = re.compile(
+        r"(?P<station>[A-Za-z0-9/._-]+): "
+        r"EchoLink QSO state changed to "
+        r"(?P<status>CONNECTED|DISCONNECTED)"
     )
 
     DNS_ERROR_MESSAGES = (
@@ -34,11 +45,24 @@ class EchoLinkMonitor(BaseMonitor):
 
     def check(self, state: NodeState) -> None:
         """
-        Update the current EchoLink directory status.
+        Update EchoLink directory and connection information.
         """
 
         state.echolink_status = EchoLinkStatus.UNKNOWN
         state.echolink_last_error = ""
+        state.echolink_connected_stations = []
+        state.echolink_connection_count = 0
+
+        self._update_directory_status(state)
+        self._update_connected_stations(state)
+
+    def _update_directory_status(
+        self,
+        state: NodeState,
+    ) -> None:
+        """
+        Update the EchoLink directory registration status.
+        """
 
         for line in self._read_lines_reverse():
             if self._is_dns_error(line):
@@ -65,6 +89,45 @@ class EchoLinkMonitor(BaseMonitor):
                 )
 
             return
+
+    def _update_connected_stations(
+        self,
+        state: NodeState,
+    ) -> None:
+        """
+        Reconstruct currently connected EchoLink stations.
+        """
+
+        station_states: dict[str, bool] = {}
+
+        for line in self._read_lines_reverse():
+            if self._is_module_start(line):
+                break
+
+            connection_event = self._extract_connection_event(
+                line
+            )
+
+            if connection_event is None:
+                continue
+
+            station, connected = connection_event
+
+            if station in station_states:
+                continue
+
+            station_states[station] = connected
+
+        connected_stations = sorted(
+            station
+            for station, connected in station_states.items()
+            if connected
+        )
+
+        state.echolink_connected_stations = connected_stations
+        state.echolink_connection_count = len(
+            connected_stations
+        )
 
     def _read_lines_reverse(self) -> Iterator[str]:
         """
@@ -123,6 +186,16 @@ class EchoLinkMonitor(BaseMonitor):
             for message in self.DNS_ERROR_MESSAGES
         )
 
+    def _is_module_start(self, line: str) -> bool:
+        """
+        Return whether the line marks an EchoLink module start.
+        """
+
+        return (
+            self.MODULE_START_MESSAGE in line
+            and "starting" in line.lower()
+        )
+
     def _extract_directory_status(
         self,
         line: str,
@@ -141,6 +214,27 @@ class EchoLinkMonitor(BaseMonitor):
         normalized_status = status.strip().upper()
 
         return normalized_status or None
+
+    def _extract_connection_event(
+        self,
+        line: str,
+    ) -> tuple[str, bool] | None:
+        """
+        Extract a station connection event from a log line.
+        """
+
+        match = self.CONNECTION_PATTERN.search(line)
+
+        if match is None:
+            return None
+
+        station = match.group("station").upper()
+        connection_status = match.group("status")
+
+        return (
+            station,
+            connection_status == "CONNECTED",
+        )
 
     @staticmethod
     def _map_directory_status(

@@ -4,7 +4,7 @@ SVX Guardian node state.
 Defines the current dynamic state of the monitored node.
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 
 from .status import (
@@ -45,6 +45,10 @@ class NodeState:
     # EchoLink
     echolink_status: EchoLinkStatus = EchoLinkStatus.UNKNOWN
     echolink_last_error: str = ""
+    echolink_connected_stations: list[str] = field(
+        default_factory=list
+    )
+    echolink_connection_count: int = 0
 
     # Reflector
     reflector_status: ReflectorStatus = ReflectorStatus.UNKNOWN
