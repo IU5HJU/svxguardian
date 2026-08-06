@@ -7,6 +7,10 @@ Provides formatted console output for the current node state.
 from typing import Any
 
 from .config import ConfigManager
+from .status import (
+    HealthStatus,
+    ServiceStatus,
+)
 
 
 class ConsoleRenderer:
@@ -31,14 +35,19 @@ class ConsoleRenderer:
         print("-" * self.SEPARATOR_LENGTH)
 
         print(
-            "SvxLink       : "
-            f"{'RUNNING' if state.svxlink_running else 'STOPPED'}"
+            f"SvxLink       : {state.svxlink_status.value}"
         )
 
-        print(f"PID           : {state.svxlink_pid}")
-        print(f"Service Up    : {state.svxlink_uptime}")
+        if state.svxlink_status is ServiceStatus.RUNNING:
+            print(f"PID           : {state.svxlink_pid}")
+            print(f"Service Up    : {state.svxlink_uptime}")
 
-        print(f"Health        : {state.health}")
+        print(
+            f"Health        : {state.health.value}"
+            if isinstance(state.health, HealthStatus)
+            else f"Health        : {state.health}"
+        )
+
         print(f"Reason        : {state.health_reason}")
 
         print("-" * self.SEPARATOR_LENGTH)

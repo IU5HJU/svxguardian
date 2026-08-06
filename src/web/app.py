@@ -13,6 +13,7 @@ from flask import Flask, jsonify, render_template, request
 from ..core.exporter import StateExporter
 from ..core.guardian import Guardian
 from ..core.i18n import TranslationManager
+from ..modules.echolink import EchoLinkMonitor
 from ..modules.svxlink import SvxLinkMonitor
 from ..modules.system import SystemMonitor
 
@@ -22,6 +23,7 @@ app = Flask(__name__)
 guardian = Guardian()
 guardian.register(SystemMonitor())
 guardian.register(SvxLinkMonitor())
+guardian.register(EchoLinkMonitor())
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
