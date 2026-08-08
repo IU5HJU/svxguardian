@@ -1,0 +1,32 @@
+[Unit]
+Description=SVX Guardian Monitoring Service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+
+User=@SVXGUARDIAN_USER@
+Group=@SVXGUARDIAN_GROUP@
+
+WorkingDirectory=@SVXGUARDIAN_DIRECTORY@
+
+ExecStart=@SVXGUARDIAN_DIRECTORY@/.venv/bin/gunicorn \
+    --bind 127.0.0.1:@SVXGUARDIAN_BACKEND_PORT@ \
+    --workers 1 \
+    --threads 4 \
+    --timeout 30 \
+    --access-logfile - \
+    --error-logfile - \
+    src.web.app:app
+
+Restart=on-failure
+RestartSec=5
+
+Environment=PYTHONUNBUFFERED=1
+
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

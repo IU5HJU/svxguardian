@@ -1,0 +1,64 @@
+#
+# SVX Guardian - Apache Reverse Proxy Template
+#
+# This file is a TEMPLATE.
+# Do not enable it directly without replacing the variables below.
+#
+# Variables:
+#
+#   @SVXGUARDIAN_HOSTNAME@
+#   @SVXGUARDIAN_CERTIFICATE@
+#   @SVXGUARDIAN_PRIVATE_KEY@
+#   @SVXGUARDIAN_BACKEND_HOST@
+#   @SVXGUARDIAN_BACKEND_PORT@
+#
+# Example:
+#
+#   @SVXGUARDIAN_HOSTNAME@
+#       iu5hju.ddns.net
+#
+#   @SVXGUARDIAN_BACKEND_HOST@
+#       127.0.0.1
+#
+#   @SVXGUARDIAN_BACKEND_PORT@
+#       8080
+#
+
+
+<VirtualHost *:80>
+
+    ServerName @SVXGUARDIAN_HOSTNAME@
+
+    ProxyPreserveHost On
+
+    ProxyPass / http://@SVXGUARDIAN_BACKEND_HOST@:@SVXGUARDIAN_BACKEND_PORT@/
+    ProxyPassReverse / http://@SVXGUARDIAN_BACKEND_HOST@:@SVXGUARDIAN_BACKEND_PORT@/
+
+    RequestHeader set X-Forwarded-Proto "http"
+
+    ErrorLog ${APACHE_LOG_DIR}/svxguardian-error.log
+    CustomLog ${APACHE_LOG_DIR}/svxguardian-access.log combined
+
+</VirtualHost>
+
+
+<VirtualHost *:443>
+
+    ServerName @SVXGUARDIAN_HOSTNAME@
+
+    SSLEngine on
+
+    SSLCertificateFile @SVXGUARDIAN_CERTIFICATE@
+    SSLCertificateKeyFile @SVXGUARDIAN_PRIVATE_KEY@
+
+    ProxyPreserveHost On
+
+    ProxyPass / http://@SVXGUARDIAN_BACKEND_HOST@:@SVXGUARDIAN_BACKEND_PORT@/
+    ProxyPassReverse / http://@SVXGUARDIAN_BACKEND_HOST@:@SVXGUARDIAN_BACKEND_PORT@/
+
+    RequestHeader set X-Forwarded-Proto "https"
+
+    ErrorLog ${APACHE_LOG_DIR}/svxguardian-ssl-error.log
+    CustomLog ${APACHE_LOG_DIR}/svxguardian-ssl-access.log combined
+
+</VirtualHost>
