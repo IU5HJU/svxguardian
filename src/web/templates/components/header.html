@@ -26,6 +26,41 @@
             </span>
 
 
+            <!-- Commutatore vista standard / vista operativa -->
+
+            {% if request.endpoint == "operational_monitor" %}
+
+                <a
+                    class="svx-header-button"
+                    href="{{ url_for(
+                        'dashboard',
+                        lang=language
+                    ) }}"
+                    aria-label="Vista standard"
+                    title="Vista standard">
+
+                    <i class="fa-solid fa-table-columns"></i>
+
+                </a>
+
+            {% else %}
+
+                <a
+                    class="svx-header-button"
+                    href="{{ url_for(
+                        'operational_monitor',
+                        lang=language
+                    ) }}"
+                    aria-label="Vista operativa"
+                    title="Vista operativa">
+
+                    <i class="fa-solid fa-display"></i>
+
+                </a>
+
+            {% endif %}
+
+
             <!-- Lingua -->
             <div class="dropdown svx-header-dropdown">
 

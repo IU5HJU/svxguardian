@@ -1,0 +1,1764 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+    :root {
+        --op-bg: #f4f7fb;
+        --op-surface: #ffffff;
+        --op-surface-soft: #eef3f8;
+        --op-text: #15202b;
+        --op-muted: #65717d;
+        --op-border: #cfd8e3;
+        --op-primary: #0d6efd;
+
+        --op-success: #1f9d45;
+        --op-success-soft: rgba(31, 157, 69, 0.08);
+
+        --op-warning: #d99b00;
+        --op-warning-soft: rgba(217, 155, 0, 0.10);
+
+        --op-danger: #dc3545;
+        --op-danger-soft: rgba(220, 53, 69, 0.09);
+
+        --op-shadow:
+            0 5px 18px rgba(0, 0, 0, 0.07);
+    }
+
+
+    html[data-theme="dark"] {
+        --op-bg: #090d12;
+        --op-surface: #111820;
+        --op-surface-soft: #18212b;
+        --op-text: #f1f5f9;
+        --op-muted: #9aa8b5;
+        --op-border: #33404d;
+        --op-primary: #3d8dff;
+
+        --op-success: #32d05c;
+        --op-success-soft: rgba(50, 208, 92, 0.09);
+
+        --op-warning: #ffc247;
+        --op-warning-soft: rgba(255, 194, 71, 0.12);
+
+        --op-danger: #ff4d5e;
+        --op-danger-soft: rgba(255, 77, 94, 0.12);
+
+        --op-shadow: none;
+    }
+
+
+    body {
+        background: var(--op-bg);
+    }
+
+
+    .operational-monitor {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 14px 14px 26px;
+        color: var(--op-text);
+    }
+
+
+    .operational-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 14px;
+    }
+
+
+    .operational-brand {
+        display: flex;
+        align-items: center;
+        min-width: 0;
+    }
+
+
+    .operational-brand img {
+        width: 54px;
+        height: 54px;
+        object-fit: contain;
+        margin-right: 10px;
+        flex-shrink: 0;
+    }
+
+
+    .operational-title {
+        margin: 0;
+        font-size: 1.35rem;
+        line-height: 1.05;
+        font-weight: 900;
+        color: var(--op-text);
+    }
+
+
+    .operational-subtitle {
+        margin-top: 4px;
+        font-size: 0.78rem;
+        font-weight: 900;
+        color: var(--op-primary);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+
+    .operational-node {
+        text-align: right;
+        flex-shrink: 0;
+    }
+
+
+    .operational-node-label {
+        display: block;
+        font-size: 0.66rem;
+        font-weight: 800;
+        color: var(--op-muted);
+        text-transform: uppercase;
+    }
+
+
+    .operational-node-callsign {
+        display: block;
+        margin-top: 2px;
+        font-size: 1.45rem;
+        line-height: 1;
+        font-weight: 900;
+        color: var(--op-primary);
+    }
+
+
+    .operational-status {
+        border: 3px solid var(--op-border);
+        border-radius: 22px;
+        padding: 20px 16px;
+        text-align: center;
+        margin-bottom: 12px;
+        background: var(--op-surface);
+        box-shadow: var(--op-shadow);
+    }
+
+
+    .operational-status.online {
+        border-color: var(--op-success);
+    }
+
+
+    .operational-status.offline {
+        border-color: var(--op-danger);
+    }
+
+
+    .operational-status.unknown {
+        border-color: var(--op-muted);
+    }
+
+
+    .operational-status-label {
+        margin-bottom: 2px;
+        font-size: 1rem;
+        font-weight: 900;
+    }
+
+
+    .operational-status-value {
+        font-size: clamp(
+            2.8rem,
+            13vw,
+            4.8rem
+        );
+
+        line-height: 0.98;
+        font-weight: 900;
+    }
+
+
+    .operational-status.online
+    .operational-status-value {
+        color: var(--op-success);
+    }
+
+
+    .operational-status.offline
+    .operational-status-value {
+        color: var(--op-danger);
+    }
+
+
+    .operational-status.unknown
+    .operational-status-value {
+        color: var(--op-muted);
+    }
+
+
+    .operational-summary {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+
+        padding: 14px 16px;
+        margin-bottom: 12px;
+
+        border: 1px solid var(--op-border);
+        border-radius: 18px;
+
+        background: var(--op-surface);
+        box-shadow: var(--op-shadow);
+    }
+
+
+    .operational-summary-label {
+        font-size: 0.84rem;
+        font-weight: 900;
+        text-transform: uppercase;
+    }
+
+
+    .operational-summary-count {
+        margin-top: 2px;
+        font-size: 3.1rem;
+        line-height: 0.95;
+        font-weight: 900;
+        color: var(--op-primary);
+    }
+
+
+    .operational-update {
+        text-align: right;
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: var(--op-muted);
+    }
+
+
+    .operational-update-time {
+        display: block;
+        margin-top: 2px;
+        font-size: 1.05rem;
+        line-height: 1;
+        font-weight: 900;
+        color: var(--op-text);
+    }
+
+
+    .operational-stations {
+        border: 1px solid var(--op-border);
+        border-radius: 18px;
+        padding: 12px;
+        background: var(--op-surface);
+        box-shadow: var(--op-shadow);
+    }
+
+
+    .operational-stations-title {
+        margin: 0 4px 10px;
+        font-size: 0.88rem;
+        font-weight: 900;
+        color: var(--op-primary);
+        text-transform: uppercase;
+    }
+
+
+    .operational-station-list {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 9px;
+    }
+
+
+    .operational-station {
+        min-height: 94px;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        gap: 12px;
+        padding: 12px 15px;
+
+        border:
+            2px solid
+            var(--op-border);
+
+        border-radius: 14px;
+
+        background:
+            var(--op-surface-soft);
+    }
+
+
+    .operational-station.connected {
+        border-color:
+            var(--op-success);
+
+        background:
+            var(--op-success-soft);
+    }
+
+
+    .operational-station.unstable {
+        border-color:
+            var(--op-warning);
+
+        background:
+            var(--op-warning-soft);
+    }
+
+
+    .operational-station.transmitting {
+        border-color:
+            var(--op-danger);
+
+        background:
+            var(--op-danger-soft);
+    }
+
+
+    .operational-station-main {
+        min-width: 0;
+        flex: 1 1 auto;
+    }
+
+
+    .operational-station-callsign {
+        display: block;
+
+        font-size: clamp(
+            1.9rem,
+            9vw,
+            2.7rem
+        );
+
+        line-height: 0.98;
+        font-weight: 900;
+        color: var(--op-text);
+    }
+
+
+    .operational-station.transmitting
+    .operational-station-callsign {
+        color: var(--op-danger);
+    }
+
+
+    .operational-station.unstable
+    .operational-station-callsign {
+        color: var(--op-warning);
+    }
+
+
+    .operational-station-name {
+        display: block;
+        margin-top: 6px;
+
+        font-size: 1rem;
+        line-height: 1.1;
+
+        font-weight: 700;
+        color: var(--op-muted);
+    }
+
+
+    .operational-station-state {
+        display: block;
+        margin-top: 8px;
+
+        font-size: 0.88rem;
+        line-height: 1;
+
+        font-weight: 900;
+        text-transform: uppercase;
+    }
+
+
+    .operational-station-state::before {
+        content: "●";
+        margin-right: 6px;
+    }
+
+
+    .operational-station.connected
+    .operational-station-state {
+        color: var(--op-success);
+    }
+
+
+    .operational-station.unstable
+    .operational-station-state {
+        color: var(--op-warning);
+    }
+
+
+    .operational-station.transmitting
+    .operational-station-state {
+        color: var(--op-danger);
+        font-size: 0.98rem;
+    }
+
+
+    .operational-station-duration {
+        flex: 0 0 auto;
+
+        min-width: 84px;
+
+        text-align: right;
+
+        font-size: 1.05rem;
+        line-height: 1;
+
+        font-weight: 900;
+        color: var(--op-muted);
+
+        font-variant-numeric:
+            tabular-nums;
+    }
+
+
+    .operational-station.transmitting
+    .operational-station-duration {
+        color: var(--op-danger);
+    }
+
+
+    .operational-station.unstable
+    .operational-station-duration {
+        color: var(--op-warning);
+    }
+
+
+    .operational-empty {
+        padding: 28px 12px;
+
+        text-align: center;
+
+        font-size: 1.18rem;
+        font-weight: 800;
+
+        color: var(--op-muted);
+    }
+
+
+    .operational-station-list.compact {
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            );
+
+        gap: 7px;
+    }
+
+
+    .operational-station-list.compact
+    .operational-station {
+        min-height: 76px;
+        padding: 9px 10px;
+    }
+
+
+    .operational-station-list.compact
+    .operational-station-callsign {
+        font-size: clamp(
+            1.35rem,
+            6.4vw,
+            1.95rem
+        );
+    }
+
+
+    .operational-station-list.compact
+    .operational-station-name {
+        margin-top: 4px;
+        font-size: 0.78rem;
+    }
+
+
+    .operational-station-list.compact
+    .operational-station-state {
+        margin-top: 5px;
+        font-size: 0.7rem;
+    }
+
+
+    .operational-station-list.compact
+    .operational-station-duration {
+        min-width: 64px;
+        font-size: 0.78rem;
+    }
+
+
+    .operational-error {
+        margin-bottom: 12px;
+        padding: 13px 15px;
+
+        border:
+            2px solid
+            var(--op-danger);
+
+        border-radius: 14px;
+
+        background:
+            var(--op-danger-soft);
+
+        color:
+            var(--op-danger);
+
+        font-weight: 800;
+    }
+
+
+    @media (max-width: 390px) {
+
+        .operational-monitor {
+            padding:
+                10px
+                10px
+                22px;
+        }
+
+
+        .operational-brand img {
+            width: 46px;
+            height: 46px;
+        }
+
+
+        .operational-title {
+            font-size: 1.1rem;
+        }
+
+
+        .operational-node-callsign {
+            font-size: 1.2rem;
+        }
+
+
+        .operational-summary-count {
+            font-size: 2.6rem;
+        }
+
+
+        .operational-station-duration {
+            min-width: 72px;
+            font-size: 0.9rem;
+        }
+    }
+
+</style>
+
+
+<div class="operational-monitor">
+
+
+    <header class="operational-header">
+
+        <div class="operational-brand">
+
+            <img
+                src="{{ url_for(
+                    'static',
+                    filename='img/logos/logo-icon-64.png'
+                ) }}"
+                alt="{{ t('APP_NAME') }}"
+            >
+
+            <div>
+
+                <div class="operational-title">
+                    {{ t("APP_NAME") }}
+                </div>
+
+                <div class="operational-subtitle">
+                    {{ t("OPERATIONAL_VIEW") }}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="operational-node">
+
+            <span class="operational-node-label">
+                {{ t("NODE") }}
+            </span>
+
+            <span
+                id="operational-node-callsign"
+                class="operational-node-callsign"
+            >
+                {{ node.callsign or state.callsign or "—" }}
+            </span>
+
+        </div>
+
+    </header>
+
+
+    <div
+        id="operational-error"
+        class="operational-error
+        {% if not state.echolink_last_error %}
+            d-none
+        {% endif %}"
+    >
+
+        <span id="operational-error-text">
+            {{ state.echolink_last_error }}
+        </span>
+
+    </div>
+
+
+    <section
+        id="operational-status"
+        class="operational-status
+        {% if state.echolink_status == 'ONLINE' %}
+            online
+        {% elif state.echolink_status == 'OFFLINE'
+            or state.echolink_status == 'ERROR'
+            or state.echolink_status == 'DNS_ERROR' %}
+            offline
+        {% else %}
+            unknown
+        {% endif %}"
+    >
+
+        <div class="operational-status-label">
+            {{ t("ECHOLINK") }}
+        </div>
+
+
+        <div
+            id="operational-status-value"
+            class="operational-status-value"
+        >
+
+            {% if state.echolink_status == "ONLINE" %}
+
+                {{ t("ONLINE") }}
+
+            {% elif state.echolink_status == "OFFLINE" %}
+
+                {{ t("OFFLINE") }}
+
+            {% elif state.echolink_status == "ERROR" %}
+
+                {{ t("ERROR") }}
+
+            {% else %}
+
+                {{ t("UNKNOWN") }}
+
+            {% endif %}
+
+        </div>
+
+    </section>
+
+
+    <section class="operational-summary">
+
+        <div>
+
+            <div class="operational-summary-label">
+                {{ t("OPERATIONAL_CONNECTED_STATIONS") }}
+            </div>
+
+
+            <div
+                id="operational-connection-count"
+                class="operational-summary-count"
+            >
+                {{ state.echolink_connection_count }}
+            </div>
+
+        </div>
+
+
+        <div class="operational-update">
+
+            {{ t("OPERATIONAL_LAST_UPDATE") }}
+
+            <span
+                id="operational-update-time"
+                class="operational-update-time"
+            >
+                --:--:--
+            </span>
+
+            {{ t("OPERATIONAL_AUTOMATIC") }}
+
+        </div>
+
+    </section>
+
+
+    <section class="operational-stations">
+
+        <h2 class="operational-stations-title">
+            {{ t("ECHOLINK_CONNECTED_STATIONS") }}
+        </h2>
+
+
+        <div
+            id="operational-station-list"
+            class="operational-station-list"
+        >
+        </div>
+
+    </section>
+
+
+</div>
+
+
+<script>
+
+    /*
+     * Translated presentation strings.
+     *
+     * Internal state remains canonical and language-independent.
+     */
+
+    const operationalTranslations = {
+
+        online:
+            {{ t("ONLINE") | tojson }},
+
+        offline:
+            {{ t("OFFLINE") | tojson }},
+
+        error:
+            {{ t("ERROR") | tojson }},
+
+        unknown:
+            {{ t("UNKNOWN") | tojson }},
+
+        connected:
+            {{ t("CONNECTED") | tojson }},
+
+        transmitting:
+            {{ t("OPERATIONAL_TRANSMITTING") | tojson }},
+
+        unstable:
+            {{ t("OPERATIONAL_UNSTABLE_CONNECTION") | tojson }},
+
+        noStations:
+            {{ t("ECHOLINK_NO_STATIONS") | tojson }}
+
+    };
+
+
+    /*
+     * Initial server-side state.
+     */
+
+    let operationalStationStartTimes =
+        {{ state.echolink_connection_started | tojson }};
+
+
+    const operationalInitialStations =
+        {{ state.echolink_connected_stations | tojson }};
+
+
+    const operationalInitialStationNames =
+        {{ state.echolink_station_names | tojson }};
+
+
+    const operationalInitialTransmittingStation =
+        {{ state.echolink_transmitting_station | tojson }};
+
+
+    const operationalInitialUnstableStations =
+        {{ state.echolink_unstable_stations | tojson }};
+
+
+    /*
+     * Local operational memory.
+     *
+     * Once the browser has seen an unstable station,
+     * yellow remains visible locally for at least 10 seconds.
+     */
+
+    const OPERATIONAL_UNSTABLE_HOLD_MS =
+        10000;
+
+
+    const operationalUnstableUntil =
+        new Map();
+
+
+    let operationalLastTransmittingStation =
+        operationalInitialTransmittingStation
+        ||
+        "";
+
+
+    let operationalWakeLock = null;
+
+
+    function operationalStatusClass(status) {
+
+        if (status === "ONLINE") {
+
+            return "operational-status online";
+        }
+
+
+        if (
+            status === "OFFLINE"
+            ||
+            status === "ERROR"
+            ||
+            status === "DNS_ERROR"
+        ) {
+
+            return "operational-status offline";
+        }
+
+
+        return "operational-status unknown";
+    }
+
+
+    function operationalStatusText(status) {
+
+        if (status === "ONLINE") {
+
+            return operationalTranslations.online;
+        }
+
+
+        if (status === "OFFLINE") {
+
+            return operationalTranslations.offline;
+        }
+
+
+        if (
+            status === "ERROR"
+            ||
+            status === "DNS_ERROR"
+        ) {
+
+            return operationalTranslations.error;
+        }
+
+
+        return operationalTranslations.unknown;
+    }
+
+
+    function formatConnectionDuration(
+        startTime
+    ) {
+
+        if (!startTime) {
+
+            return "--:--:--";
+        }
+
+
+        const start =
+            new Date(startTime);
+
+
+        if (
+            Number.isNaN(
+                start.getTime()
+            )
+        ) {
+
+            return "--:--:--";
+        }
+
+
+        const elapsedSeconds =
+            Math.max(
+                0,
+                Math.floor(
+                    (
+                        Date.now()
+                        -
+                        start.getTime()
+                    )
+                    /
+                    1000
+                )
+            );
+
+
+        const hours =
+            Math.floor(
+                elapsedSeconds
+                /
+                3600
+            );
+
+
+        const minutes =
+            Math.floor(
+                (
+                    elapsedSeconds
+                    %
+                    3600
+                )
+                /
+                60
+            );
+
+
+        const seconds =
+            elapsedSeconds
+            %
+            60;
+
+
+        return [
+
+            String(hours)
+                .padStart(
+                    2,
+                    "0"
+                ),
+
+            String(minutes)
+                .padStart(
+                    2,
+                    "0"
+                ),
+
+            String(seconds)
+                .padStart(
+                    2,
+                    "0"
+                )
+
+        ].join(":");
+    }
+
+
+    function updateConnectionTimers() {
+
+        document
+            .querySelectorAll(
+                "[data-connection-start]"
+            )
+            .forEach(
+                (element) => {
+
+                    element.textContent =
+                        formatConnectionDuration(
+                            element.dataset
+                                .connectionStart
+                        );
+                }
+            );
+    }
+
+
+    function updateOperationalUnstableMemory(
+        stations,
+        unstableStations,
+        transmittingStation
+    ) {
+
+        const now =
+            Date.now();
+
+
+        const connectedStationSet =
+            new Set(
+                stations || []
+            );
+
+
+        for (
+            const station
+            of unstableStations || []
+        ) {
+
+            if (
+                connectedStationSet.has(
+                    station
+                )
+            ) {
+
+                operationalUnstableUntil.set(
+                    station,
+                    now
+                    +
+                    OPERATIONAL_UNSTABLE_HOLD_MS
+                );
+            }
+        }
+
+
+        if (
+            operationalLastTransmittingStation
+            &&
+            operationalLastTransmittingStation
+                !== transmittingStation
+        ) {
+
+            operationalUnstableUntil.delete(
+                operationalLastTransmittingStation
+            );
+        }
+
+
+        operationalLastTransmittingStation =
+            transmittingStation
+            ||
+            "";
+
+
+        for (
+            const station
+            of Array.from(
+                operationalUnstableUntil.keys()
+            )
+        ) {
+
+            if (
+                !connectedStationSet.has(
+                    station
+                )
+            ) {
+
+                operationalUnstableUntil.delete(
+                    station
+                );
+
+                continue;
+            }
+
+
+            const unstableUntil =
+                operationalUnstableUntil.get(
+                    station
+                );
+
+
+            if (
+                unstableUntil
+                <=
+                now
+            ) {
+
+                operationalUnstableUntil.delete(
+                    station
+                );
+            }
+        }
+    }
+
+
+    function getOperationalUnstableStations(
+        stations,
+        transmittingStation
+    ) {
+
+        const now =
+            Date.now();
+
+
+        const connectedStationSet =
+            new Set(
+                stations || []
+            );
+
+
+        const effectiveUnstableStations =
+            [];
+
+
+        for (
+            const [
+                station,
+                unstableUntil
+            ]
+            of operationalUnstableUntil.entries()
+        ) {
+
+            if (
+                unstableUntil <= now
+            ) {
+
+                operationalUnstableUntil.delete(
+                    station
+                );
+
+                continue;
+            }
+
+
+            if (
+                !connectedStationSet.has(
+                    station
+                )
+            ) {
+
+                operationalUnstableUntil.delete(
+                    station
+                );
+
+                continue;
+            }
+
+
+            if (
+                station
+                ===
+                transmittingStation
+            ) {
+
+                continue;
+            }
+
+
+            effectiveUnstableStations.push(
+                station
+            );
+        }
+
+
+        return effectiveUnstableStations;
+    }
+
+
+    function renderOperationalStations(
+        stations,
+        stationNames = {},
+        connectionStarted = {},
+        transmittingStation = "",
+        unstableStations = []
+    ) {
+
+        const list =
+            document.getElementById(
+                "operational-station-list"
+            );
+
+
+        list.innerHTML = "";
+
+
+        operationalStationStartTimes =
+            connectionStarted
+            ||
+            {};
+
+
+        const unstableStationSet =
+            new Set(
+                unstableStations
+                ||
+                []
+            );
+
+
+        if (
+            !stations
+            ||
+            stations.length === 0
+        ) {
+
+            list.className =
+                "operational-station-list";
+
+
+            const empty =
+                document.createElement(
+                    "div"
+                );
+
+
+            empty.className =
+                "operational-empty";
+
+
+            empty.textContent =
+                operationalTranslations.noStations;
+
+
+            list.appendChild(
+                empty
+            );
+
+
+            return;
+        }
+
+
+        list.className =
+            stations.length > 3
+                ? "operational-station-list compact"
+                : "operational-station-list";
+
+
+        const sortedStations =
+            [...stations].sort(
+                (
+                    firstStation,
+                    secondStation
+                ) => {
+
+                    if (
+                        firstStation ===
+                            transmittingStation
+                        &&
+                        secondStation !==
+                            transmittingStation
+                    ) {
+
+                        return -1;
+                    }
+
+
+                    if (
+                        secondStation ===
+                            transmittingStation
+                        &&
+                        firstStation !==
+                            transmittingStation
+                    ) {
+
+                        return 1;
+                    }
+
+
+                    const firstUnstable =
+                        unstableStationSet.has(
+                            firstStation
+                        );
+
+
+                    const secondUnstable =
+                        unstableStationSet.has(
+                            secondStation
+                        );
+
+
+                    if (
+                        firstUnstable
+                        &&
+                        !secondUnstable
+                    ) {
+
+                        return -1;
+                    }
+
+
+                    if (
+                        secondUnstable
+                        &&
+                        !firstUnstable
+                    ) {
+
+                        return 1;
+                    }
+
+
+                    return (
+                        firstStation.localeCompare(
+                            secondStation
+                        )
+                    );
+                }
+            );
+
+
+        sortedStations.forEach(
+            (station) => {
+
+                const isTransmitting =
+                    station
+                    ===
+                    transmittingStation;
+
+
+                const isUnstable =
+                    !isTransmitting
+                    &&
+                    unstableStationSet.has(
+                        station
+                    );
+
+
+                const row =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                if (isTransmitting) {
+
+                    row.className =
+                        "operational-station transmitting";
+
+                } else if (isUnstable) {
+
+                    row.className =
+                        "operational-station unstable";
+
+                } else {
+
+                    row.className =
+                        "operational-station connected";
+                }
+
+
+                const main =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                main.className =
+                    "operational-station-main";
+
+
+                const callsign =
+                    document.createElement(
+                        "span"
+                    );
+
+
+                callsign.className =
+                    "operational-station-callsign";
+
+
+                callsign.textContent =
+                    station;
+
+
+                main.appendChild(
+                    callsign
+                );
+
+
+                const operatorName =
+                    stationNames[
+                        station
+                    ];
+
+
+                if (operatorName) {
+
+                    const name =
+                        document.createElement(
+                            "span"
+                        );
+
+
+                    name.className =
+                        "operational-station-name";
+
+
+                    name.textContent =
+                        operatorName;
+
+
+                    main.appendChild(
+                        name
+                    );
+                }
+
+
+                const stationState =
+                    document.createElement(
+                        "span"
+                    );
+
+
+                stationState.className =
+                    "operational-station-state";
+
+
+                if (isTransmitting) {
+
+                    stationState.textContent =
+                        operationalTranslations
+                            .transmitting;
+
+                } else if (isUnstable) {
+
+                    stationState.textContent =
+                        operationalTranslations
+                            .unstable;
+
+                } else {
+
+                    stationState.textContent =
+                        operationalTranslations
+                            .connected;
+                }
+
+
+                main.appendChild(
+                    stationState
+                );
+
+
+                const duration =
+                    document.createElement(
+                        "span"
+                    );
+
+
+                duration.className =
+                    "operational-station-duration";
+
+
+                duration.dataset.connectionStart =
+                    connectionStarted[
+                        station
+                    ]
+                    ||
+                    "";
+
+
+                duration.textContent =
+                    formatConnectionDuration(
+                        connectionStarted[
+                            station
+                        ]
+                    );
+
+
+                row.appendChild(
+                    main
+                );
+
+
+                row.appendChild(
+                    duration
+                );
+
+
+                list.appendChild(
+                    row
+                );
+            }
+        );
+    }
+
+
+    function updateOperationalClock() {
+
+        const now =
+            new Date();
+
+
+        document.getElementById(
+            "operational-update-time"
+        ).textContent =
+            now.toLocaleTimeString(
+                [],
+                {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit"
+                }
+            );
+    }
+
+
+    async function requestOperationalWakeLock() {
+
+        if (
+            !(
+                "wakeLock"
+                in
+                navigator
+            )
+        ) {
+
+            return;
+        }
+
+
+        if (
+            document.visibilityState
+            !==
+            "visible"
+        ) {
+
+            return;
+        }
+
+
+        if (
+            operationalWakeLock
+        ) {
+
+            return;
+        }
+
+
+        try {
+
+            operationalWakeLock =
+                await navigator
+                    .wakeLock
+                    .request(
+                        "screen"
+                    );
+
+
+            operationalWakeLock
+                .addEventListener(
+                    "release",
+                    () => {
+
+                        operationalWakeLock =
+                            null;
+                    }
+                );
+
+        } catch (error) {
+
+            console.warn(
+                "SVX Guardian Wake Lock unavailable:",
+                error
+            );
+        }
+    }
+
+
+    async function updateOperationalMonitor() {
+
+        try {
+
+            const response =
+                await fetch(
+                    "{{ url_for('api_state') }}",
+                    {
+                        cache: "no-store"
+                    }
+                );
+
+
+            if (
+                !response.ok
+            ) {
+
+                return;
+            }
+
+
+            const data =
+                await response.json();
+
+
+            const status =
+                document.getElementById(
+                    "operational-status"
+                );
+
+
+            const statusValue =
+                document.getElementById(
+                    "operational-status-value"
+                );
+
+
+            status.className =
+                operationalStatusClass(
+                    data.echolink_status
+                );
+
+
+            statusValue.textContent =
+                operationalStatusText(
+                    data.echolink_status
+                );
+
+
+            document.getElementById(
+                "operational-connection-count"
+            ).textContent =
+                data.echolink_connection_count;
+
+
+            if (
+                data.node
+                &&
+                data.node.callsign
+            ) {
+
+                document.getElementById(
+                    "operational-node-callsign"
+                ).textContent =
+                    data.node.callsign;
+            }
+
+
+            updateOperationalUnstableMemory(
+
+                data.echolink_connected_stations
+                    ||
+                    [],
+
+                data.echolink_unstable_stations
+                    ||
+                    [],
+
+                data.echolink_transmitting_station
+                    ||
+                    ""
+            );
+
+
+            const effectiveUnstableStations =
+                getOperationalUnstableStations(
+
+                    data.echolink_connected_stations
+                        ||
+                        [],
+
+                    data.echolink_transmitting_station
+                        ||
+                        ""
+                );
+
+
+            renderOperationalStations(
+
+                data.echolink_connected_stations,
+
+                data.echolink_station_names
+                    ||
+                    {},
+
+                data.echolink_connection_started
+                    ||
+                    {},
+
+                data.echolink_transmitting_station
+                    ||
+                    "",
+
+                effectiveUnstableStations
+            );
+
+
+            const errorBox =
+                document.getElementById(
+                    "operational-error"
+                );
+
+
+            const errorText =
+                document.getElementById(
+                    "operational-error-text"
+                );
+
+
+            if (
+                data.echolink_last_error
+            ) {
+
+                errorBox
+                    .classList
+                    .remove(
+                        "d-none"
+                    );
+
+
+                errorText.textContent =
+                    data.echolink_last_error;
+
+            } else {
+
+                errorBox
+                    .classList
+                    .add(
+                        "d-none"
+                    );
+
+
+                errorText.textContent =
+                    "";
+            }
+
+
+            updateOperationalClock();
+
+        } catch (error) {
+
+            console.error(
+                "SVX Guardian operational monitor update failed:",
+                error
+            );
+        }
+    }
+
+
+    document.addEventListener(
+        "visibilitychange",
+        () => {
+
+            if (
+                document.visibilityState
+                ===
+                "visible"
+            ) {
+
+                requestOperationalWakeLock();
+            }
+        }
+    );
+
+
+    updateOperationalUnstableMemory(
+        operationalInitialStations,
+        operationalInitialUnstableStations,
+        operationalInitialTransmittingStation
+    );
+
+
+    const operationalInitialEffectiveUnstableStations =
+        getOperationalUnstableStations(
+            operationalInitialStations,
+            operationalInitialTransmittingStation
+        );
+
+
+    renderOperationalStations(
+        operationalInitialStations,
+        operationalInitialStationNames,
+        operationalStationStartTimes,
+        operationalInitialTransmittingStation,
+        operationalInitialEffectiveUnstableStations
+    );
+
+
+    updateOperationalClock();
+
+    updateConnectionTimers();
+
+    requestOperationalWakeLock();
+
+    updateOperationalMonitor();
+
+
+    window.setInterval(
+        updateConnectionTimers,
+        1000
+    );
+
+
+    window.setInterval(
+        updateOperationalMonitor,
+        2000
+    );
+
+</script>
+
+{% endblock %}

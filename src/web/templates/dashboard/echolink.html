@@ -1,0 +1,469 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="svx-dashboard-layout">
+
+    <aside class="svx-sidebar">
+
+        <nav class="svx-sidebar-nav">
+
+            <a
+                class="svx-sidebar-link"
+                href="{{ url_for('dashboard', lang=language) }}"
+            >
+                <i class="fa-solid fa-gauge-high"></i>
+                <span>{{ t("DASHBOARD") }}</span>
+            </a>
+
+            <a
+                class="svx-sidebar-link"
+                href="{{ url_for('system_page', lang=language) }}"
+            >
+                <i class="fa-solid fa-microchip"></i>
+                <span>{{ t("SYSTEM") }}</span>
+            </a>
+
+            <a
+                class="svx-sidebar-link"
+                href="{{ url_for('svxlink_page', lang=language) }}"
+            >
+                <i class="fa-solid fa-radio"></i>
+                <span>{{ t("SVXLINK") }}</span>
+            </a>
+
+            <a
+                class="svx-sidebar-link active"
+                href="{{ url_for('echolink_page', lang=language) }}"
+            >
+                <i class="fa-solid fa-tower-broadcast"></i>
+                <span style="text-transform: none;">
+                    {{ t("ECHOLINK") }}
+                </span>
+            </a>
+
+            <a
+                class="svx-sidebar-link"
+                href="{{ url_for('reflector_page', lang=language) }}"
+            >
+                <i class="fa-solid fa-satellite-dish"></i>
+                <span>{{ t("REFLECTOR") }}</span>
+            </a>
+
+            <a class="svx-sidebar-link" href="#">
+                <i class="fa-solid fa-list"></i>
+                <span>{{ t("LOGS") }}</span>
+            </a>
+
+            <a class="svx-sidebar-link" href="#">
+                <i class="fa-solid fa-sliders"></i>
+                <span>{{ t("CONFIGURATION") }}</span>
+            </a>
+
+            <a class="svx-sidebar-link" href="#">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>{{ t("ABOUT") }}</span>
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <section class="svx-dashboard-content">
+
+        <div class="row mb-4">
+
+            <div class="col-12">
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <i class="fa-solid fa-tower-broadcast"></i>
+
+                        <span style="text-transform: none;">
+                            {{ t("ECHOLINK") }}
+                        </span>
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div
+                            id="echolink-error"
+                            class="alert alert-danger
+                            {% if not state.echolink_last_error %}d-none{% endif %}"
+                        >
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+
+                            <span id="echolink-error-text">
+                                {% if state.echolink_last_error %}
+                                    {{ t(state.echolink_last_error) }}
+                                {% endif %}
+                            </span>
+                        </div>
+
+
+                        <div class="row g-4">
+
+                            <div class="col-xl-3 col-md-6">
+
+                                <div class="svx-service-row mb-0">
+
+                                    <span class="svx-service-name">
+                                        {{ t("ECHOLINK_STATUS") }}
+                                    </span>
+
+                                    <span
+                                        id="echolink-status"
+                                        class="badge
+                                        {% if state.echolink_status == 'ONLINE' %}
+                                            bg-success
+                                        {% elif state.echolink_status == 'OFFLINE' %}
+                                            bg-warning text-dark
+                                        {% elif state.echolink_status == 'DNS_ERROR'
+                                            or state.echolink_status == 'ERROR' %}
+                                            bg-danger
+                                        {% else %}
+                                            bg-secondary
+                                        {% endif %}"
+                                    >
+                                        {{ t(state.echolink_status) }}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-xl-3 col-md-6">
+
+                                <div class="svx-service-row mb-0">
+
+                                    <span class="svx-service-name">
+                                        {{ t("ECHOLINK_CONNECTION_COUNT") }}
+                                    </span>
+
+                                    <span
+                                        id="echolink-connection-count"
+                                        class="svx-status-value"
+                                    >
+                                        {{ state.echolink_connection_count }}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-xl-3 col-md-6">
+
+                                <div class="svx-service-row mb-0">
+
+                                    <span class="svx-service-name">
+                                        {{ t("CALLSIGN") }}
+                                    </span>
+
+                                    <span class="svx-status-value">
+                                        {{ node.callsign or t("NOT_AVAILABLE") }}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-xl-3 col-md-6">
+
+                                <div class="svx-service-row mb-0">
+
+                                    <span class="svx-service-name">
+                                        {{ t("ECHOLINK_MODULE") }}
+                                    </span>
+
+                                    {% if "ModuleEchoLink" in node.modules %}
+
+                                        <span class="badge bg-success">
+                                            {{ t("MODULE_LOADED") }}
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="badge bg-secondary">
+                                            {{ t("NOT_AVAILABLE") }}
+                                        </span>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-12">
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <i class="fa-solid fa-link"></i>
+
+                        <span style="text-transform: none;">
+                            {{ t("ECHOLINK_CONNECTED_STATIONS") }}
+                        </span>
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div id="echolink-stations-container">
+
+                            {% if state.echolink_connected_stations %}
+
+                                <div class="table-responsive">
+
+                                    <table class="table align-middle mb-0">
+
+                                        <thead>
+
+                                            <tr>
+                                                <th>{{ t("CALLSIGN") }}</th>
+                                                <th>{{ t("ECHOLINK_STATUS") }}</th>
+                                            </tr>
+
+                                        </thead>
+
+                                        <tbody id="echolink-stations-body">
+
+                                            {% for station in state.echolink_connected_stations %}
+
+                                                <tr>
+                                                    <td>
+                                                        <span class="badge bg-primary">
+                                                            {{ station }}
+                                                        </span>
+                                                    </td>
+
+                                                    <td>
+                                                        <span class="badge bg-success">
+                                                            {{ t("CONNECTED") }}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+
+                                            {% endfor %}
+
+                                        </tbody>
+
+                                    </table>
+
+                                </div>
+
+                            {% else %}
+
+                                <div
+                                    id="echolink-no-stations"
+                                    class="text-muted"
+                                >
+                                    {{ t("ECHOLINK_NO_STATIONS") }}
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<script>
+    const echoLinkTranslations = {
+        ONLINE: {{ t("ONLINE") | tojson }},
+        OFFLINE: {{ t("OFFLINE") | tojson }},
+        DNS_ERROR: {{ t("DNS_ERROR") | tojson }},
+        ERROR: {{ t("ERROR") | tojson }},
+        UNKNOWN: {{ t("UNKNOWN") | tojson }},
+        CONNECTED: {{ t("CONNECTED") | tojson }},
+        NO_STATIONS: {{ t("ECHOLINK_NO_STATIONS") | tojson }},
+        CALLSIGN: {{ t("CALLSIGN") | tojson }},
+        STATUS: {{ t("ECHOLINK_STATUS") | tojson }},
+        DNS_REASON: {{ t("REASON_ECHOLINK_DNS_ERROR") | tojson }},
+        DIRECTORY_REASON:
+            {{ t("REASON_ECHOLINK_DIRECTORY_ERROR") | tojson }}
+    };
+
+
+    function echoLinkStatusClass(status) {
+        if (status === "ONLINE") {
+            return "badge bg-success";
+        }
+
+        if (status === "OFFLINE") {
+            return "badge bg-warning text-dark";
+        }
+
+        if (status === "DNS_ERROR" || status === "ERROR") {
+            return "badge bg-danger";
+        }
+
+        return "badge bg-secondary";
+    }
+
+
+    function echoLinkErrorText(errorCode) {
+        if (errorCode === "REASON_ECHOLINK_DNS_ERROR") {
+            return echoLinkTranslations.DNS_REASON;
+        }
+
+        if (errorCode === "REASON_ECHOLINK_DIRECTORY_ERROR") {
+            return echoLinkTranslations.DIRECTORY_REASON;
+        }
+
+        return errorCode;
+    }
+
+
+    function renderEchoLinkStations(stations) {
+        const container = document.getElementById(
+            "echolink-stations-container"
+        );
+
+        if (!stations || stations.length === 0) {
+            container.innerHTML = `
+                <div class="text-muted">
+                    ${echoLinkTranslations.NO_STATIONS}
+                </div>
+            `;
+            return;
+        }
+
+        const rows = stations.map((station) => `
+            <tr>
+                <td>
+                    <span class="badge bg-primary">
+                        ${station}
+                    </span>
+                </td>
+                <td>
+                    <span class="badge bg-success">
+                        ${echoLinkTranslations.CONNECTED}
+                    </span>
+                </td>
+            </tr>
+        `).join("");
+
+        container.innerHTML = `
+            <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>${echoLinkTranslations.CALLSIGN}</th>
+                            <th>${echoLinkTranslations.STATUS}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${rows}
+                    </tbody>
+                </table>
+            </div>
+        `;
+    }
+
+
+    async function updateEchoLinkState() {
+        try {
+            const response = await fetch(
+                "{{ url_for('api_state') }}",
+                {
+                    cache: "no-store"
+                }
+            );
+
+            if (!response.ok) {
+                return;
+            }
+
+            const data = await response.json();
+
+            const statusElement = document.getElementById(
+                "echolink-status"
+            );
+
+            const countElement = document.getElementById(
+                "echolink-connection-count"
+            );
+
+            const errorElement = document.getElementById(
+                "echolink-error"
+            );
+
+            const errorTextElement = document.getElementById(
+                "echolink-error-text"
+            );
+
+            statusElement.className = echoLinkStatusClass(
+                data.echolink_status
+            );
+
+            statusElement.textContent =
+                echoLinkTranslations[data.echolink_status]
+                || data.echolink_status;
+
+            countElement.textContent =
+                data.echolink_connection_count;
+
+            renderEchoLinkStations(
+                data.echolink_connected_stations
+            );
+
+            if (data.echolink_last_error) {
+                errorElement.classList.remove("d-none");
+
+                errorTextElement.textContent = echoLinkErrorText(
+                    data.echolink_last_error
+                );
+            } else {
+                errorElement.classList.add("d-none");
+                errorTextElement.textContent = "";
+            }
+
+        } catch (error) {
+            console.error(
+                "SVX Guardian EchoLink update failed:",
+                error
+            );
+        }
+    }
+
+
+    updateEchoLinkState();
+
+    window.setInterval(
+        updateEchoLinkState,
+        2000
+    );
+</script>
+
+{% endblock %}

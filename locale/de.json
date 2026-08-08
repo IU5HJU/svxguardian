@@ -10,6 +10,8 @@
     "REASON_CPU_TEMP_HIGH": "CPU-Temperatur ist hoch",
     "REASON_CPU_TEMP_CRITICAL": "CPU-Temperatur ist kritisch",
     "REASON_SVXLINK_STOPPED": "Der SvxLink-Dienst läuft nicht",
+    "REASON_ECHOLINK_DNS_ERROR": "EchoLink-DNS-Fehler",
+    "REASON_ECHOLINK_DIRECTORY_ERROR": "EchoLink-Verzeichnisfehler",
 
     "SYSTEM": "System",
     "RADIO": "Funk",
@@ -22,28 +24,108 @@
     "UPTIME": "Betriebszeit",
 
     "SVXLINK": "SvxLink",
-    "ECHOLINK": "EchoLink",
-    "REFLECTOR": "Reflector",
+    "SVXLINK_STATUS": "SvxLink-Status",
+    "SVXLINK_PID": "SvxLink-PID",
+    "SVXLINK_UPTIME": "SvxLink-Betriebszeit",
 
+    "ECHOLINK": "EchoLink",
+    "ECHOLINK_STATUS": "EchoLink-Status",
+    "ECHOLINK_DIRECTORY": "EchoLink-Verzeichnis",
+    "ECHOLINK_CONNECTED_STATIONS": "Verbundene EchoLink-Stationen",
+    "ECHOLINK_CONNECTION_COUNT": "EchoLink-Verbindungen",
+    "ECHOLINK_NO_STATIONS": "Keine EchoLink-Stationen verbunden",
+    "ECHOLINK_LAST_ERROR": "Letzter EchoLink-Fehler",
+    "ECHOLINK_MODULE": "EchoLink-Modul",
+
+    "REFLECTOR": "Reflector",
+    "REFLECTOR_STATUS": "Reflector-Status",
+    "REFLECTOR_HOST": "Reflector-Host",
+    "REFLECTOR_PORT": "Reflector-Port",
+    "REFLECTOR_TG": "Talkgroup",
+    "REFLECTOR_ENCRYPTION": "Verschlüsselung",
+    "REFLECTOR_CONNECTED_NODES": "Verbundene Knoten",
+    "REFLECTOR_CONNECTION_COUNT": "Anzahl verbundener Knoten",
+    "REFLECTOR_LAST_DISCONNECT": "Letzte Trennung",
+    "REFLECTOR_LAST_ERROR": "Letzter Reflector-Fehler",
+    "REFLECTOR_NO_NODES": "Keine Knoten verbunden",
+
+    "UNKNOWN": "Unbekannt",
+    "STARTING": "Startet",
     "RUNNING": "Aktiv",
+    "STOPPING": "Wird beendet",
     "STOPPED": "Gestoppt",
+    "ERROR": "Fehler",
+
+    "ONLINE": "Online",
+    "OFFLINE": "Offline",
+    "DNS_ERROR": "DNS-Fehler",
+
+    "CONNECTING": "Verbindung wird hergestellt",
+    "CONNECTED": "Verbunden",
+    "RECONNECTING": "Wiederverbindung läuft",
+    "DISCONNECTED": "Getrennt",
+    "AUTH_ERROR": "Authentifizierungsfehler",
+    "TIMEOUT": "Zeitüberschreitung",
+
+    "YES": "Ja",
+    "NO": "Nein",
+    "ENCRYPTED": "Verschlüsselt",
+    "NOT_ENCRYPTED": "Nicht verschlüsselt",
+
     "NOT_MONITORED": "Nicht überwacht",
+    "NOT_AVAILABLE": "Nicht verfügbar",
+    "NONE": "Keine",
 
     "DASHBOARD": "Dashboard",
     "LOGS": "Protokolle",
     "CONFIGURATION": "Konfiguration",
     "ABOUT": "Informationen",
+
     "NODE_IDENTITY": "Knotenidentität",
     "NODE_STATUS": "Knotenstatus",
     "MODULES": "Module",
     "SVXLINK_VERSION": "SvxLink-Version",
-    "NOT_AVAILABLE": "Nicht verfügbar",
     "MODULE_LOADED": "Modul geladen",
     "CONFIGURED": "Konfiguriert",
+
     "LAST_EVENTS": "Letzte Ereignisse",
     "GUARDIAN_STARTED": "SVX Guardian gestartet",
+
     "CPU_TEMP_HISTORY": "CPU-Temperaturverlauf",
     "HISTORICAL_CHART_SOON": "Das Verlaufsdiagramm wird bald verfügbar sein",
+
     "CALLSIGN": "Rufzeichen",
-    "NODE": "Knoten"
+    "NODE": "Knoten",
+
+    "OPERATIONAL_VIEW": "Betriebsansicht",
+    "OPERATIONAL_CONNECTED_STATIONS": "Verbundene Stationen",
+    "OPERATIONAL_LAST_UPDATE": "Letzte Aktualisierung",
+    "OPERATIONAL_AUTOMATIC": "Automatisch",
+    "OPERATIONAL_TRANSMITTING": "Sendet",
+    "OPERATIONAL_UNSTABLE_CONNECTION": "Instabile Verbindung",
+
+    "QTH": "QTH",
+    "LOCATOR": "Locator",
+    "SYSOP": "Sysop",
+    "NODE_CLASS": "Klasse",
+    "POSITION": "Position",
+
+    "SVXLINK_CONFIG_FILE": "SvxLink-Konfigurationsdatei",
+    "NODEINFO_FILE": "NodeInfo-Datei",
+    "LOGICS": "Logiken",
+
+    "RECEPTION": "Empfang",
+    "RX_NAME": "RX-Name",
+    "RX_FREQUENCY": "RX-Frequenz",
+    "SQUELCH_TYPE": "Squelch-Typ",
+    "RX_CTCSS": "RX-CTCSS",
+
+    "TRANSMISSION": "Übertragung",
+    "TX_NAME": "TX-Name",
+    "TX_FREQUENCY": "TX-Frequenz",
+    "TX_POWER": "TX-Leistung",
+    "TX_CTCSS": "TX-CTCSS",
+
+    "TONE_TO_TALKGROUP": "Ton zu Talkgroup",
+    "TALK_GROUP": "Talkgroup"
 }

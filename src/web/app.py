@@ -1,11 +1,13 @@
 """
-SVX Guardian Web Application
+SVX Guardian Web Application.
 
-Main Flask application.
+Provides the web dashboard and REST API.
 """
 
+from copy import deepcopy
 import json
 from pathlib import Path
+from threading import RLock
 from typing import Any
 
 from flask import Flask, jsonify, render_template, request
@@ -27,6 +29,8 @@ guardian.register(SvxLinkMonitor())
 guardian.register(EchoLinkMonitor())
 guardian.register(ReflectorMonitor())
 
+guardian_lock = RLock()
+
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 LOCALE_DIRECTORY = PROJECT_ROOT / "locale"
@@ -35,7 +39,7 @@ LANGUAGES_FILE = LOCALE_DIRECTORY / "languages.json"
 
 def load_languages() -> dict[str, dict[str, Any]]:
     """
-    Load enabled languages from locale/languages.json.
+    Load enabled interface languages.
     """
 
     fallback_languages = {
@@ -107,12 +111,34 @@ def get_language(
     return next(iter(languages))
 
 
-def export_node_info() -> dict[str, Any]:
+def build_page_context() -> dict[str, Any]:
     """
-    Export the static node configuration as a dictionary.
+    Build an isolated snapshot for rendering a web page.
     """
 
-    node = guardian.node_info
+    with guardian_lock:
+        guardian.run()
+
+        state_snapshot = deepcopy(guardian.state)
+        node_snapshot = deepcopy(guardian.node_info)
+
+    languages = load_languages()
+    language = get_language(languages)
+    translator = TranslationManager(language)
+
+    return {
+        "state": state_snapshot,
+        "node": node_snapshot,
+        "language": language,
+        "languages": languages,
+        "t": translator.gettext,
+    }
+
+
+def export_node_info(node: Any) -> dict[str, Any]:
+    """
+    Export static node information as a dictionary.
+    """
 
     return {
         "callsign": node.callsign,
@@ -154,35 +180,89 @@ def export_node_info() -> dict[str, Any]:
 @app.route("/")
 def dashboard():
     """
-    Render the main dashboard.
+    Render the general dashboard.
     """
-
-    guardian.run()
-
-    languages = load_languages()
-    language = get_language(languages)
-    translator = TranslationManager(language)
 
     return render_template(
         "dashboard/dashboard.html",
-        state=guardian.state,
-        node=guardian.node_info,
-        language=language,
-        languages=languages,
-        t=translator.gettext,
+        **build_page_context(),
+    )
+
+
+@app.route("/monitor")
+def operational_monitor():
+    """
+    Render the simplified mobile operational view.
+    """
+
+    return render_template(
+        "dashboard/monitor.html",
+        **build_page_context(),
+    )
+
+
+@app.route("/system")
+def system_page():
+    """
+    Render detailed operating-system information.
+    """
+
+    return render_template(
+        "dashboard/system.html",
+        **build_page_context(),
+    )
+
+
+@app.route("/svxlink")
+def svxlink_page():
+    """
+    Render detailed SvxLink information.
+    """
+
+    return render_template(
+        "dashboard/svxlink.html",
+        **build_page_context(),
+    )
+
+
+@app.route("/echolink")
+def echolink_page():
+    """
+    Render detailed EchoLink information.
+    """
+
+    return render_template(
+        "dashboard/echolink.html",
+        **build_page_context(),
+    )
+
+
+@app.route("/reflector")
+def reflector_page():
+    """
+    Render detailed Reflector information.
+    """
+
+    return render_template(
+        "dashboard/reflector.html",
+        **build_page_context(),
     )
 
 
 @app.route("/api/state")
 def api_state():
     """
-    Return the current node state and node information as JSON.
+    Return an isolated current-state snapshot as JSON.
     """
 
-    guardian.run()
+    with guardian_lock:
+        guardian.run()
 
-    data = StateExporter.to_dict(guardian.state)
-    data["node"] = export_node_info()
+        state_snapshot = deepcopy(guardian.state)
+        node_snapshot = deepcopy(guardian.node_info)
+
+    data = StateExporter.to_dict(state_snapshot)
+    data["node"] = export_node_info(node_snapshot)
 
     return jsonify(data)
 

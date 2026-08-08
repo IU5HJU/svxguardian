@@ -45,10 +45,27 @@ class NodeState:
     # EchoLink
     echolink_status: EchoLinkStatus = EchoLinkStatus.UNKNOWN
     echolink_last_error: str = ""
+
     echolink_connected_stations: list[str] = field(
         default_factory=list
     )
+
+    echolink_station_names: dict[str, str] = field(
+        default_factory=dict
+    )
+
+    echolink_connection_started: dict[str, str] = field(
+        default_factory=dict
+    )
+
+    echolink_unstable_stations: list[str] = field(
+        default_factory=list
+    )
+
     echolink_connection_count: int = 0
+
+    echolink_transmitting: bool = False
+    echolink_transmitting_station: str = ""
 
     # Reflector
     reflector_status: ReflectorStatus = ReflectorStatus.UNKNOWN
@@ -56,9 +73,11 @@ class NodeState:
     reflector_port: int = 0
     reflector_tg: int = 0
     reflector_encrypted: bool = False
+
     reflector_connected_nodes: list[str] = field(
         default_factory=list
     )
+
     reflector_connection_count: int = 0
     reflector_last_error: str = ""
     reflector_last_disconnect_reason: str = ""

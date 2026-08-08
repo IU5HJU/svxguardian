@@ -1,0 +1,687 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="svx-dashboard-layout">
+
+    <aside class="svx-sidebar">
+
+        <nav class="svx-sidebar-nav">
+
+            <a
+                class="svx-sidebar-link"
+                href="{{ url_for('dashboard', lang=language) }}"
+            >
+                <i class="fa-solid fa-gauge-high"></i>
+                <span>{{ t("DASHBOARD") }}</span>
+            </a>
+
+            <a
+                class="svx-sidebar-link"
+                href="{{ url_for('system_page', lang=language) }}"
+            >
+                <i class="fa-solid fa-microchip"></i>
+                <span>{{ t("SYSTEM") }}</span>
+            </a>
+
+            <a
+                class="svx-sidebar-link active"
+                href="{{ url_for('svxlink_page', lang=language) }}"
+            >
+                <i class="fa-solid fa-radio"></i>
+                <span>{{ t("SVXLINK") }}</span>
+            </a>
+
+            <a
+                class="svx-sidebar-link"
+                href="{{ url_for('echolink_page', lang=language) }}"
+            >
+                <i class="fa-solid fa-tower-broadcast"></i>
+                <span>{{ t("ECHOLINK") }}</span>
+            </a>
+
+            <a
+                class="svx-sidebar-link"
+                href="{{ url_for('reflector_page', lang=language) }}"
+            >
+                <i class="fa-solid fa-satellite-dish"></i>
+                <span>{{ t("REFLECTOR") }}</span>
+            </a>
+
+            <a class="svx-sidebar-link" href="#">
+                <i class="fa-solid fa-list"></i>
+                <span>{{ t("LOGS") }}</span>
+            </a>
+
+            <a class="svx-sidebar-link" href="#">
+                <i class="fa-solid fa-sliders"></i>
+                <span>{{ t("CONFIGURATION") }}</span>
+            </a>
+
+            <a class="svx-sidebar-link" href="#">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>{{ t("ABOUT") }}</span>
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <section class="svx-dashboard-content">
+
+        <div class="row mb-4">
+
+            <div class="col-12">
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <i class="fa-solid fa-radio"></i>
+                        {{ t("SVXLINK") }}
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="row g-4">
+
+                            <div class="col-xl-4 col-md-6">
+
+                                <div class="svx-service-row mb-0">
+
+                                    <span class="svx-service-name">
+                                        {{ t("SVXLINK_STATUS") }}
+                                    </span>
+
+                                    {% if state.svxlink_status == "RUNNING" %}
+
+                                        <span class="badge bg-success">
+                                            {{ t(state.svxlink_status) }}
+                                        </span>
+
+                                    {% elif state.svxlink_status == "STARTING"
+                                        or state.svxlink_status == "STOPPING" %}
+
+                                        <span class="badge bg-warning text-dark">
+                                            {{ t(state.svxlink_status) }}
+                                        </span>
+
+                                    {% elif state.svxlink_status == "STOPPED"
+                                        or state.svxlink_status == "ERROR" %}
+
+                                        <span class="badge bg-danger">
+                                            {{ t(state.svxlink_status) }}
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="badge bg-secondary">
+                                            {{ t(state.svxlink_status) }}
+                                        </span>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-xl-4 col-md-6">
+
+                                <div class="svx-service-row mb-0">
+
+                                    <span class="svx-service-name">
+                                        {{ t("SVXLINK_PID") }}
+                                    </span>
+
+                                    <span class="svx-status-value">
+
+                                        {% if state.svxlink_pid %}
+
+                                            {{ state.svxlink_pid }}
+
+                                        {% else %}
+
+                                            {{ t("NOT_AVAILABLE") }}
+
+                                        {% endif %}
+
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-xl-4 col-md-6">
+
+                                <div class="svx-service-row mb-0">
+
+                                    <span class="svx-service-name">
+                                        {{ t("SVXLINK_UPTIME") }}
+                                    </span>
+
+                                    <span class="svx-status-value">
+                                        {{ state.svxlink_uptime or t("NOT_AVAILABLE") }}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="row g-4 mb-4">
+
+            <div class="col-xl-6">
+
+                <div class="card h-100">
+
+                    <div class="card-header">
+
+                        <i class="fa-solid fa-tower-cell"></i>
+                        {{ t("NODE_IDENTITY") }}
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="svx-service-row">
+
+                            <span class="svx-service-name">
+                                {{ t("CALLSIGN") }}
+                            </span>
+
+                            <span class="svx-status-value">
+                                {{ node.callsign or t("NOT_AVAILABLE") }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="svx-service-row">
+
+                            <span class="svx-service-name">
+                                {{ t("QTH") }}
+                            </span>
+
+                            <span class="svx-status-value">
+                                {{ node.qth or t("NOT_AVAILABLE") }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="svx-service-row">
+
+                            <span class="svx-service-name">
+                                {{ t("LOCATOR") }}
+                            </span>
+
+                            <span class="svx-status-value">
+                                {{ node.locator or t("NOT_AVAILABLE") }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="svx-service-row">
+
+                            <span class="svx-service-name">
+                                {{ t("SYSOP") }}
+                            </span>
+
+                            <span class="svx-status-value">
+                                {{ node.sysop or t("NOT_AVAILABLE") }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="svx-service-row">
+
+                            <span class="svx-service-name">
+                                {{ t("NODE_CLASS") }}
+                            </span>
+
+                            <span class="svx-status-value">
+                                {{ node.node_class or t("NOT_AVAILABLE") }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="svx-service-row mb-0">
+
+                            <span class="svx-service-name">
+                                {{ t("POSITION") }}
+                            </span>
+
+                            <span class="svx-status-value">
+
+                                {% if node.latitude and node.longitude %}
+
+                                    {{ node.latitude }},
+                                    {{ node.longitude }}
+
+                                {% else %}
+
+                                    {{ t("NOT_AVAILABLE") }}
+
+                                {% endif %}
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-xl-6">
+
+                <div class="card h-100">
+
+                    <div class="card-header">
+
+                        <i class="fa-solid fa-file-code"></i>
+                        {{ t("CONFIGURATION") }}
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="svx-service-row">
+
+                            <span class="svx-service-name">
+                                {{ t("SVXLINK_VERSION") }}
+                            </span>
+
+                            <span class="svx-status-value">
+                                {{ node.svxlink_version or t("NOT_AVAILABLE") }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="svx-service-row">
+
+                            <span class="svx-service-name">
+                                {{ t("SVXLINK_CONFIG_FILE") }}
+                            </span>
+
+                            <span class="svx-status-value">
+                                {{ node.config_file or t("NOT_AVAILABLE") }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="svx-service-row mb-0">
+
+                            <span class="svx-service-name">
+                                {{ t("NODEINFO_FILE") }}
+                            </span>
+
+                            <span class="svx-status-value">
+                                {{ node.node_info_file or t("NOT_AVAILABLE") }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="row g-4 mb-4">
+
+            <div class="col-xl-6">
+
+                <div class="card h-100">
+
+                    <div class="card-header">
+
+                        <i class="fa-solid fa-puzzle-piece"></i>
+                        {{ t("MODULES") }}
+
+                    </div>
+
+                    <div class="card-body">
+
+                        {% if node.modules %}
+
+                            <div class="d-flex flex-wrap gap-2">
+
+                                {% for module in node.modules %}
+
+                                    <span class="badge bg-primary">
+                                        {{ module }}
+                                    </span>
+
+                                {% endfor %}
+
+                            </div>
+
+                        {% else %}
+
+                            <span class="text-muted">
+                                {{ t("NOT_AVAILABLE") }}
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-xl-6">
+
+                <div class="card h-100">
+
+                    <div class="card-header">
+
+                        <i class="fa-solid fa-diagram-project"></i>
+                        {{ t("LOGICS") }}
+
+                    </div>
+
+                    <div class="card-body">
+
+                        {% if node.logics %}
+
+                            <div class="d-flex flex-wrap gap-2">
+
+                                {% for logic in node.logics %}
+
+                                    <span class="badge bg-secondary">
+                                        {{ logic }}
+                                    </span>
+
+                                {% endfor %}
+
+                            </div>
+
+                        {% else %}
+
+                            <span class="text-muted">
+                                {{ t("NOT_AVAILABLE") }}
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="row g-4 mb-4">
+
+            <div class="col-xl-6">
+
+                <div class="card h-100">
+
+                    <div class="card-header">
+
+                        <i class="fa-solid fa-arrow-down"></i>
+                        {{ t("RECEPTION") }}
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="svx-service-row">
+
+                            <span class="svx-service-name">
+                                {{ t("RX_NAME") }}
+                            </span>
+
+                            <span class="svx-status-value">
+                                {{ node.rx_name or t("NOT_AVAILABLE") }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="svx-service-row">
+
+                            <span class="svx-service-name">
+                                {{ t("RX_FREQUENCY") }}
+                            </span>
+
+                            <span class="svx-status-value">
+                                {{ node.rx_frequency or t("NOT_AVAILABLE") }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="svx-service-row">
+
+                            <span class="svx-service-name">
+                                {{ t("SQUELCH_TYPE") }}
+                            </span>
+
+                            <span class="svx-status-value">
+                                {{ node.rx_sql_type or t("NOT_AVAILABLE") }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="svx-service-row mb-0">
+
+                            <span class="svx-service-name">
+                                {{ t("RX_CTCSS") }}
+                            </span>
+
+                            <span class="svx-status-value">
+
+                                {% if node.rx_ctcss_frequencies %}
+
+                                    {% for frequency in node.rx_ctcss_frequencies %}
+
+                                        <span class="badge bg-secondary">
+                                            {{ frequency }}
+                                        </span>
+
+                                    {% endfor %}
+
+                                {% else %}
+
+                                    {{ t("NOT_AVAILABLE") }}
+
+                                {% endif %}
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-xl-6">
+
+                <div class="card h-100">
+
+                    <div class="card-header">
+
+                        <i class="fa-solid fa-arrow-up"></i>
+                        {{ t("TRANSMISSION") }}
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="svx-service-row">
+
+                            <span class="svx-service-name">
+                                {{ t("TX_NAME") }}
+                            </span>
+
+                            <span class="svx-status-value">
+                                {{ node.tx_name or t("NOT_AVAILABLE") }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="svx-service-row">
+
+                            <span class="svx-service-name">
+                                {{ t("TX_FREQUENCY") }}
+                            </span>
+
+                            <span class="svx-status-value">
+                                {{ node.tx_frequency or t("NOT_AVAILABLE") }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="svx-service-row">
+
+                            <span class="svx-service-name">
+                                {{ t("TX_POWER") }}
+                            </span>
+
+                            <span class="svx-status-value">
+                                {{ node.tx_power or t("NOT_AVAILABLE") }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="svx-service-row mb-0">
+
+                            <span class="svx-service-name">
+                                {{ t("TX_CTCSS") }}
+                            </span>
+
+                            <span class="svx-status-value">
+                                {{ node.tx_ctcss_frequency or t("NOT_AVAILABLE") }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-12">
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <i class="fa-solid fa-code-branch"></i>
+                        {{ t("TONE_TO_TALKGROUP") }}
+
+                    </div>
+
+                    <div class="card-body">
+
+                        {% if node.tone_to_talkgroup %}
+
+                            <div class="table-responsive">
+
+                                <table class="table align-middle mb-0">
+
+                                    <thead>
+
+                                        <tr>
+
+                                            <th>
+                                                CTCSS
+                                            </th>
+
+                                            <th>
+                                                {{ t("TALK_GROUP") }}
+                                            </th>
+
+                                        </tr>
+
+                                    </thead>
+
+                                    <tbody>
+
+                                        {% for tone, talkgroup in
+                                            node.tone_to_talkgroup.items() %}
+
+                                            <tr>
+
+                                                <td>
+                                                    {{ tone }}
+                                                </td>
+
+                                                <td>
+                                                    {{ talkgroup }}
+                                                </td>
+
+                                            </tr>
+
+                                        {% endfor %}
+
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+
+                        {% else %}
+
+                            <span class="text-muted">
+                                {{ t("NOT_AVAILABLE") }}
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+{% endblock %}

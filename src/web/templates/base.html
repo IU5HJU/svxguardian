@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="{{ language }}">
 
 <head>
@@ -11,20 +12,24 @@
 
     <title>{{ t("APP_NAME") }}</title>
 
+
     <!-- Bootstrap 5 -->
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
         rel="stylesheet">
+
 
     <!-- Font Awesome -->
     <link
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
         rel="stylesheet">
 
+
     <!-- Google Font -->
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
+
 
     <!-- SVX Guardian -->
     <link
@@ -35,11 +40,59 @@
         rel="stylesheet"
         href="{{ url_for('static', filename='css/dashboard.css') }}">
 
+
+    <!--
+        Apply the saved theme as early as possible.
+
+        This prevents a light-theme flash before JavaScript at the
+        bottom of the page is executed.
+    -->
+    <script>
+        (function () {
+
+            const savedTheme =
+                localStorage.getItem(
+                    "svxguardian-theme"
+                );
+
+            let theme = savedTheme;
+
+            if (
+                theme !== "light" &&
+                theme !== "dark"
+            ) {
+
+                const prefersDark =
+                    window.matchMedia &&
+                    window.matchMedia(
+                        "(prefers-color-scheme: dark)"
+                    ).matches;
+
+                theme = prefersDark
+                    ? "dark"
+                    : "light";
+            }
+
+            document.documentElement.dataset.theme =
+                theme;
+
+            if (theme === "dark") {
+                document.documentElement.classList.add(
+                    "svx-theme-dark"
+                );
+            }
+
+        })();
+    </script>
+
 </head>
+
 
 <body>
 
+
     {% include "components/header.html" %}
+
 
     <main class="container-fluid">
 
@@ -48,9 +101,204 @@
 
     </main>
 
+
     <!-- Bootstrap -->
     <script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+
+    <!-- SVX Guardian global theme manager -->
+    <script>
+        (function () {
+
+            const STORAGE_KEY =
+                "svxguardian-theme";
+
+            const root =
+                document.documentElement;
+
+            const body =
+                document.body;
+
+            const themeToggle =
+                document.getElementById(
+                    "themeToggle"
+                );
+
+
+            function getCurrentTheme() {
+
+                const currentTheme =
+                    root.dataset.theme;
+
+                if (
+                    currentTheme === "dark" ||
+                    currentTheme === "light"
+                ) {
+                    return currentTheme;
+                }
+
+                return "light";
+            }
+
+
+            function updateThemeIcon(theme) {
+
+                if (!themeToggle) {
+                    return;
+                }
+
+                const icon =
+                    themeToggle.querySelector("i");
+
+                if (!icon) {
+                    return;
+                }
+
+                if (theme === "dark") {
+
+                    icon.className =
+                        "fa-solid fa-lightbulb";
+
+                    themeToggle.setAttribute(
+                        "aria-label",
+                        "Light theme"
+                    );
+
+                    themeToggle.setAttribute(
+                        "title",
+                        "Light theme"
+                    );
+
+                } else {
+
+                    icon.className =
+                        "fa-solid fa-moon";
+
+                    themeToggle.setAttribute(
+                        "aria-label",
+                        "Dark theme"
+                    );
+
+                    themeToggle.setAttribute(
+                        "title",
+                        "Dark theme"
+                    );
+                }
+            }
+
+
+            function applyTheme(
+                theme,
+                savePreference = true
+            ) {
+
+                if (
+                    theme !== "light" &&
+                    theme !== "dark"
+                ) {
+                    theme = "light";
+                }
+
+
+                root.dataset.theme =
+                    theme;
+
+
+                if (theme === "dark") {
+
+                    root.classList.add(
+                        "svx-theme-dark"
+                    );
+
+                    body.classList.add(
+                        "svx-theme-dark"
+                    );
+
+                } else {
+
+                    root.classList.remove(
+                        "svx-theme-dark"
+                    );
+
+                    body.classList.remove(
+                        "svx-theme-dark"
+                    );
+                }
+
+
+                updateThemeIcon(
+                    theme
+                );
+
+
+                if (savePreference) {
+
+                    localStorage.setItem(
+                        STORAGE_KEY,
+                        theme
+                    );
+                }
+
+
+                window.dispatchEvent(
+                    new CustomEvent(
+                        "svxguardian-theme-change",
+                        {
+                            detail: {
+                                theme: theme
+                            }
+                        }
+                    )
+                );
+            }
+
+
+            function toggleTheme() {
+
+                const currentTheme =
+                    getCurrentTheme();
+
+                const nextTheme =
+                    currentTheme === "dark"
+                        ? "light"
+                        : "dark";
+
+                applyTheme(
+                    nextTheme,
+                    true
+                );
+            }
+
+
+            applyTheme(
+                getCurrentTheme(),
+                false
+            );
+
+
+            if (themeToggle) {
+
+                themeToggle.addEventListener(
+                    "click",
+                    toggleTheme
+                );
+            }
+
+
+            window.SVXGuardianTheme = {
+                get: getCurrentTheme,
+                set: function (theme) {
+                    applyTheme(
+                        theme,
+                        true
+                    );
+                },
+                toggle: toggleTheme
+            };
+
+        })();
     </script>
 
 </body>
