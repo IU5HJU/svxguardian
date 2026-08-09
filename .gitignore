@@ -239,3 +239,17 @@ Thumbs.db
 
 # Temporary files
 *.tmp
+
+# SVX Guardian SSL / certificate material
+*.key
+*.csr
+*.pem
+*.crt
+*.cer
+*.p12
+*.pfx
+
+# Local SSL working directories
+/ssl/
+certs/
+certificates/
