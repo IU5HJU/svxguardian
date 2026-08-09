@@ -1,48 +1,23 @@
 #
-# SVX Guardian - Apache Reverse Proxy Template
+# SVX Guardian - Apache HTTPS Reverse Proxy Template
 #
 # This file is a TEMPLATE.
-# Do not enable it directly without replacing the variables below.
+#
+# SVX Guardian does NOT require public TCP port 80.
+# Certificate validation may use DNS-based verification.
 #
 # Variables:
 #
 #   @SVXGUARDIAN_HOSTNAME@
+#   @SVXGUARDIAN_HTTPS_PORT@
 #   @SVXGUARDIAN_CERTIFICATE@
 #   @SVXGUARDIAN_PRIVATE_KEY@
 #   @SVXGUARDIAN_BACKEND_HOST@
 #   @SVXGUARDIAN_BACKEND_PORT@
 #
-# Example:
-#
-#   @SVXGUARDIAN_HOSTNAME@
-#       iu5hju.ddns.net
-#
-#   @SVXGUARDIAN_BACKEND_HOST@
-#       127.0.0.1
-#
-#   @SVXGUARDIAN_BACKEND_PORT@
-#       8080
-#
 
 
-<VirtualHost *:80>
-
-    ServerName @SVXGUARDIAN_HOSTNAME@
-
-    ProxyPreserveHost On
-
-    ProxyPass / http://@SVXGUARDIAN_BACKEND_HOST@:@SVXGUARDIAN_BACKEND_PORT@/
-    ProxyPassReverse / http://@SVXGUARDIAN_BACKEND_HOST@:@SVXGUARDIAN_BACKEND_PORT@/
-
-    RequestHeader set X-Forwarded-Proto "http"
-
-    ErrorLog ${APACHE_LOG_DIR}/svxguardian-error.log
-    CustomLog ${APACHE_LOG_DIR}/svxguardian-access.log combined
-
-</VirtualHost>
-
-
-<VirtualHost *:443>
+<VirtualHost *:@SVXGUARDIAN_HTTPS_PORT@>
 
     ServerName @SVXGUARDIAN_HOSTNAME@
 
