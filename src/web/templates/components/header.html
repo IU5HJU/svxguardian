@@ -5,7 +5,8 @@
         <!-- Logo -->
         <a
             class="svx-header-brand"
-            href="{{ url_for('dashboard', lang=language) }}">
+            href="{{ url_for('dashboard', lang=language) }}"
+        >
 
             <img
                 src="{{ url_for(
@@ -13,7 +14,8 @@
                     filename='img/logos/logo-light.png'
                 ) }}"
                 alt="{{ t('APP_NAME') }}"
-                class="svx-header-logo">
+                class="svx-header-logo"
+            >
 
         </a>
 
@@ -36,8 +38,9 @@
                         'dashboard',
                         lang=language
                     ) }}"
-                    aria-label="Vista standard"
-                    title="Vista standard">
+                    aria-label="{{ t('DASHBOARD') }}"
+                    title="{{ t('DASHBOARD') }}"
+                >
 
                     <i class="fa-solid fa-table-columns"></i>
 
@@ -51,8 +54,9 @@
                         'operational_monitor',
                         lang=language
                     ) }}"
-                    aria-label="Vista operativa"
-                    title="Vista operativa">
+                    aria-label="{{ t('OPERATIONAL_VIEW') }}"
+                    title="{{ t('OPERATIONAL_VIEW') }}"
+                >
 
                     <i class="fa-solid fa-display"></i>
 
@@ -72,7 +76,8 @@
                     data-bs-auto-close="true"
                     aria-expanded="false"
                     aria-label="Language"
-                    title="Language">
+                    title="Language"
+                >
 
                     <i class="fa-solid fa-language"></i>
 
@@ -82,9 +87,11 @@
 
                 </button>
 
+
                 <ul
                     class="dropdown-menu dropdown-menu-end svx-language-menu"
-                    aria-labelledby="languageDropdown">
+                    aria-labelledby="languageDropdown"
+                >
 
                     {% for language_code, metadata in languages.items() %}
 
@@ -96,9 +103,20 @@
                                     active
                                 {% endif %}"
                                 href="{{ url_for(
-                                    'dashboard',
+                                    request.endpoint
+                                        if request.endpoint
+                                        in [
+                                            'dashboard',
+                                            'operational_monitor',
+                                            'system_page',
+                                            'svxlink_page',
+                                            'echolink_page',
+                                            'reflector_page'
+                                        ]
+                                        else 'dashboard',
                                     lang=language_code
-                                ) }}">
+                                ) }}"
+                            >
 
                                 <span class="svx-language-check">
 
@@ -129,7 +147,8 @@
                 type="button"
                 id="themeToggle"
                 aria-label="Theme"
-                title="Theme">
+                title="Theme"
+            >
 
                 <i class="fa-solid fa-moon"></i>
 
@@ -141,8 +160,9 @@
                 class="svx-header-button"
                 type="button"
                 id="settingsButton"
-                aria-label="Settings"
-                title="Settings">
+                aria-label="{{ t('CONFIGURATION') }}"
+                title="{{ t('CONFIGURATION') }}"
+            >
 
                 <i class="fa-solid fa-gear"></i>
 
