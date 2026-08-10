@@ -80,6 +80,8 @@
     "LOGS": "Journaux",
     "CONFIGURATION": "Configuration",
     "ABOUT": "À propos",
+    "NAV_CONFIGURATION": "Réglages",
+    "NAV_ABOUT": "Infos",
 
     "NODE_IDENTITY": "Identité du nœud",
     "NODE_STATUS": "État du nœud",

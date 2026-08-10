@@ -80,6 +80,8 @@
     "LOGS": "Logs",
     "CONFIGURATION": "Configuration",
     "ABOUT": "About",
+    "NAV_CONFIGURATION": "Settings",
+    "NAV_ABOUT": "Info",
 
     "NODE_IDENTITY": "Node Identity",
     "NODE_STATUS": "Node Status",

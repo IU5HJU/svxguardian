@@ -1,14 +1,14 @@
 {
     "APP_NAME": "SVX Guardian",
 
-    "STATUS_HEALTHY": "Работает нормально",
+    "STATUS_HEALTHY": "Работает",
     "STATUS_WARNING": "Предупреждение",
     "STATUS_CRITICAL": "Критическое состояние",
     "STATUS_UNKNOWN": "Неизвестно",
 
     "REASON_NONE": "Система работает нормально",
-    "REASON_CPU_TEMP_HIGH": "Высокая температура процессора",
-    "REASON_CPU_TEMP_CRITICAL": "Критическая температура процессора",
+    "REASON_CPU_TEMP_HIGH": "Высокая температура CPU",
+    "REASON_CPU_TEMP_CRITICAL": "Критическая температура CPU",
     "REASON_SVXLINK_STOPPED": "Служба SvxLink не запущена",
     "REASON_ECHOLINK_DNS_ERROR": "Ошибка DNS EchoLink",
     "REASON_ECHOLINK_DIRECTORY_ERROR": "Ошибка каталога EchoLink",
@@ -17,9 +17,9 @@
     "RADIO": "Радио",
 
     "HOSTNAME": "Имя хоста",
-    "CPU_TEMP": "Температура процессора",
-    "CPU_USAGE": "Загрузка процессора",
-    "RAM_USAGE": "Использование ОЗУ",
+    "CPU_TEMP": "Температура CPU",
+    "CPU_USAGE": "Загрузка CPU",
+    "RAM_USAGE": "Использование RAM",
     "DISK_USAGE": "Использование диска",
     "UPTIME": "Время работы",
 
@@ -50,10 +50,10 @@
     "REFLECTOR_NO_NODES": "Нет подключённых узлов",
 
     "UNKNOWN": "Неизвестно",
-    "STARTING": "Запускается",
+    "STARTING": "Запуск",
     "RUNNING": "Работает",
-    "STOPPING": "Останавливается",
-    "STOPPED": "Остановлено",
+    "STOPPING": "Остановка",
+    "STOPPED": "Остановлен",
     "ERROR": "Ошибка",
 
     "ONLINE": "В сети",
@@ -61,25 +61,27 @@
     "DNS_ERROR": "Ошибка DNS",
 
     "CONNECTING": "Подключение",
-    "CONNECTED": "Подключено",
-    "RECONNECTING": "Повторное подключение",
-    "DISCONNECTED": "Отключено",
+    "CONNECTED": "Подключён",
+    "RECONNECTING": "Переподключение",
+    "DISCONNECTED": "Отключён",
     "AUTH_ERROR": "Ошибка аутентификации",
-    "TIMEOUT": "Время ожидания истекло",
+    "TIMEOUT": "Тайм-аут",
 
     "YES": "Да",
     "NO": "Нет",
     "ENCRYPTED": "Зашифровано",
-    "NOT_ENCRYPTED": "Не зашифровано",
+    "NOT_ENCRYPTED": "Без шифрования",
 
-    "NOT_MONITORED": "Не контролируется",
+    "NOT_MONITORED": "Не отслеживается",
     "NOT_AVAILABLE": "Недоступно",
     "NONE": "Нет",
 
-    "DASHBOARD": "Панель управления",
-    "LOGS": "Журналы",
+    "DASHBOARD": "Панель",
+    "LOGS": "Журнал",
     "CONFIGURATION": "Конфигурация",
-    "ABOUT": "О программе",
+    "ABOUT": "Информация",
+    "NAV_CONFIGURATION": "Настр.",
+    "NAV_ABOUT": "Инфо",
 
     "NODE_IDENTITY": "Идентификация узла",
     "NODE_STATUS": "Состояние узла",
@@ -91,8 +93,8 @@
     "LAST_EVENTS": "Последние события",
     "GUARDIAN_STARTED": "SVX Guardian запущен",
 
-    "CPU_TEMP_HISTORY": "История температуры процессора",
-    "HISTORICAL_CHART_SOON": "График истории скоро будет доступен",
+    "CPU_TEMP_HISTORY": "История температуры CPU",
+    "HISTORICAL_CHART_SOON": "Исторический график скоро будет доступен",
 
     "CALLSIGN": "Позывной",
     "NODE": "Узел",
@@ -105,7 +107,7 @@
     "OPERATIONAL_UNSTABLE_CONNECTION": "Нестабильное соединение",
 
     "QTH": "QTH",
-    "LOCATOR": "Локатор",
+    "LOCATOR": "Locator",
     "SYSOP": "Sysop",
     "NODE_CLASS": "Класс",
     "POSITION": "Позиция",
@@ -126,6 +128,6 @@
     "TX_POWER": "Мощность TX",
     "TX_CTCSS": "CTCSS TX",
 
-    "TONE_TO_TALKGROUP": "Тон для разговорной группы",
+    "TONE_TO_TALKGROUP": "Тон в разговорную группу",
     "TALK_GROUP": "Разговорная группа"
 }

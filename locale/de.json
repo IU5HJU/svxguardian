@@ -7,10 +7,10 @@
     "STATUS_UNKNOWN": "Unbekannt",
 
     "REASON_NONE": "System arbeitet normal",
-    "REASON_CPU_TEMP_HIGH": "CPU-Temperatur ist hoch",
-    "REASON_CPU_TEMP_CRITICAL": "CPU-Temperatur ist kritisch",
+    "REASON_CPU_TEMP_HIGH": "Hohe CPU-Temperatur",
+    "REASON_CPU_TEMP_CRITICAL": "Kritische CPU-Temperatur",
     "REASON_SVXLINK_STOPPED": "Der SvxLink-Dienst läuft nicht",
-    "REASON_ECHOLINK_DNS_ERROR": "EchoLink-DNS-Fehler",
+    "REASON_ECHOLINK_DNS_ERROR": "EchoLink DNS-Fehler",
     "REASON_ECHOLINK_DIRECTORY_ERROR": "EchoLink-Verzeichnisfehler",
 
     "SYSTEM": "System",
@@ -20,7 +20,7 @@
     "CPU_TEMP": "CPU-Temperatur",
     "CPU_USAGE": "CPU-Auslastung",
     "RAM_USAGE": "RAM-Auslastung",
-    "DISK_USAGE": "Festplattennutzung",
+    "DISK_USAGE": "Festplattenauslastung",
     "UPTIME": "Betriebszeit",
 
     "SVXLINK": "SvxLink",
@@ -60,9 +60,9 @@
     "OFFLINE": "Offline",
     "DNS_ERROR": "DNS-Fehler",
 
-    "CONNECTING": "Verbindung wird hergestellt",
+    "CONNECTING": "Verbindet",
     "CONNECTED": "Verbunden",
-    "RECONNECTING": "Wiederverbindung läuft",
+    "RECONNECTING": "Wiederverbindung",
     "DISCONNECTED": "Getrennt",
     "AUTH_ERROR": "Authentifizierungsfehler",
     "TIMEOUT": "Zeitüberschreitung",
@@ -76,10 +76,12 @@
     "NOT_AVAILABLE": "Nicht verfügbar",
     "NONE": "Keine",
 
-    "DASHBOARD": "Dashboard",
+    "DASHBOARD": "Übersicht",
     "LOGS": "Protokolle",
     "CONFIGURATION": "Konfiguration",
     "ABOUT": "Informationen",
+    "NAV_CONFIGURATION": "Setup",
+    "NAV_ABOUT": "Info",
 
     "NODE_IDENTITY": "Knotenidentität",
     "NODE_STATUS": "Knotenstatus",
@@ -92,7 +94,7 @@
     "GUARDIAN_STARTED": "SVX Guardian gestartet",
 
     "CPU_TEMP_HISTORY": "CPU-Temperaturverlauf",
-    "HISTORICAL_CHART_SOON": "Das Verlaufsdiagramm wird bald verfügbar sein",
+    "HISTORICAL_CHART_SOON": "Historisches Diagramm demnächst verfügbar",
 
     "CALLSIGN": "Rufzeichen",
     "NODE": "Knoten",

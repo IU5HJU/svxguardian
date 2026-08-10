@@ -4,68 +4,7 @@
 
 <div class="svx-dashboard-layout">
 
-    <aside class="svx-sidebar">
-
-        <nav class="svx-sidebar-nav">
-
-            <a
-                class="svx-sidebar-link"
-                href="{{ url_for('dashboard', lang=language) }}"
-            >
-                <i class="fa-solid fa-gauge-high"></i>
-                <span>{{ t("DASHBOARD") }}</span>
-            </a>
-
-            <a
-                class="svx-sidebar-link"
-                href="{{ url_for('system_page', lang=language) }}"
-            >
-                <i class="fa-solid fa-microchip"></i>
-                <span>{{ t("SYSTEM") }}</span>
-            </a>
-
-            <a
-                class="svx-sidebar-link active"
-                href="{{ url_for('svxlink_page', lang=language) }}"
-            >
-                <i class="fa-solid fa-radio"></i>
-                <span>{{ t("SVXLINK") }}</span>
-            </a>
-
-            <a
-                class="svx-sidebar-link"
-                href="{{ url_for('echolink_page', lang=language) }}"
-            >
-                <i class="fa-solid fa-tower-broadcast"></i>
-                <span>{{ t("ECHOLINK") }}</span>
-            </a>
-
-            <a
-                class="svx-sidebar-link"
-                href="{{ url_for('reflector_page', lang=language) }}"
-            >
-                <i class="fa-solid fa-satellite-dish"></i>
-                <span>{{ t("REFLECTOR") }}</span>
-            </a>
-
-            <a class="svx-sidebar-link" href="#">
-                <i class="fa-solid fa-list"></i>
-                <span>{{ t("LOGS") }}</span>
-            </a>
-
-            <a class="svx-sidebar-link" href="#">
-                <i class="fa-solid fa-sliders"></i>
-                <span>{{ t("CONFIGURATION") }}</span>
-            </a>
-
-            <a class="svx-sidebar-link" href="#">
-                <i class="fa-solid fa-circle-info"></i>
-                <span>{{ t("ABOUT") }}</span>
-            </a>
-
-        </nav>
-
-    </aside>
+    {% include "components/sidebar.html" %}
 
 
     <section class="svx-dashboard-content">

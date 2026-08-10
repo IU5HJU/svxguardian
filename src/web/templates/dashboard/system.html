@@ -1,0 +1,334 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="svx-dashboard-layout">
+
+    {% include "components/sidebar.html" %}
+
+
+    <section class="svx-dashboard-content">
+
+        <div class="row mb-4">
+
+            <div class="col-12">
+
+                <div
+                    class="card health-banner
+                    {% if state.health == 'HEALTHY' %}
+                        health-healthy
+                    {% elif state.health == 'WARNING' %}
+                        health-warning
+                    {% elif state.health == 'CRITICAL' %}
+                        health-critical
+                    {% else %}
+                        health-unknown
+                    {% endif %}"
+                >
+
+                    <div class="card-body text-center">
+
+                        {% if state.health == "HEALTHY" %}
+
+                            <h2>
+                                <i class="fa-solid fa-circle-check"></i>
+                                {{ t("STATUS_HEALTHY") }}
+                            </h2>
+
+                        {% elif state.health == "WARNING" %}
+
+                            <h2>
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                {{ t("STATUS_WARNING") }}
+                            </h2>
+
+                        {% elif state.health == "CRITICAL" %}
+
+                            <h2>
+                                <i class="fa-solid fa-circle-xmark"></i>
+                                {{ t("STATUS_CRITICAL") }}
+                            </h2>
+
+                        {% else %}
+
+                            <h2>
+                                <i class="fa-solid fa-circle-question"></i>
+                                {{ t("STATUS_UNKNOWN") }}
+                            </h2>
+
+                        {% endif %}
+
+                        <p class="lead mb-0">
+                            {{ t(state.health_reason) }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="row g-4 mb-4">
+
+            <div class="col-xl-6">
+
+                <div class="card h-100">
+
+                    <div class="card-header">
+                        <i class="fa-solid fa-server"></i>
+                        {{ t("SYSTEM") }}
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="svx-service-row">
+
+                            <span class="svx-service-name">
+                                {{ t("HOSTNAME") }}
+                            </span>
+
+                            <span class="svx-status-value">
+                                {{ state.hostname or t("NOT_AVAILABLE") }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="svx-service-row mb-0">
+
+                            <span class="svx-service-name">
+                                {{ t("UPTIME") }}
+                            </span>
+
+                            <span class="svx-status-value">
+                                {{ state.uptime or t("NOT_AVAILABLE") }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-xl-6">
+
+                <div class="card h-100">
+
+                    <div class="card-header">
+                        <i class="fa-solid fa-microchip"></i>
+                        {{ t("CPU_TEMP") }}
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="svx-service-row">
+
+                            <span class="svx-service-name">
+                                {{ t("CPU_TEMP") }}
+                            </span>
+
+                            <span class="svx-status-value">
+
+                                {% if state.cpu_temp > 0 %}
+
+                                    {{ "%.1f"|format(state.cpu_temp) }} °C
+
+                                {% else %}
+
+                                    {{ t("NOT_AVAILABLE") }}
+
+                                {% endif %}
+
+                            </span>
+
+                        </div>
+
+
+                        <div class="svx-service-row mb-0">
+
+                            <span class="svx-service-name">
+                                {{ t("CPU_USAGE") }}
+                            </span>
+
+                            <span class="svx-status-value">
+                                {{ "%.1f"|format(state.cpu_usage) }} %
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="row g-4">
+
+            <div class="col-xl-4">
+
+                <div class="card h-100">
+
+                    <div class="card-header">
+                        <i class="fa-solid fa-microchip"></i>
+                        {{ t("CPU_USAGE") }}
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="svx-service-row">
+
+                            <span class="svx-service-name">
+                                {{ t("CPU_USAGE") }}
+                            </span>
+
+                            <span class="svx-status-value">
+                                {{ "%.1f"|format(state.cpu_usage) }} %
+                            </span>
+
+                        </div>
+
+
+                        <div class="progress">
+
+                            <div
+                                class="progress-bar
+                                {% if state.cpu_usage >= 90 %}
+                                    bg-danger
+                                {% elif state.cpu_usage >= 75 %}
+                                    bg-warning
+                                {% else %}
+                                    bg-success
+                                {% endif %}"
+                                role="progressbar"
+                                style="width: {{ state.cpu_usage }}%;"
+                                aria-valuenow="{{ state.cpu_usage }}"
+                                aria-valuemin="0"
+                                aria-valuemax="100"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-xl-4">
+
+                <div class="card h-100">
+
+                    <div class="card-header">
+                        <i class="fa-solid fa-memory"></i>
+                        {{ t("RAM_USAGE") }}
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="svx-service-row">
+
+                            <span class="svx-service-name">
+                                {{ t("RAM_USAGE") }}
+                            </span>
+
+                            <span class="svx-status-value">
+                                {{ "%.1f"|format(state.ram_usage) }} %
+                            </span>
+
+                        </div>
+
+
+                        <div class="progress">
+
+                            <div
+                                class="progress-bar
+                                {% if state.ram_usage >= 90 %}
+                                    bg-danger
+                                {% elif state.ram_usage >= 75 %}
+                                    bg-warning
+                                {% else %}
+                                    bg-success
+                                {% endif %}"
+                                role="progressbar"
+                                style="width: {{ state.ram_usage }}%;"
+                                aria-valuenow="{{ state.ram_usage }}"
+                                aria-valuemin="0"
+                                aria-valuemax="100"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-xl-4">
+
+                <div class="card h-100">
+
+                    <div class="card-header">
+                        <i class="fa-solid fa-hard-drive"></i>
+                        {{ t("DISK_USAGE") }}
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="svx-service-row">
+
+                            <span class="svx-service-name">
+                                {{ t("DISK_USAGE") }}
+                            </span>
+
+                            <span class="svx-status-value">
+                                {{ "%.1f"|format(state.disk_usage) }} %
+                            </span>
+
+                        </div>
+
+
+                        <div class="progress">
+
+                            <div
+                                class="progress-bar
+                                {% if state.disk_usage >= 90 %}
+                                    bg-danger
+                                {% elif state.disk_usage >= 75 %}
+                                    bg-warning
+                                {% else %}
+                                    bg-success
+                                {% endif %}"
+                                role="progressbar"
+                                style="width: {{ state.disk_usage }}%;"
+                                aria-valuenow="{{ state.disk_usage }}"
+                                aria-valuemin="0"
+                                aria-valuemax="100"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+{% endblock %}

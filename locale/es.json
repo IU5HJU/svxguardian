@@ -80,6 +80,8 @@
     "LOGS": "Registros",
     "CONFIGURATION": "Configuración",
     "ABOUT": "Acerca de",
+    "NAV_CONFIGURATION": "Ajustes",
+    "NAV_ABOUT": "Info",
 
     "NODE_IDENTITY": "Identidad del nodo",
     "NODE_STATUS": "Estado del nodo",
@@ -110,7 +112,7 @@
     "NODE_CLASS": "Clase",
     "POSITION": "Posición",
 
-    "SVXLINK_CONFIG_FILE": "Archivo de configuración de SvxLink",
+    "SVXLINK_CONFIG_FILE": "Archivo de configuración SvxLink",
     "NODEINFO_FILE": "Archivo NodeInfo",
     "LOGICS": "Lógicas",
 
@@ -126,6 +128,6 @@
     "TX_POWER": "Potencia TX",
     "TX_CTCSS": "CTCSS TX",
 
-    "TONE_TO_TALKGROUP": "Tono a grupo de conversación",
+    "TONE_TO_TALKGROUP": "Tono hacia grupo de conversación",
     "TALK_GROUP": "Grupo de conversación"
 }

@@ -1,0 +1,711 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="svx-dashboard-layout">
+
+    {% include "components/sidebar.html" %}
+
+
+    <section class="svx-dashboard-content">
+
+        <div class="row mb-4">
+
+            <div class="col-12">
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <i class="fa-solid fa-satellite-dish"></i>
+                        {{ t("REFLECTOR") }}
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div
+                            id="reflector-error"
+                            class="alert alert-danger
+                            {% if not state.reflector_last_error %}
+                                d-none
+                            {% endif %}"
+                        >
+
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+
+                            <span id="reflector-error-text">
+                                {% if state.reflector_last_error %}
+                                    {{ t(state.reflector_last_error) }}
+                                {% endif %}
+                            </span>
+
+                        </div>
+
+
+                        <div class="row g-4">
+
+                            <div class="col-xl-3 col-md-6">
+
+                                <div class="svx-service-row mb-0">
+
+                                    <span class="svx-service-name">
+                                        {{ t("REFLECTOR_STATUS") }}
+                                    </span>
+
+                                    <span
+                                        id="reflector-status"
+                                        class="badge
+                                        {% if state.reflector_status == 'CONNECTED' %}
+                                            bg-success
+                                        {% elif state.reflector_status == 'CONNECTING'
+                                            or state.reflector_status == 'RECONNECTING' %}
+                                            bg-warning text-dark
+                                        {% elif state.reflector_status == 'DISCONNECTED'
+                                            or state.reflector_status == 'AUTH_ERROR'
+                                            or state.reflector_status == 'TIMEOUT'
+                                            or state.reflector_status == 'ERROR' %}
+                                            bg-danger
+                                        {% else %}
+                                            bg-secondary
+                                        {% endif %}"
+                                    >
+                                        {{ t(state.reflector_status) }}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-xl-3 col-md-6">
+
+                                <div class="svx-service-row mb-0">
+
+                                    <span class="svx-service-name">
+                                        {{ t("REFLECTOR_HOST") }}
+                                    </span>
+
+                                    <span
+                                        id="reflector-host"
+                                        class="svx-status-value"
+                                    >
+                                        {% if state.reflector_host %}
+                                            {{ state.reflector_host }}
+                                        {% else %}
+                                            {{ t("NOT_AVAILABLE") }}
+                                        {% endif %}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-xl-3 col-md-6">
+
+                                <div class="svx-service-row mb-0">
+
+                                    <span class="svx-service-name">
+                                        {{ t("REFLECTOR_PORT") }}
+                                    </span>
+
+                                    <span
+                                        id="reflector-port"
+                                        class="svx-status-value"
+                                    >
+                                        {% if state.reflector_port %}
+                                            {{ state.reflector_port }}
+                                        {% else %}
+                                            {{ t("NOT_AVAILABLE") }}
+                                        {% endif %}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-xl-3 col-md-6">
+
+                                <div class="svx-service-row mb-0">
+
+                                    <span class="svx-service-name">
+                                        {{ t("REFLECTOR_CONNECTION_COUNT") }}
+                                    </span>
+
+                                    <span
+                                        id="reflector-connection-count"
+                                        class="svx-status-value"
+                                    >
+                                        {{ state.reflector_connection_count }}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="row g-4 mb-4">
+
+            <div class="col-xl-6">
+
+                <div class="card h-100">
+
+                    <div class="card-header">
+
+                        <i class="fa-solid fa-wave-square"></i>
+                        {{ t("REFLECTOR_TG") }}
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="svx-service-row">
+
+                            <span class="svx-service-name">
+                                {{ t("REFLECTOR_TG") }}
+                            </span>
+
+                            <span
+                                id="reflector-tg"
+                                class="svx-status-value"
+                            >
+                                {% if state.reflector_tg %}
+                                    {{ state.reflector_tg }}
+                                {% else %}
+                                    {{ t("NOT_AVAILABLE") }}
+                                {% endif %}
+                            </span>
+
+                        </div>
+
+
+                        <div class="svx-service-row mb-0">
+
+                            <span class="svx-service-name">
+                                {{ t("REFLECTOR_ENCRYPTION") }}
+                            </span>
+
+                            <span
+                                id="reflector-encryption"
+                                class="badge
+                                {% if state.reflector_encrypted %}
+                                    bg-success
+                                {% else %}
+                                    bg-secondary
+                                {% endif %}"
+                            >
+                                {% if state.reflector_encrypted %}
+                                    {{ t("ENCRYPTED") }}
+                                {% else %}
+                                    {{ t("NOT_ENCRYPTED") }}
+                                {% endif %}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-xl-6">
+
+                <div class="card h-100">
+
+                    <div class="card-header">
+
+                        <i class="fa-solid fa-circle-info"></i>
+                        {{ t("REFLECTOR_LAST_DISCONNECT") }}
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="svx-service-row">
+
+                            <span class="svx-service-name">
+                                {{ t("REFLECTOR_LAST_DISCONNECT") }}
+                            </span>
+
+                            <span
+                                id="reflector-last-disconnect"
+                                class="svx-status-value"
+                            >
+                                {% if state.reflector_last_disconnect_reason %}
+                                    {{ state.reflector_last_disconnect_reason }}
+                                {% else %}
+                                    {{ t("NONE") }}
+                                {% endif %}
+                            </span>
+
+                        </div>
+
+
+                        <div class="svx-service-row mb-0">
+
+                            <span class="svx-service-name">
+                                {{ t("REFLECTOR_LAST_ERROR") }}
+                            </span>
+
+                            <span
+                                id="reflector-last-error"
+                                class="svx-status-value"
+                            >
+                                {% if state.reflector_last_error %}
+                                    {{ t(state.reflector_last_error) }}
+                                {% else %}
+                                    {{ t("NONE") }}
+                                {% endif %}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-12">
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <i class="fa-solid fa-diagram-project"></i>
+                        {{ t("REFLECTOR_CONNECTED_NODES") }}
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div id="reflector-nodes-container">
+
+                            {% if state.reflector_connected_nodes %}
+
+                                <div class="table-responsive">
+
+                                    <table class="table align-middle mb-0">
+
+                                        <thead>
+
+                                            <tr>
+
+                                                <th>
+                                                    {{ t("NODE") }}
+                                                </th>
+
+                                                <th>
+                                                    {{ t("REFLECTOR_STATUS") }}
+                                                </th>
+
+                                            </tr>
+
+                                        </thead>
+
+                                        <tbody>
+
+                                            {% for node_name in state.reflector_connected_nodes %}
+
+                                                <tr>
+
+                                                    <td>
+
+                                                        <span class="badge bg-primary">
+                                                            {{ node_name }}
+                                                        </span>
+
+                                                    </td>
+
+                                                    <td>
+
+                                                        <span class="badge bg-success">
+                                                            {{ t("CONNECTED") }}
+                                                        </span>
+
+                                                    </td>
+
+                                                </tr>
+
+                                            {% endfor %}
+
+                                        </tbody>
+
+                                    </table>
+
+                                </div>
+
+                            {% else %}
+
+                                <div class="text-muted">
+                                    {{ t("REFLECTOR_NO_NODES") }}
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<script>
+
+    const reflectorTranslations = {
+
+        CONNECTING:
+            {{ t("CONNECTING") | tojson }},
+
+        CONNECTED:
+            {{ t("CONNECTED") | tojson }},
+
+        RECONNECTING:
+            {{ t("RECONNECTING") | tojson }},
+
+        DISCONNECTED:
+            {{ t("DISCONNECTED") | tojson }},
+
+        AUTH_ERROR:
+            {{ t("AUTH_ERROR") | tojson }},
+
+        TIMEOUT:
+            {{ t("TIMEOUT") | tojson }},
+
+        ERROR:
+            {{ t("ERROR") | tojson }},
+
+        UNKNOWN:
+            {{ t("UNKNOWN") | tojson }},
+
+        ENCRYPTED:
+            {{ t("ENCRYPTED") | tojson }},
+
+        NOT_ENCRYPTED:
+            {{ t("NOT_ENCRYPTED") | tojson }},
+
+        NOT_AVAILABLE:
+            {{ t("NOT_AVAILABLE") | tojson }},
+
+        NONE:
+            {{ t("NONE") | tojson }},
+
+        NO_NODES:
+            {{ t("REFLECTOR_NO_NODES") | tojson }},
+
+        NODE:
+            {{ t("NODE") | tojson }},
+
+        STATUS:
+            {{ t("REFLECTOR_STATUS") | tojson }}
+
+    };
+
+
+    function reflectorStatusClass(status) {
+
+        if (status === "CONNECTED") {
+            return "badge bg-success";
+        }
+
+        if (
+            status === "CONNECTING" ||
+            status === "RECONNECTING"
+        ) {
+            return "badge bg-warning text-dark";
+        }
+
+        if (
+            status === "DISCONNECTED" ||
+            status === "AUTH_ERROR" ||
+            status === "TIMEOUT" ||
+            status === "ERROR"
+        ) {
+            return "badge bg-danger";
+        }
+
+        return "badge bg-secondary";
+    }
+
+
+    function reflectorStatusText(status) {
+
+        return (
+            reflectorTranslations[status]
+            || status
+            || reflectorTranslations.UNKNOWN
+        );
+    }
+
+
+    function reflectorValue(value) {
+
+        if (
+            value === null ||
+            value === undefined ||
+            value === "" ||
+            value === 0
+        ) {
+            return reflectorTranslations.NOT_AVAILABLE;
+        }
+
+        return value;
+    }
+
+
+    function renderReflectorNodes(nodes) {
+
+        const container =
+            document.getElementById(
+                "reflector-nodes-container"
+            );
+
+        if (!nodes || nodes.length === 0) {
+
+            container.innerHTML = `
+                <div class="text-muted">
+                    ${reflectorTranslations.NO_NODES}
+                </div>
+            `;
+
+            return;
+        }
+
+
+        const rows = nodes.map((nodeName) => `
+            <tr>
+                <td>
+                    <span class="badge bg-primary">
+                        ${nodeName}
+                    </span>
+                </td>
+                <td>
+                    <span class="badge bg-success">
+                        ${reflectorTranslations.CONNECTED}
+                    </span>
+                </td>
+            </tr>
+        `).join("");
+
+
+        container.innerHTML = `
+            <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>
+                                ${reflectorTranslations.NODE}
+                            </th>
+                            <th>
+                                ${reflectorTranslations.STATUS}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${rows}
+                    </tbody>
+                </table>
+            </div>
+        `;
+    }
+
+
+    async function updateReflectorState() {
+
+        try {
+
+            const response = await fetch(
+                "{{ url_for('api_state') }}",
+                {
+                    cache: "no-store"
+                }
+            );
+
+
+            if (!response.ok) {
+                return;
+            }
+
+
+            const data = await response.json();
+
+
+            const statusElement =
+                document.getElementById(
+                    "reflector-status"
+                );
+
+            const hostElement =
+                document.getElementById(
+                    "reflector-host"
+                );
+
+            const portElement =
+                document.getElementById(
+                    "reflector-port"
+                );
+
+            const countElement =
+                document.getElementById(
+                    "reflector-connection-count"
+                );
+
+            const tgElement =
+                document.getElementById(
+                    "reflector-tg"
+                );
+
+            const encryptionElement =
+                document.getElementById(
+                    "reflector-encryption"
+                );
+
+            const disconnectElement =
+                document.getElementById(
+                    "reflector-last-disconnect"
+                );
+
+            const lastErrorElement =
+                document.getElementById(
+                    "reflector-last-error"
+                );
+
+            const errorElement =
+                document.getElementById(
+                    "reflector-error"
+                );
+
+            const errorTextElement =
+                document.getElementById(
+                    "reflector-error-text"
+                );
+
+
+            statusElement.className =
+                reflectorStatusClass(
+                    data.reflector_status
+                );
+
+            statusElement.textContent =
+                reflectorStatusText(
+                    data.reflector_status
+                );
+
+
+            hostElement.textContent =
+                reflectorValue(
+                    data.reflector_host
+                );
+
+            portElement.textContent =
+                reflectorValue(
+                    data.reflector_port
+                );
+
+            countElement.textContent =
+                data.reflector_connection_count ?? 0;
+
+            tgElement.textContent =
+                reflectorValue(
+                    data.reflector_tg
+                );
+
+
+            if (data.reflector_encrypted) {
+
+                encryptionElement.className =
+                    "badge bg-success";
+
+                encryptionElement.textContent =
+                    reflectorTranslations.ENCRYPTED;
+
+            } else {
+
+                encryptionElement.className =
+                    "badge bg-secondary";
+
+                encryptionElement.textContent =
+                    reflectorTranslations.NOT_ENCRYPTED;
+            }
+
+
+            disconnectElement.textContent =
+                data.reflector_last_disconnect_reason
+                || reflectorTranslations.NONE;
+
+
+            lastErrorElement.textContent =
+                data.reflector_last_error
+                || reflectorTranslations.NONE;
+
+
+            if (data.reflector_last_error) {
+
+                errorElement.classList.remove(
+                    "d-none"
+                );
+
+                errorTextElement.textContent =
+                    data.reflector_last_error;
+
+            } else {
+
+                errorElement.classList.add(
+                    "d-none"
+                );
+
+                errorTextElement.textContent = "";
+            }
+
+
+            renderReflectorNodes(
+                data.reflector_connected_nodes
+            );
+
+        } catch (error) {
+
+            console.error(
+                "SVX Guardian Reflector update failed:",
+                error
+            );
+        }
+    }
+
+
+    updateReflectorState();
+
+    window.setInterval(
+        updateReflectorState,
+        2000
+    );
+
+</script>
+
+{% endblock %}
