@@ -9,7 +9,11 @@
 
     <section class="svx-dashboard-content">
 
-        <div class="row mb-4">
+        <!-- =====================================================
+             GENERAL HEALTH
+             ===================================================== -->
+
+        <div class="row mb-2">
 
             <div class="col-12">
 
@@ -28,209 +32,42 @@
 
                     <div class="card-body text-center">
 
-                        {% if state.health == "HEALTHY" %}
+                        <div>
 
-                            <h2>
-                                <i class="fa-solid fa-circle-check"></i>
-                                {{ t("STATUS_HEALTHY") }}
-                            </h2>
+                            {% if state.health == "HEALTHY" %}
 
-                        {% elif state.health == "WARNING" %}
+                                <h2>
+                                    <i class="fa-solid fa-circle-check"></i>
+                                    {{ t("STATUS_HEALTHY") }}
+                                </h2>
 
-                            <h2>
-                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                {{ t("STATUS_WARNING") }}
-                            </h2>
+                            {% elif state.health == "WARNING" %}
 
-                        {% elif state.health == "CRITICAL" %}
+                                <h2>
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                    {{ t("STATUS_WARNING") }}
+                                </h2>
 
-                            <h2>
-                                <i class="fa-solid fa-circle-xmark"></i>
-                                {{ t("STATUS_CRITICAL") }}
-                            </h2>
+                            {% elif state.health == "CRITICAL" %}
 
-                        {% else %}
+                                <h2>
+                                    <i class="fa-solid fa-circle-xmark"></i>
+                                    {{ t("STATUS_CRITICAL") }}
+                                </h2>
 
-                            <h2>
-                                <i class="fa-solid fa-circle-question"></i>
-                                {{ t("STATUS_UNKNOWN") }}
-                            </h2>
+                            {% else %}
 
-                        {% endif %}
+                                <h2>
+                                    <i class="fa-solid fa-circle-question"></i>
+                                    {{ t("STATUS_UNKNOWN") }}
+                                </h2>
 
-                        <p class="lead mb-0">
-                            {{ t(state.health_reason) }}
-                        </p>
+                            {% endif %}
 
-                    </div>
 
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div class="row g-4 mb-4">
-
-            <div class="col-xl-8">
-
-                <div class="card h-100 svx-node-panel">
-
-                    <div class="card-header">
-                        <i class="fa-solid fa-tower-cell"></i>
-                        {{ t("NODE_IDENTITY") }}
-                    </div>
-
-                    <div class="card-body">
-
-                        <div class="svx-node-panel-grid">
-
-                            <div class="svx-node-identity">
-
-                                <div class="svx-node-callsign">
-                                    {{ node.callsign or "NOCALL" }}
-                                </div>
-
-                                <div class="svx-node-description">
-                                    {{ node.description or t("NODE") }}
-                                </div>
-
-                                <div class="svx-node-meta">
-
-                                    {% if node.qth %}
-
-                                        <span>
-                                            <i class="fa-solid fa-location-dot"></i>
-                                            {{ node.qth }}
-                                        </span>
-
-                                    {% endif %}
-
-                                    {% if node.locator %}
-
-                                        <span>
-                                            <i class="fa-solid fa-map"></i>
-                                            {{ node.locator }}
-                                        </span>
-
-                                    {% endif %}
-
-                                </div>
-
-                            </div>
-
-
-                            <div class="svx-node-details">
-
-                                <div class="svx-node-detail-row">
-
-                                    <span class="svx-node-detail-label">
-                                        {{ t("HOSTNAME") }}
-                                    </span>
-
-                                    <span class="svx-node-detail-value">
-                                        {{ state.hostname }}
-                                    </span>
-
-                                </div>
-
-
-                                <div class="svx-node-detail-row">
-
-                                    <span class="svx-node-detail-label">
-                                        {{ t("UPTIME") }}
-                                    </span>
-
-                                    <span class="svx-node-detail-value">
-                                        {{ state.uptime }}
-                                    </span>
-
-                                </div>
-
-
-                                <div class="svx-node-detail-row mb-0">
-
-                                    <span class="svx-node-detail-label">
-                                        {{ t("MODULES") }}
-                                    </span>
-
-                                    <span class="svx-node-detail-value">
-                                        {{ node.modules | length }}
-                                    </span>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="col-xl-4">
-
-                <div class="card h-100">
-
-                    <div class="card-header">
-                        <i class="fa-solid fa-server"></i>
-                        {{ t("SYSTEM") }}
-                    </div>
-
-                    <div class="card-body">
-
-                        <div class="svx-service-row">
-
-                            <span class="svx-service-name">
-                                {{ t("CPU_TEMP") }}
-                            </span>
-
-                            <span class="svx-status-value">
-                                {{ "%.1f"|format(state.cpu_temp) }} °C
-                            </span>
-
-                        </div>
-
-
-                        <div class="svx-service-row">
-
-                            <span class="svx-service-name">
-                                {{ t("CPU_USAGE") }}
-                            </span>
-
-                            <span class="svx-status-value">
-                                {{ "%.1f"|format(state.cpu_usage) }} %
-                            </span>
-
-                        </div>
-
-
-                        <div class="svx-service-row">
-
-                            <span class="svx-service-name">
-                                {{ t("RAM_USAGE") }}
-                            </span>
-
-                            <span class="svx-status-value">
-                                {{ "%.1f"|format(state.ram_usage) }} %
-                            </span>
-
-                        </div>
-
-
-                        <div class="svx-service-row mb-0">
-
-                            <span class="svx-service-name">
-                                {{ t("DISK_USAGE") }}
-                            </span>
-
-                            <span class="svx-status-value">
-                                {{ "%.1f"|format(state.disk_usage) }} %
-                            </span>
+                            <p class="lead mb-0">
+                                {{ t(state.health_reason) }}
+                            </p>
 
                         </div>
 
@@ -243,29 +80,191 @@
         </div>
 
 
-        <div class="row g-4">
+        <!-- =====================================================
+             NODE IDENTITY
+             ===================================================== -->
 
-            <div class="col-xl-4">
+        <div class="row mb-2">
+
+            <div class="col-12">
+
+                <div class="card">
+
+                    <div class="card-body py-2">
+
+                        <div
+                            class="
+                                d-flex
+                                align-items-center
+                                justify-content-center
+                                flex-wrap
+                                gap-2
+                                gap-md-4
+                                text-center
+                            "
+                        >
+
+                            <strong>
+                                {{ node.callsign or "NOCALL" }}
+                            </strong>
+
+                            <span class="text-muted">
+                                •
+                            </span>
+
+                            <strong>
+                                {{ node.locator or t("NOT_AVAILABLE") }}
+                            </strong>
+
+                            <span class="text-muted">
+                                •
+                            </span>
+
+                            <strong>
+                                {{ node.qth or t("NOT_AVAILABLE") }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             SYSTEM SUMMARY
+             ===================================================== -->
+
+        <div class="row mb-3">
+
+            <div class="col-12">
+
+                <a
+                    class="text-decoration-none"
+                    href="{{ url_for('system_page', lang=language) }}"
+                >
+
+                    <div class="card">
+
+                        <div class="card-body py-2">
+
+                            <div
+                                class="
+                                    d-flex
+                                    align-items-center
+                                    justify-content-around
+                                    flex-wrap
+                                    gap-2
+                                "
+                            >
+
+                                <div class="text-center">
+
+                                    <div class="small text-muted">
+                                        {{ t("CPU_USAGE") }}
+                                    </div>
+
+                                    <strong>
+                                        {{ "%.1f"|format(state.cpu_usage) }} %
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="text-center">
+
+                                    <div class="small text-muted">
+                                        {{ t("CPU_TEMP") }}
+                                    </div>
+
+                                    <strong>
+
+                                        {% if state.cpu_temp > 0 %}
+
+                                            {{ "%.1f"|format(state.cpu_temp) }} °C
+
+                                        {% else %}
+
+                                            {{ t("NOT_AVAILABLE") }}
+
+                                        {% endif %}
+
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="text-center">
+
+                                    <div class="small text-muted">
+                                        {{ t("RAM_USAGE") }}
+                                    </div>
+
+                                    <strong>
+                                        {{ "%.1f"|format(state.ram_usage) }} %
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="text-center">
+
+                                    <div class="small text-muted">
+                                        {{ t("DISK_USAGE") }}
+                                    </div>
+
+                                    <strong>
+                                        {{ "%.1f"|format(state.disk_usage) }} %
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             SERVICE STATUS
+             ===================================================== -->
+
+        <div class="row g-2">
+
+            <!-- SvxLink -->
+
+            <div class="col-12 col-md-4">
 
                 <a
                     class="text-decoration-none"
                     href="{{ url_for('svxlink_page', lang=language) }}"
                 >
 
-                    <div class="card h-100">
+                    <div class="card">
 
-                        <div class="card-header">
-                            <i class="fa-solid fa-radio"></i>
-                            {{ t("SVXLINK") }}
-                        </div>
+                        <div class="card-body py-2">
 
-                        <div class="card-body">
-
-                            <div class="svx-service-row">
+                            <div class="svx-service-row mb-0">
 
                                 <span class="svx-service-name">
-                                    {{ t("SVXLINK_STATUS") }}
+
+                                    <i class="fa-solid fa-radio me-2"></i>
+
+                                    {{ t("SVXLINK") }}
+
                                 </span>
+
 
                                 {% if state.svxlink_status == "RUNNING" %}
 
@@ -297,19 +296,6 @@
 
                             </div>
 
-
-                            <div class="svx-service-row mb-0">
-
-                                <span class="svx-service-name">
-                                    {{ t("SVXLINK_UPTIME") }}
-                                </span>
-
-                                <span class="svx-status-value">
-                                    {{ state.svxlink_uptime or t("NOT_AVAILABLE") }}
-                                </span>
-
-                            </div>
-
                         </div>
 
                     </div>
@@ -319,27 +305,37 @@
             </div>
 
 
-            <div class="col-xl-4">
+            <!-- EchoLink -->
+
+            <div class="col-12 col-md-4">
 
                 <a
                     class="text-decoration-none"
                     href="{{ url_for('echolink_page', lang=language) }}"
                 >
 
-                    <div class="card h-100">
+                    <div class="card">
 
-                        <div class="card-header">
-                            <i class="fa-solid fa-tower-broadcast"></i>
-                            {{ t("ECHOLINK") }}
-                        </div>
+                        <div class="card-body py-2">
 
-                        <div class="card-body">
-
-                            <div class="svx-service-row">
+                            <div class="svx-service-row mb-0">
 
                                 <span class="svx-service-name">
-                                    {{ t("ECHOLINK_DIRECTORY") }}
+
+                                    <i
+                                        class="
+                                            fa-solid
+                                            fa-tower-broadcast
+                                            me-2
+                                        "
+                                    ></i>
+
+                                    <span style="text-transform: none;">
+                                        {{ t("ECHOLINK") }}
+                                    </span>
+
                                 </span>
+
 
                                 {% if state.echolink_status == "ONLINE" %}
 
@@ -370,19 +366,6 @@
 
                             </div>
 
-
-                            <div class="svx-service-row mb-0">
-
-                                <span class="svx-service-name">
-                                    {{ t("ECHOLINK_CONNECTION_COUNT") }}
-                                </span>
-
-                                <span class="svx-status-value">
-                                    {{ state.echolink_connection_count }}
-                                </span>
-
-                            </div>
-
                         </div>
 
                     </div>
@@ -392,27 +375,35 @@
             </div>
 
 
-            <div class="col-xl-4">
+            <!-- Reflector -->
+
+            <div class="col-12 col-md-4">
 
                 <a
                     class="text-decoration-none"
                     href="{{ url_for('reflector_page', lang=language) }}"
                 >
 
-                    <div class="card h-100">
+                    <div class="card">
 
-                        <div class="card-header">
-                            <i class="fa-solid fa-satellite-dish"></i>
-                            {{ t("REFLECTOR") }}
-                        </div>
+                        <div class="card-body py-2">
 
-                        <div class="card-body">
-
-                            <div class="svx-service-row">
+                            <div class="svx-service-row mb-0">
 
                                 <span class="svx-service-name">
-                                    {{ t("REFLECTOR_STATUS") }}
+
+                                    <i
+                                        class="
+                                            fa-solid
+                                            fa-satellite-dish
+                                            me-2
+                                        "
+                                    ></i>
+
+                                    {{ t("REFLECTOR") }}
+
                                 </span>
+
 
                                 {% if state.reflector_status == "CONNECTED" %}
 
@@ -443,29 +434,6 @@
                                     </span>
 
                                 {% endif %}
-
-                            </div>
-
-
-                            <div class="svx-service-row mb-0">
-
-                                <span class="svx-service-name">
-                                    {{ t("REFLECTOR_TG") }}
-                                </span>
-
-                                <span class="svx-status-value">
-
-                                    {% if state.reflector_tg %}
-
-                                        {{ state.reflector_tg }}
-
-                                    {% else %}
-
-                                        {{ t("NOT_AVAILABLE") }}
-
-                                    {% endif %}
-
-                                </span>
 
                             </div>
 
