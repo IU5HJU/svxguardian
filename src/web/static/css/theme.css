@@ -1,0 +1,544 @@
+/*
+ * SVX Guardian
+ *
+ * Global light / dark theme overrides.
+ *
+ * The application theme is selected by base.html through:
+ *
+ *     html[data-theme="light"]
+ *     html[data-theme="dark"]
+ *
+ * Operational colors are intentionally not redefined here.
+ * HEALTHY, WARNING, CRITICAL and service-status colors must
+ * keep the same semantic meaning in both themes.
+ */
+
+
+/* ==========================================================
+   Dark theme variables
+   ========================================================== */
+
+html[data-theme="dark"] {
+    --svx-background: #08111d;
+
+    --svx-surface: #101c2a;
+    --svx-surface-secondary: #142334;
+
+    --svx-border: #26384b;
+
+    --svx-text: #e7edf4;
+    --svx-text-secondary: #9cafc2;
+
+    --svx-shadow-small:
+        0 2px 8px rgba(0, 0, 0, 0.24);
+
+    --svx-shadow-medium:
+        0 8px 24px rgba(0, 0, 0, 0.32);
+}
+
+
+/* ==========================================================
+   Document
+   ========================================================== */
+
+html[data-theme="dark"],
+html[data-theme="dark"] body {
+    background-color: #08111d;
+    color: var(--svx-text);
+}
+
+
+html[data-theme="dark"] body {
+    background:
+        linear-gradient(
+            180deg,
+            #0b1624 0%,
+            var(--svx-background) 100%
+        );
+}
+
+
+/* ==========================================================
+   Dashboard background
+   ========================================================== */
+
+html[data-theme="dark"] .svx-dashboard-content {
+    background:
+        linear-gradient(
+            180deg,
+            #0b1624 0%,
+            var(--svx-background) 100%
+        );
+}
+
+
+/* ==========================================================
+   Cards
+   ========================================================== */
+
+html[data-theme="dark"] .card {
+    border-color: var(--svx-border);
+
+    background-color: var(--svx-surface);
+
+    color: var(--svx-text);
+}
+
+
+html[data-theme="dark"] .card:hover {
+    border-color: #38506a;
+}
+
+
+html[data-theme="dark"] .card-header {
+    border-bottom-color: var(--svx-border);
+
+    background-color: var(--svx-surface-secondary);
+
+    color: #dbe5ef;
+}
+
+
+html[data-theme="dark"] .card-body {
+    color: var(--svx-text);
+}
+
+
+html[data-theme="dark"] .card-body h1,
+html[data-theme="dark"] .card-body h2,
+html[data-theme="dark"] .card-body h3,
+html[data-theme="dark"] .card-body h4,
+html[data-theme="dark"] .card-body h5,
+html[data-theme="dark"] .card-body h6 {
+    color: var(--svx-text);
+}
+
+
+/* ==========================================================
+   Health banner
+   ========================================================== */
+
+/*
+ * No background colors are changed here.
+ *
+ * HEALTHY / WARNING / CRITICAL / UNKNOWN keep the exact
+ * original colors defined in main.css.
+ */
+
+html[data-theme="dark"] .health-banner {
+    color: #ffffff;
+}
+
+
+html[data-theme="dark"]
+.health-banner.health-warning {
+    color: #212529;
+}
+
+
+/* ==========================================================
+   Metrics
+   ========================================================== */
+
+html[data-theme="dark"] .svx-metric-label {
+    color: #b8c6d5;
+}
+
+
+html[data-theme="dark"] .svx-metric-value {
+    color: #edf3f8;
+}
+
+
+/* ==========================================================
+   Service rows
+   ========================================================== */
+
+html[data-theme="dark"] .svx-service-row {
+    border-color: #26384b;
+
+    background-color: #0d1926;
+}
+
+
+html[data-theme="dark"] .svx-service-name {
+    color: #cbd7e3;
+}
+
+
+html[data-theme="dark"] .svx-status-value {
+    color: #edf3f8;
+}
+
+
+/* ==========================================================
+   Generic text helpers
+   ========================================================== */
+
+html[data-theme="dark"] .text-muted {
+    color: #91a4b8 !important;
+}
+
+
+html[data-theme="dark"] .text-secondary {
+    color: #9cafc2 !important;
+}
+
+
+/* ==========================================================
+   Tables
+   ========================================================== */
+
+html[data-theme="dark"] .table {
+    --bs-table-color: #dce6ef;
+    --bs-table-bg: transparent;
+
+    --bs-table-border-color: #2b3d50;
+
+    --bs-table-striped-color: #dce6ef;
+    --bs-table-striped-bg: rgba(255, 255, 255, 0.025);
+
+    --bs-table-hover-color: #ffffff;
+    --bs-table-hover-bg: rgba(255, 255, 255, 0.045);
+
+    color: #dce6ef;
+}
+
+
+html[data-theme="dark"] .table > :not(caption) > * > * {
+    border-bottom-color: #2b3d50;
+}
+
+
+html[data-theme="dark"] .table thead th {
+    color: #aebfd0;
+}
+
+
+/* ==========================================================
+   Forms
+   ========================================================== */
+
+html[data-theme="dark"] .form-control,
+html[data-theme="dark"] .form-select {
+    border-color: #30465c;
+
+    background-color: #0d1926;
+
+    color: #edf3f8;
+}
+
+
+html[data-theme="dark"] .form-control:focus,
+html[data-theme="dark"] .form-select:focus {
+    border-color: var(--svx-primary);
+
+    background-color: #101e2d;
+
+    color: #ffffff;
+
+    box-shadow:
+        0 0 0 0.2rem rgba(13, 110, 253, 0.18);
+}
+
+
+html[data-theme="dark"] .form-control::placeholder {
+    color: #71879d;
+}
+
+
+html[data-theme="dark"] .form-control:disabled,
+html[data-theme="dark"] .form-select:disabled {
+    border-color: #293b4e;
+
+    background-color: #152230;
+
+    color: #8497aa;
+}
+
+
+/* ==========================================================
+   Dropdowns
+   ========================================================== */
+
+html[data-theme="dark"] .dropdown-menu {
+    border-color: #304357;
+
+    background-color: #101c2a;
+
+    color: #dce6ef;
+
+    box-shadow:
+        0 10px 28px rgba(0, 0, 0, 0.38);
+}
+
+
+html[data-theme="dark"] .dropdown-item {
+    color: #dce6ef;
+}
+
+
+html[data-theme="dark"] .dropdown-item:hover,
+html[data-theme="dark"] .dropdown-item:focus {
+    background-color: #192b3e;
+
+    color: #ffffff;
+}
+
+
+html[data-theme="dark"] .dropdown-item.active,
+html[data-theme="dark"] .dropdown-item:active {
+    background-color: var(--svx-primary);
+
+    color: #ffffff;
+}
+
+
+html[data-theme="dark"] .dropdown-divider {
+    border-top-color: #2a3c4f;
+}
+
+
+/* ==========================================================
+   Progress bars
+   ========================================================== */
+
+html[data-theme="dark"] .progress {
+    background-color: #223246;
+}
+
+
+/*
+ * The progress-bar foreground is deliberately not changed.
+ * Its original green gradient remains semantically meaningful.
+ */
+
+
+/* ==========================================================
+   Events
+   ========================================================== */
+
+html[data-theme="dark"] .svx-event-row {
+    border-bottom-color: #26384b;
+}
+
+
+html[data-theme="dark"] .svx-event-text {
+    color: #c3d0dd;
+}
+
+
+/* ==========================================================
+   Chart placeholders
+   ========================================================== */
+
+html[data-theme="dark"] .svx-chart-placeholder {
+    border-color: #3a4e63;
+
+    background:
+        linear-gradient(
+            180deg,
+            #101c2a 0%,
+            #0c1723 100%
+        );
+
+    color: #8fa3b8;
+}
+
+
+/* ==========================================================
+   Node details
+   dashboard.css overrides
+   ========================================================== */
+
+html[data-theme="dark"] .svx-node-detail-row {
+    border-color: #293c50;
+
+    background-color: #0d1926;
+}
+
+
+html[data-theme="dark"] .svx-node-detail-label {
+    color: #9fb1c4;
+}
+
+
+html[data-theme="dark"] .svx-node-detail-value {
+    color: #edf3f8;
+}
+
+
+html[data-theme="dark"] .svx-node-config-path {
+    color: #9cafc2;
+}
+
+
+html[data-theme="dark"] .svx-status-value {
+    color: #edf3f8;
+}
+
+
+/* ==========================================================
+   Bootstrap alerts
+   ========================================================== */
+
+html[data-theme="dark"] .alert {
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+
+html[data-theme="dark"] .alert-secondary {
+    border-color: #384b5f;
+
+    background-color: #172536;
+
+    color: #dce6ef;
+}
+
+
+/* ==========================================================
+   List groups
+   ========================================================== */
+
+html[data-theme="dark"] .list-group-item {
+    border-color: #293c50;
+
+    background-color: var(--svx-surface);
+
+    color: var(--svx-text);
+}
+
+
+/* ==========================================================
+   Modal
+   ========================================================== */
+
+html[data-theme="dark"] .modal-content {
+    border-color: #293c50;
+
+    background-color: var(--svx-surface);
+
+    color: var(--svx-text);
+}
+
+
+html[data-theme="dark"] .modal-header,
+html[data-theme="dark"] .modal-footer {
+    border-color: #293c50;
+}
+
+
+/* ==========================================================
+   Offcanvas
+   ========================================================== */
+
+html[data-theme="dark"] .offcanvas {
+    background-color: var(--svx-surface);
+
+    color: var(--svx-text);
+}
+
+
+/* ==========================================================
+   Accordion
+   ========================================================== */
+
+html[data-theme="dark"] .accordion {
+    --bs-accordion-color: var(--svx-text);
+    --bs-accordion-bg: var(--svx-surface);
+
+    --bs-accordion-border-color: var(--svx-border);
+
+    --bs-accordion-btn-color: var(--svx-text);
+    --bs-accordion-btn-bg: var(--svx-surface-secondary);
+
+    --bs-accordion-active-color: #ffffff;
+    --bs-accordion-active-bg: #173557;
+}
+
+
+/* ==========================================================
+   Buttons that use Bootstrap light surfaces
+   ========================================================== */
+
+html[data-theme="dark"] .btn-light {
+    border-color: #304357;
+
+    background-color: #172536;
+
+    color: #dce6ef;
+}
+
+
+html[data-theme="dark"] .btn-light:hover,
+html[data-theme="dark"] .btn-light:focus {
+    border-color: #405a72;
+
+    background-color: #203348;
+
+    color: #ffffff;
+}
+
+
+/* ==========================================================
+   Borders and backgrounds from Bootstrap helpers
+   ========================================================== */
+
+html[data-theme="dark"] .bg-light {
+    background-color:
+        var(--svx-surface-secondary) !important;
+}
+
+
+html[data-theme="dark"] .border {
+    border-color:
+        var(--svx-border) !important;
+}
+
+
+html[data-theme="dark"] .border-top,
+html[data-theme="dark"] .border-bottom,
+html[data-theme="dark"] .border-start,
+html[data-theme="dark"] .border-end {
+    border-color:
+        var(--svx-border) !important;
+}
+
+
+/* ==========================================================
+   Links
+   ========================================================== */
+
+html[data-theme="dark"] .card a:not(.btn),
+html[data-theme="dark"] .svx-dashboard-content a:not(.btn) {
+    color: inherit;
+}
+
+
+/* ==========================================================
+   Code
+   ========================================================== */
+
+html[data-theme="dark"] code {
+    color: #8fc2ff;
+}
+
+
+html[data-theme="dark"] pre {
+    border: 1px solid #293c50;
+
+    background-color: #08131f;
+
+    color: #dce6ef;
+}
+
+
+/* ==========================================================
+   Selection
+   ========================================================== */
+
+html[data-theme="dark"] ::selection {
+    background-color: rgba(13, 110, 253, 0.45);
+
+    color: #ffffff;
+}

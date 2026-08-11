@@ -9,68 +9,6 @@
 
     <section class="svx-dashboard-content">
 
-        <div class="row mb-4">
-
-            <div class="col-12">
-
-                <div
-                    class="card health-banner
-                    {% if state.health == 'HEALTHY' %}
-                        health-healthy
-                    {% elif state.health == 'WARNING' %}
-                        health-warning
-                    {% elif state.health == 'CRITICAL' %}
-                        health-critical
-                    {% else %}
-                        health-unknown
-                    {% endif %}"
-                >
-
-                    <div class="card-body text-center">
-
-                        {% if state.health == "HEALTHY" %}
-
-                            <h2>
-                                <i class="fa-solid fa-circle-check"></i>
-                                {{ t("STATUS_HEALTHY") }}
-                            </h2>
-
-                        {% elif state.health == "WARNING" %}
-
-                            <h2>
-                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                {{ t("STATUS_WARNING") }}
-                            </h2>
-
-                        {% elif state.health == "CRITICAL" %}
-
-                            <h2>
-                                <i class="fa-solid fa-circle-xmark"></i>
-                                {{ t("STATUS_CRITICAL") }}
-                            </h2>
-
-                        {% else %}
-
-                            <h2>
-                                <i class="fa-solid fa-circle-question"></i>
-                                {{ t("STATUS_UNKNOWN") }}
-                            </h2>
-
-                        {% endif %}
-
-                        <p class="lead mb-0">
-                            {{ t(state.health_reason) }}
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
         <div class="row g-4 mb-4">
 
             <div class="col-xl-6">
@@ -121,13 +59,13 @@
                 <div class="card h-100">
 
                     <div class="card-header">
-                        <i class="fa-solid fa-microchip"></i>
+                        <i class="fa-solid fa-temperature-half"></i>
                         {{ t("CPU_TEMP") }}
                     </div>
 
                     <div class="card-body">
 
-                        <div class="svx-service-row">
+                        <div class="svx-service-row mb-0">
 
                             <span class="svx-service-name">
                                 {{ t("CPU_TEMP") }}
@@ -145,19 +83,6 @@
 
                                 {% endif %}
 
-                            </span>
-
-                        </div>
-
-
-                        <div class="svx-service-row mb-0">
-
-                            <span class="svx-service-name">
-                                {{ t("CPU_USAGE") }}
-                            </span>
-
-                            <span class="svx-status-value">
-                                {{ "%.1f"|format(state.cpu_usage) }} %
                             </span>
 
                         </div>
