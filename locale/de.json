@@ -1,33 +1,27 @@
 {
     "APP_NAME": "SVX Guardian",
-
     "STATUS_HEALTHY": "Betriebsbereit",
     "STATUS_WARNING": "Warnung",
     "STATUS_CRITICAL": "Kritisch",
     "STATUS_UNKNOWN": "Unbekannt",
-
     "REASON_NONE": "System arbeitet normal",
     "REASON_CPU_TEMP_HIGH": "Hohe CPU-Temperatur",
     "REASON_CPU_TEMP_CRITICAL": "Kritische CPU-Temperatur",
     "REASON_SVXLINK_STOPPED": "Der SvxLink-Dienst läuft nicht",
     "REASON_ECHOLINK_DNS_ERROR": "EchoLink DNS-Fehler",
     "REASON_ECHOLINK_DIRECTORY_ERROR": "EchoLink-Verzeichnisfehler",
-
     "SYSTEM": "System",
     "RADIO": "Funk",
-
     "HOSTNAME": "Hostname",
     "CPU_TEMP": "CPU-Temperatur",
     "CPU_USAGE": "CPU-Auslastung",
     "RAM_USAGE": "RAM-Auslastung",
     "DISK_USAGE": "Festplattenauslastung",
     "UPTIME": "Betriebszeit",
-
     "SVXLINK": "SvxLink",
     "SVXLINK_STATUS": "SvxLink-Status",
     "SVXLINK_PID": "SvxLink-PID",
     "SVXLINK_UPTIME": "SvxLink-Betriebszeit",
-
     "ECHOLINK": "EchoLink",
     "ECHOLINK_STATUS": "EchoLink-Status",
     "ECHOLINK_DIRECTORY": "EchoLink-Verzeichnis",
@@ -36,7 +30,6 @@
     "ECHOLINK_NO_STATIONS": "Keine EchoLink-Stationen verbunden",
     "ECHOLINK_LAST_ERROR": "Letzter EchoLink-Fehler",
     "ECHOLINK_MODULE": "EchoLink-Modul",
-
     "REFLECTOR": "Reflector",
     "REFLECTOR_STATUS": "Reflector-Status",
     "REFLECTOR_HOST": "Reflector-Host",
@@ -48,86 +41,83 @@
     "REFLECTOR_LAST_DISCONNECT": "Letzte Trennung",
     "REFLECTOR_LAST_ERROR": "Letzter Reflector-Fehler",
     "REFLECTOR_NO_NODES": "Keine Knoten verbunden",
-
     "UNKNOWN": "Unbekannt",
     "STARTING": "Startet",
     "RUNNING": "Aktiv",
     "STOPPING": "Wird beendet",
     "STOPPED": "Gestoppt",
     "ERROR": "Fehler",
-
     "ONLINE": "Online",
     "OFFLINE": "Offline",
     "DNS_ERROR": "DNS-Fehler",
-
     "CONNECTING": "Verbindet",
     "CONNECTED": "Verbunden",
     "RECONNECTING": "Wiederverbindung",
     "DISCONNECTED": "Getrennt",
     "AUTH_ERROR": "Authentifizierungsfehler",
     "TIMEOUT": "Zeitüberschreitung",
-
     "YES": "Ja",
     "NO": "Nein",
     "ENCRYPTED": "Verschlüsselt",
     "NOT_ENCRYPTED": "Nicht verschlüsselt",
-
     "NOT_MONITORED": "Nicht überwacht",
     "NOT_AVAILABLE": "Nicht verfügbar",
     "NONE": "Keine",
-
     "DASHBOARD": "Übersicht",
     "LOGS": "Protokolle",
     "CONFIGURATION": "Konfiguration",
     "ABOUT": "Informationen",
     "NAV_CONFIGURATION": "Setup",
     "NAV_ABOUT": "Info",
-
     "NODE_IDENTITY": "Knotenidentität",
     "NODE_STATUS": "Knotenstatus",
     "MODULES": "Module",
     "SVXLINK_VERSION": "SvxLink-Version",
     "MODULE_LOADED": "Modul geladen",
     "CONFIGURED": "Konfiguriert",
-
     "LAST_EVENTS": "Letzte Ereignisse",
     "GUARDIAN_STARTED": "SVX Guardian gestartet",
-
     "CPU_TEMP_HISTORY": "CPU-Temperaturverlauf",
     "HISTORICAL_CHART_SOON": "Historisches Diagramm demnächst verfügbar",
-
     "CALLSIGN": "Rufzeichen",
     "NODE": "Knoten",
-
     "OPERATIONAL_VIEW": "Betriebsansicht",
     "OPERATIONAL_CONNECTED_STATIONS": "Verbundene Stationen",
     "OPERATIONAL_LAST_UPDATE": "Letzte Aktualisierung",
     "OPERATIONAL_AUTOMATIC": "Automatisch",
     "OPERATIONAL_TRANSMITTING": "Sendet",
     "OPERATIONAL_UNSTABLE_CONNECTION": "Instabile Verbindung",
-
     "QTH": "QTH",
     "LOCATOR": "Locator",
     "SYSOP": "Sysop",
     "NODE_CLASS": "Klasse",
     "POSITION": "Position",
-
     "SVXLINK_CONFIG_FILE": "SvxLink-Konfigurationsdatei",
     "NODEINFO_FILE": "NodeInfo-Datei",
     "LOGICS": "Logiken",
-
     "RECEPTION": "Empfang",
     "RX_NAME": "RX-Name",
     "RX_FREQUENCY": "RX-Frequenz",
     "SQUELCH_TYPE": "Squelch-Typ",
     "RX_CTCSS": "RX-CTCSS",
-
     "TRANSMISSION": "Übertragung",
     "TX_NAME": "TX-Name",
     "TX_FREQUENCY": "TX-Frequenz",
     "TX_POWER": "TX-Leistung",
     "TX_CTCSS": "TX-CTCSS",
-
     "TONE_TO_TALKGROUP": "Ton zu Talkgroup",
-    "TALK_GROUP": "Talkgroup"
+    "TALK_GROUP": "Talkgroup",
+    "STATUS": "Status",
+    "RESTART_SVXLINK": "SvxLink neu starten",
+    "STOP_SVXLINK": "SvxLink stoppen",
+    "SERVICE_CONTROLS": "Service-Steuerung",
+    "COOLING_FAN": "Kühlventilator",
+    "AUTOMATIC": "Automatisch",
+    "FORCE_FAN_ON": "Ventilator einschalten",
+    "RADIO_MODULE": "Funkmodul",
+    "DISABLE_RADIO_MODULE": "Funkmodul deaktivieren",
+    "ACCESS_CONTROL": "Zugriffskontrolle",
+    "RESTRICTED_CONTROLS": "Geschützte Steuerung",
+    "SYSOP_COSYSOP_ONLY": "Diese Steuerungen sind ausschließlich für Sysop und Co-Sysop verfügbar",
+    "PID": "PID"
 }

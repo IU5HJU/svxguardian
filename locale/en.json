@@ -1,33 +1,27 @@
 {
     "APP_NAME": "SVX Guardian",
-
     "STATUS_HEALTHY": "Healthy",
     "STATUS_WARNING": "Warning",
     "STATUS_CRITICAL": "Critical",
     "STATUS_UNKNOWN": "Unknown",
-
     "REASON_NONE": "System operating normally",
     "REASON_CPU_TEMP_HIGH": "High CPU temperature",
     "REASON_CPU_TEMP_CRITICAL": "Critical CPU temperature",
     "REASON_SVXLINK_STOPPED": "SvxLink service is not running",
     "REASON_ECHOLINK_DNS_ERROR": "EchoLink DNS error",
     "REASON_ECHOLINK_DIRECTORY_ERROR": "EchoLink directory error",
-
     "SYSTEM": "System",
     "RADIO": "Radio",
-
     "HOSTNAME": "Hostname",
     "CPU_TEMP": "CPU Temperature",
     "CPU_USAGE": "CPU Usage",
     "RAM_USAGE": "RAM Usage",
     "DISK_USAGE": "Disk Usage",
     "UPTIME": "Uptime",
-
     "SVXLINK": "SvxLink",
     "SVXLINK_STATUS": "SvxLink Status",
     "SVXLINK_PID": "SvxLink PID",
     "SVXLINK_UPTIME": "SvxLink Uptime",
-
     "ECHOLINK": "EchoLink",
     "ECHOLINK_STATUS": "EchoLink Status",
     "ECHOLINK_DIRECTORY": "EchoLink Directory",
@@ -36,7 +30,6 @@
     "ECHOLINK_NO_STATIONS": "No connected EchoLink stations",
     "ECHOLINK_LAST_ERROR": "Last EchoLink Error",
     "ECHOLINK_MODULE": "EchoLink Module",
-
     "REFLECTOR": "Reflector",
     "REFLECTOR_STATUS": "Reflector Status",
     "REFLECTOR_HOST": "Reflector Host",
@@ -48,86 +41,83 @@
     "REFLECTOR_LAST_DISCONNECT": "Last Disconnect",
     "REFLECTOR_LAST_ERROR": "Last Reflector Error",
     "REFLECTOR_NO_NODES": "No connected nodes",
-
     "UNKNOWN": "Unknown",
     "STARTING": "Starting",
     "RUNNING": "Running",
     "STOPPING": "Stopping",
     "STOPPED": "Stopped",
     "ERROR": "Error",
-
     "ONLINE": "Online",
     "OFFLINE": "Offline",
     "DNS_ERROR": "DNS Error",
-
     "CONNECTING": "Connecting",
     "CONNECTED": "Connected",
     "RECONNECTING": "Reconnecting",
     "DISCONNECTED": "Disconnected",
     "AUTH_ERROR": "Authentication Error",
     "TIMEOUT": "Timeout",
-
     "YES": "Yes",
     "NO": "No",
     "ENCRYPTED": "Encrypted",
     "NOT_ENCRYPTED": "Not Encrypted",
-
     "NOT_MONITORED": "Not Monitored",
     "NOT_AVAILABLE": "Not Available",
     "NONE": "None",
-
     "DASHBOARD": "Dashboard",
     "LOGS": "Logs",
     "CONFIGURATION": "Configuration",
     "ABOUT": "About",
     "NAV_CONFIGURATION": "Settings",
     "NAV_ABOUT": "Info",
-
     "NODE_IDENTITY": "Node Identity",
     "NODE_STATUS": "Node Status",
     "MODULES": "Modules",
     "SVXLINK_VERSION": "SvxLink Version",
     "MODULE_LOADED": "Module Loaded",
     "CONFIGURED": "Configured",
-
     "LAST_EVENTS": "Latest Events",
     "GUARDIAN_STARTED": "SVX Guardian Started",
-
     "CPU_TEMP_HISTORY": "CPU Temperature History",
     "HISTORICAL_CHART_SOON": "Historical chart coming soon",
-
     "CALLSIGN": "Callsign",
     "NODE": "Node",
-
     "OPERATIONAL_VIEW": "Operational View",
     "OPERATIONAL_CONNECTED_STATIONS": "Connected Stations",
     "OPERATIONAL_LAST_UPDATE": "Last Update",
     "OPERATIONAL_AUTOMATIC": "Automatic",
     "OPERATIONAL_TRANSMITTING": "Transmitting",
     "OPERATIONAL_UNSTABLE_CONNECTION": "Unstable Connection",
-
     "QTH": "QTH",
     "LOCATOR": "Locator",
     "SYSOP": "Sysop",
     "NODE_CLASS": "Class",
     "POSITION": "Position",
-
     "SVXLINK_CONFIG_FILE": "SvxLink Configuration File",
     "NODEINFO_FILE": "NodeInfo File",
     "LOGICS": "Logics",
-
     "RECEPTION": "Reception",
     "RX_NAME": "RX Name",
     "RX_FREQUENCY": "RX Frequency",
     "SQUELCH_TYPE": "Squelch Type",
     "RX_CTCSS": "RX CTCSS",
-
     "TRANSMISSION": "Transmission",
     "TX_NAME": "TX Name",
     "TX_FREQUENCY": "TX Frequency",
     "TX_POWER": "TX Power",
     "TX_CTCSS": "TX CTCSS",
-
     "TONE_TO_TALKGROUP": "Tone to Talk Group",
-    "TALK_GROUP": "Talk Group"
+    "TALK_GROUP": "Talk Group",
+    "STATUS": "Status",
+    "RESTART_SVXLINK": "Restart SvxLink",
+    "STOP_SVXLINK": "Stop SvxLink",
+    "SERVICE_CONTROLS": "Service Controls",
+    "COOLING_FAN": "Cooling Fan",
+    "AUTOMATIC": "Automatic",
+    "FORCE_FAN_ON": "Force Fan On",
+    "RADIO_MODULE": "Radio Module",
+    "DISABLE_RADIO_MODULE": "Disable Radio Module",
+    "ACCESS_CONTROL": "Access Control",
+    "RESTRICTED_CONTROLS": "Restricted Controls",
+    "SYSOP_COSYSOP_ONLY": "These controls are available only to the Sysop and Co-Sysop",
+    "PID": "PID"
 }

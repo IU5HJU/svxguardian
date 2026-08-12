@@ -249,6 +249,22 @@ def reflector_page():
     )
 
 
+@app.route("/configuration")
+def configuration_page():
+    """
+    Render the restricted node-control page.
+
+    Operational commands are intentionally not implemented here yet.
+    They will be enabled only after authentication and authorization
+    for Sysop and Co-Sysop roles are available.
+    """
+
+    return render_template(
+        "dashboard/configuration.html",
+        **build_page_context(),
+    )
+
+
 @app.route("/api/state")
 def api_state():
     """

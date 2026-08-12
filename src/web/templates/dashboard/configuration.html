@@ -1,0 +1,344 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="svx-dashboard-layout">
+
+    {% include "components/sidebar.html" %}
+
+
+    <section class="svx-dashboard-content">
+
+        <!-- =====================================================
+             SVXLINK SERVICE CONTROL
+             ===================================================== -->
+
+        <div class="row g-4 mb-4">
+
+            <div class="col-12">
+
+                <div class="card">
+
+                    <div class="card-header">
+                        <i class="fa-solid fa-gears"></i>
+                        {{ t("SVXLINK") }}
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="row g-3">
+
+                            <div class="col-12 col-lg-7">
+
+                                <div class="svx-service-row">
+
+                                    <span class="svx-service-name">
+                                        {{ t("STATUS") }}
+                                    </span>
+
+                                    {% if state.svxlink_status == "RUNNING" %}
+
+                                        <span class="badge bg-success">
+                                            {{ t(state.svxlink_status) }}
+                                        </span>
+
+                                    {% elif state.svxlink_status == "STARTING"
+                                        or state.svxlink_status == "STOPPING" %}
+
+                                        <span class="badge bg-warning text-dark">
+                                            {{ t(state.svxlink_status) }}
+                                        </span>
+
+                                    {% elif state.svxlink_status == "STOPPED"
+                                        or state.svxlink_status == "ERROR" %}
+
+                                        <span class="badge bg-danger">
+                                            {{ t(state.svxlink_status) }}
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="badge bg-secondary">
+                                            {{ t(state.svxlink_status) }}
+                                        </span>
+
+                                    {% endif %}
+
+                                </div>
+
+
+                                <div class="svx-service-row">
+
+                                    <span class="svx-service-name">
+                                        {{ t("PID") }}
+                                    </span>
+
+                                    <span class="svx-status-value">
+
+                                        {% if state.svxlink_pid > 0 %}
+
+                                            {{ state.svxlink_pid }}
+
+                                        {% else %}
+
+                                            {{ t("NOT_AVAILABLE") }}
+
+                                        {% endif %}
+
+                                    </span>
+
+                                </div>
+
+
+                                <div class="svx-service-row mb-0">
+
+                                    <span class="svx-service-name">
+                                        {{ t("UPTIME") }}
+                                    </span>
+
+                                    <span class="svx-status-value">
+                                        {{ state.svxlink_uptime
+                                            or t("NOT_AVAILABLE") }}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-12 col-lg-5">
+
+                                <div
+                                    class="
+                                        h-100
+                                        d-flex
+                                        flex-column
+                                        justify-content-center
+                                        gap-3
+                                    "
+                                >
+
+                                    <button
+                                        type="button"
+                                        class="btn btn-warning w-100"
+                                        disabled
+                                    >
+                                        <i
+                                            class="
+                                                fa-solid
+                                                fa-rotate
+                                                me-2
+                                            "
+                                        ></i>
+
+                                        {{ t("RESTART_SVXLINK") }}
+                                    </button>
+
+
+                                    <button
+                                        type="button"
+                                        class="btn btn-danger w-100"
+                                        disabled
+                                    >
+                                        <i
+                                            class="
+                                                fa-solid
+                                                fa-stop
+                                                me-2
+                                            "
+                                        ></i>
+
+                                        {{ t("STOP_SVXLINK") }}
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             SERVICE GPIO
+             ===================================================== -->
+
+        <div class="row g-4 mb-4">
+
+            <div class="col-12">
+
+                <div class="card">
+
+                    <div class="card-header">
+                        <i class="fa-solid fa-microchip"></i>
+                        {{ t("SERVICE_CONTROLS") }}
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="row g-3">
+
+                            <!-- Fan -->
+
+                            <div class="col-12 col-lg-6">
+
+                                <div class="svx-service-row">
+
+                                    <span class="svx-service-name">
+
+                                        <i
+                                            class="
+                                                fa-solid
+                                                fa-fan
+                                                me-2
+                                            "
+                                        ></i>
+
+                                        {{ t("COOLING_FAN") }}
+
+                                    </span>
+
+                                    <span class="badge bg-secondary">
+                                        {{ t("AUTOMATIC") }}
+                                    </span>
+
+                                </div>
+
+
+                                <button
+                                    type="button"
+                                    class="btn btn-outline-primary w-100"
+                                    disabled
+                                >
+                                    <i
+                                        class="
+                                            fa-solid
+                                            fa-fan
+                                            me-2
+                                        "
+                                    ></i>
+
+                                    {{ t("FORCE_FAN_ON") }}
+                                </button>
+
+                            </div>
+
+
+                            <!-- Radio module -->
+
+                            <div class="col-12 col-lg-6">
+
+                                <div class="svx-service-row">
+
+                                    <span class="svx-service-name">
+
+                                        <i
+                                            class="
+                                                fa-solid
+                                                fa-tower-broadcast
+                                                me-2
+                                            "
+                                        ></i>
+
+                                        {{ t("RADIO_MODULE") }}
+
+                                    </span>
+
+                                    <span class="badge bg-secondary">
+                                        {{ t("NOT_AVAILABLE") }}
+                                    </span>
+
+                                </div>
+
+
+                                <button
+                                    type="button"
+                                    class="btn btn-outline-danger w-100"
+                                    disabled
+                                >
+                                    <i
+                                        class="
+                                            fa-solid
+                                            fa-power-off
+                                            me-2
+                                        "
+                                    ></i>
+
+                                    {{ t("DISABLE_RADIO_MODULE") }}
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             ACCESS INFORMATION
+             ===================================================== -->
+
+        <div class="row">
+
+            <div class="col-12">
+
+                <div class="card">
+
+                    <div class="card-header">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        {{ t("ACCESS_CONTROL") }}
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="d-flex align-items-start gap-3">
+
+                            <i
+                                class="
+                                    fa-solid
+                                    fa-lock
+                                    fa-lg
+                                    mt-1
+                                "
+                            ></i>
+
+                            <div>
+
+                                <strong>
+                                    {{ t("RESTRICTED_CONTROLS") }}
+                                </strong>
+
+                                <div class="text-muted mt-1">
+                                    {{ t("SYSOP_COSYSOP_ONLY") }}
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+{% endblock %}

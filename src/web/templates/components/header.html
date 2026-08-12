@@ -111,7 +111,8 @@
                                             'system_page',
                                             'svxlink_page',
                                             'echolink_page',
-                                            'reflector_page'
+                                            'reflector_page',
+                                            'configuration_page'
                                         ]
                                         else 'dashboard',
                                     lang=language_code
@@ -155,18 +156,20 @@
             </button>
 
 
-            <!-- Impostazioni -->
-            <button
+            <!-- Configurazione -->
+            <a
                 class="svx-header-button"
-                type="button"
-                id="settingsButton"
+                href="{{ url_for(
+                    'configuration_page',
+                    lang=language
+                ) }}"
                 aria-label="{{ t('CONFIGURATION') }}"
                 title="{{ t('CONFIGURATION') }}"
             >
 
                 <i class="fa-solid fa-gear"></i>
 
-            </button>
+            </a>
 
         </div>
 

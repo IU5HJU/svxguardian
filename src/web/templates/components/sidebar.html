@@ -91,8 +91,14 @@
 
 
         <a
-            class="svx-sidebar-link"
-            href="#"
+            class="svx-sidebar-link
+            {% if request.endpoint == 'configuration_page' %}
+                active
+            {% endif %}"
+            href="{{ url_for(
+                'configuration_page',
+                lang=language
+            ) }}"
             title="{{ t('CONFIGURATION') }}"
         >
             <i class="fa-solid fa-sliders"></i>
