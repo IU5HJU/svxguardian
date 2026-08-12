@@ -4,24 +4,29 @@
     "STATUS_WARNING": "Advertencia",
     "STATUS_CRITICAL": "Crítico",
     "STATUS_UNKNOWN": "Desconocido",
+
     "REASON_NONE": "El sistema funciona con normalidad",
     "REASON_CPU_TEMP_HIGH": "Temperatura de CPU elevada",
     "REASON_CPU_TEMP_CRITICAL": "Temperatura de CPU crítica",
     "REASON_SVXLINK_STOPPED": "El servicio SvxLink no está en ejecución",
     "REASON_ECHOLINK_DNS_ERROR": "Error DNS de EchoLink",
     "REASON_ECHOLINK_DIRECTORY_ERROR": "Error del directorio EchoLink",
+
     "SYSTEM": "Sistema",
     "RADIO": "Radio",
+
     "HOSTNAME": "Nombre del host",
     "CPU_TEMP": "Temperatura de CPU",
     "CPU_USAGE": "Uso de CPU",
     "RAM_USAGE": "Uso de RAM",
     "DISK_USAGE": "Uso del disco",
     "UPTIME": "Tiempo de actividad",
+
     "SVXLINK": "SvxLink",
     "SVXLINK_STATUS": "Estado de SvxLink",
     "SVXLINK_PID": "PID de SvxLink",
     "SVXLINK_UPTIME": "Tiempo de actividad de SvxLink",
+
     "ECHOLINK": "EchoLink",
     "ECHOLINK_STATUS": "Estado de EchoLink",
     "ECHOLINK_DIRECTORY": "Directorio EchoLink",
@@ -30,6 +35,7 @@
     "ECHOLINK_NO_STATIONS": "No hay estaciones EchoLink conectadas",
     "ECHOLINK_LAST_ERROR": "Último error de EchoLink",
     "ECHOLINK_MODULE": "Módulo EchoLink",
+
     "REFLECTOR": "Reflector",
     "REFLECTOR_STATUS": "Estado del Reflector",
     "REFLECTOR_HOST": "Host del Reflector",
@@ -41,83 +47,136 @@
     "REFLECTOR_LAST_DISCONNECT": "Última desconexión",
     "REFLECTOR_LAST_ERROR": "Último error del Reflector",
     "REFLECTOR_NO_NODES": "No hay nodos conectados",
+
     "UNKNOWN": "Desconocido",
     "STARTING": "Iniciando",
     "RUNNING": "Activo",
     "STOPPING": "Deteniendo",
     "STOPPED": "Detenido",
     "ERROR": "Error",
+
     "ONLINE": "En línea",
     "OFFLINE": "Fuera de línea",
     "DNS_ERROR": "Error DNS",
+
     "CONNECTING": "Conectando",
     "CONNECTED": "Conectado",
     "RECONNECTING": "Reconectando",
     "DISCONNECTED": "Desconectado",
     "AUTH_ERROR": "Error de autenticación",
     "TIMEOUT": "Tiempo de espera agotado",
+
     "YES": "Sí",
     "NO": "No",
     "ENCRYPTED": "Cifrado",
     "NOT_ENCRYPTED": "Sin cifrar",
+
     "NOT_MONITORED": "No supervisado",
     "NOT_AVAILABLE": "No disponible",
     "NONE": "Ninguno",
+
     "DASHBOARD": "Panel de control",
     "LOGS": "Registros",
     "CONFIGURATION": "Configuración",
     "ABOUT": "Acerca de",
     "NAV_CONFIGURATION": "Ajustes",
     "NAV_ABOUT": "Info",
+
     "NODE_IDENTITY": "Identidad del nodo",
     "NODE_STATUS": "Estado del nodo",
     "MODULES": "Módulos",
     "SVXLINK_VERSION": "Versión de SvxLink",
     "MODULE_LOADED": "Módulo cargado",
     "CONFIGURED": "Configurado",
+
     "LAST_EVENTS": "Últimos eventos",
     "GUARDIAN_STARTED": "SVX Guardian iniciado",
+
     "CPU_TEMP_HISTORY": "Historial de temperatura de CPU",
     "HISTORICAL_CHART_SOON": "El gráfico histórico estará disponible próximamente",
+
     "CALLSIGN": "Indicativo",
     "NODE": "Nodo",
+
     "OPERATIONAL_VIEW": "Vista operativa",
     "OPERATIONAL_CONNECTED_STATIONS": "Estaciones conectadas",
     "OPERATIONAL_LAST_UPDATE": "Última actualización",
     "OPERATIONAL_AUTOMATIC": "Automático",
     "OPERATIONAL_TRANSMITTING": "Transmitiendo",
     "OPERATIONAL_UNSTABLE_CONNECTION": "Conexión inestable",
+
     "QTH": "QTH",
     "LOCATOR": "Locator",
     "SYSOP": "Sysop",
     "NODE_CLASS": "Clase",
     "POSITION": "Posición",
+
     "SVXLINK_CONFIG_FILE": "Archivo de configuración SvxLink",
     "NODEINFO_FILE": "Archivo NodeInfo",
     "LOGICS": "Lógicas",
+
     "RECEPTION": "Recepción",
     "RX_NAME": "Nombre RX",
     "RX_FREQUENCY": "Frecuencia RX",
     "SQUELCH_TYPE": "Tipo de squelch",
     "RX_CTCSS": "CTCSS RX",
+
     "TRANSMISSION": "Transmisión",
     "TX_NAME": "Nombre TX",
     "TX_FREQUENCY": "Frecuencia TX",
     "TX_POWER": "Potencia TX",
     "TX_CTCSS": "CTCSS TX",
+
     "TONE_TO_TALKGROUP": "Tono hacia grupo de conversación",
     "TALK_GROUP": "Grupo de conversación",
+
     "STATUS": "Estado",
     "RESTART_SVXLINK": "Reiniciar SvxLink",
     "STOP_SVXLINK": "Detener SvxLink",
+
     "SERVICE_CONTROLS": "Controles de servicio",
     "COOLING_FAN": "Ventilador de refrigeración",
     "AUTOMATIC": "Automático",
     "FORCE_FAN_ON": "Forzar encendido del ventilador",
+
     "RADIO_MODULE": "Módulo de radio",
     "DISABLE_RADIO_MODULE": "Desactivar módulo de radio",
+
     "ACCESS_CONTROL": "Control de acceso",
     "RESTRICTED_CONTROLS": "Controles restringidos",
     "SYSOP_COSYSOP_ONLY": "Estos controles están disponibles únicamente para el Sysop y el Co-Sysop",
-    "PID": "PID"
+
+    "PID": "PID",
+
+    "AUTH_LOGIN": "Acceso",
+    "AUTH_SYSOP_ACCESS": "Acceso Sysop / Co-Sysop",
+    "AUTH_LOGIN_DESCRIPTION": "Autentícate para utilizar los comandos de control del nodo",
+    "AUTH_NOT_CONFIGURED": "La autenticación no está configurada en esta instalación",
+    "AUTH_SESSION_INVALID": "Sesión no válida. Inténtalo de nuevo.",
+    "AUTH_INVALID_CREDENTIALS": "Credenciales no válidas",
+    "AUTH_USERNAME": "Usuario",
+    "AUTH_PASSWORD": "Contraseña",
+    "AUTH_LOGIN_BUTTON": "Acceder",
+    "AUTH_BACK_TO_CONFIGURATION": "Volver a la configuración",
+
+    "AUTH_ACCESS_STATUS": "Estado del acceso",
+    "AUTH_NOT_AUTHENTICATED": "No autenticado",
+    "AUTH_AUTHENTICATED_AS": "Autenticado como",
+    "AUTH_ROLE": "Rol",
+    "AUTH_LOGOUT_BUTTON": "Cerrar sesión",
+    "AUTH_LOGIN_TO_CONTROL": "Inicia sesión para utilizar los comandos de control",
+    "ROLE_SYSOP": "Sysop",
+    "ROLE_COSYSOP": "Co-Sysop",
+
+    "CONTROL_SUCCESS": "Operación completada",
+    "CONTROL_ERROR": "La operación ha fallado",
+
+    "RESTART_SVXLINK_SUCCESS": "SvxLink se ha reiniciado correctamente",
+    "RESTART_SVXLINK_FAILED": "El reinicio de SvxLink ha fallado",
+    "RESTART_SVXLINK_TIMEOUT": "El reinicio de SvxLink ha superado el tiempo máximo permitido",
+    "RESTART_SVXLINK_VERIFICATION_FAILED": "SvxLink no ha vuelto a un estado operativo después del reinicio",
+    "CONTROL_INVALID_REQUEST": "Solicitud de control no válida",
+
+    "PREVIOUS_PID": "PID anterior",
+    "CURRENT_PID": "PID actual"
 }

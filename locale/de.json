@@ -4,24 +4,29 @@
     "STATUS_WARNING": "Warnung",
     "STATUS_CRITICAL": "Kritisch",
     "STATUS_UNKNOWN": "Unbekannt",
+
     "REASON_NONE": "System arbeitet normal",
     "REASON_CPU_TEMP_HIGH": "Hohe CPU-Temperatur",
     "REASON_CPU_TEMP_CRITICAL": "Kritische CPU-Temperatur",
     "REASON_SVXLINK_STOPPED": "Der SvxLink-Dienst läuft nicht",
     "REASON_ECHOLINK_DNS_ERROR": "EchoLink DNS-Fehler",
     "REASON_ECHOLINK_DIRECTORY_ERROR": "EchoLink-Verzeichnisfehler",
+
     "SYSTEM": "System",
     "RADIO": "Funk",
+
     "HOSTNAME": "Hostname",
     "CPU_TEMP": "CPU-Temperatur",
     "CPU_USAGE": "CPU-Auslastung",
     "RAM_USAGE": "RAM-Auslastung",
     "DISK_USAGE": "Festplattenauslastung",
     "UPTIME": "Betriebszeit",
+
     "SVXLINK": "SvxLink",
     "SVXLINK_STATUS": "SvxLink-Status",
     "SVXLINK_PID": "SvxLink-PID",
     "SVXLINK_UPTIME": "SvxLink-Betriebszeit",
+
     "ECHOLINK": "EchoLink",
     "ECHOLINK_STATUS": "EchoLink-Status",
     "ECHOLINK_DIRECTORY": "EchoLink-Verzeichnis",
@@ -30,6 +35,7 @@
     "ECHOLINK_NO_STATIONS": "Keine EchoLink-Stationen verbunden",
     "ECHOLINK_LAST_ERROR": "Letzter EchoLink-Fehler",
     "ECHOLINK_MODULE": "EchoLink-Modul",
+
     "REFLECTOR": "Reflector",
     "REFLECTOR_STATUS": "Reflector-Status",
     "REFLECTOR_HOST": "Reflector-Host",
@@ -41,83 +47,136 @@
     "REFLECTOR_LAST_DISCONNECT": "Letzte Trennung",
     "REFLECTOR_LAST_ERROR": "Letzter Reflector-Fehler",
     "REFLECTOR_NO_NODES": "Keine Knoten verbunden",
+
     "UNKNOWN": "Unbekannt",
     "STARTING": "Startet",
     "RUNNING": "Aktiv",
     "STOPPING": "Wird beendet",
     "STOPPED": "Gestoppt",
     "ERROR": "Fehler",
+
     "ONLINE": "Online",
     "OFFLINE": "Offline",
     "DNS_ERROR": "DNS-Fehler",
+
     "CONNECTING": "Verbindet",
     "CONNECTED": "Verbunden",
     "RECONNECTING": "Wiederverbindung",
     "DISCONNECTED": "Getrennt",
     "AUTH_ERROR": "Authentifizierungsfehler",
     "TIMEOUT": "Zeitüberschreitung",
+
     "YES": "Ja",
     "NO": "Nein",
     "ENCRYPTED": "Verschlüsselt",
     "NOT_ENCRYPTED": "Nicht verschlüsselt",
+
     "NOT_MONITORED": "Nicht überwacht",
     "NOT_AVAILABLE": "Nicht verfügbar",
     "NONE": "Keine",
+
     "DASHBOARD": "Übersicht",
     "LOGS": "Protokolle",
     "CONFIGURATION": "Konfiguration",
     "ABOUT": "Informationen",
     "NAV_CONFIGURATION": "Setup",
     "NAV_ABOUT": "Info",
+
     "NODE_IDENTITY": "Knotenidentität",
     "NODE_STATUS": "Knotenstatus",
     "MODULES": "Module",
     "SVXLINK_VERSION": "SvxLink-Version",
     "MODULE_LOADED": "Modul geladen",
     "CONFIGURED": "Konfiguriert",
+
     "LAST_EVENTS": "Letzte Ereignisse",
     "GUARDIAN_STARTED": "SVX Guardian gestartet",
+
     "CPU_TEMP_HISTORY": "CPU-Temperaturverlauf",
     "HISTORICAL_CHART_SOON": "Historisches Diagramm demnächst verfügbar",
+
     "CALLSIGN": "Rufzeichen",
     "NODE": "Knoten",
+
     "OPERATIONAL_VIEW": "Betriebsansicht",
     "OPERATIONAL_CONNECTED_STATIONS": "Verbundene Stationen",
     "OPERATIONAL_LAST_UPDATE": "Letzte Aktualisierung",
     "OPERATIONAL_AUTOMATIC": "Automatisch",
     "OPERATIONAL_TRANSMITTING": "Sendet",
     "OPERATIONAL_UNSTABLE_CONNECTION": "Instabile Verbindung",
+
     "QTH": "QTH",
     "LOCATOR": "Locator",
     "SYSOP": "Sysop",
     "NODE_CLASS": "Klasse",
     "POSITION": "Position",
+
     "SVXLINK_CONFIG_FILE": "SvxLink-Konfigurationsdatei",
     "NODEINFO_FILE": "NodeInfo-Datei",
     "LOGICS": "Logiken",
+
     "RECEPTION": "Empfang",
     "RX_NAME": "RX-Name",
     "RX_FREQUENCY": "RX-Frequenz",
     "SQUELCH_TYPE": "Squelch-Typ",
     "RX_CTCSS": "RX-CTCSS",
+
     "TRANSMISSION": "Übertragung",
     "TX_NAME": "TX-Name",
     "TX_FREQUENCY": "TX-Frequenz",
     "TX_POWER": "TX-Leistung",
     "TX_CTCSS": "TX-CTCSS",
+
     "TONE_TO_TALKGROUP": "Ton zu Talkgroup",
     "TALK_GROUP": "Talkgroup",
+
     "STATUS": "Status",
     "RESTART_SVXLINK": "SvxLink neu starten",
     "STOP_SVXLINK": "SvxLink stoppen",
+
     "SERVICE_CONTROLS": "Service-Steuerung",
     "COOLING_FAN": "Kühlventilator",
     "AUTOMATIC": "Automatisch",
     "FORCE_FAN_ON": "Ventilator einschalten",
+
     "RADIO_MODULE": "Funkmodul",
     "DISABLE_RADIO_MODULE": "Funkmodul deaktivieren",
+
     "ACCESS_CONTROL": "Zugriffskontrolle",
     "RESTRICTED_CONTROLS": "Geschützte Steuerung",
     "SYSOP_COSYSOP_ONLY": "Diese Steuerungen sind ausschließlich für Sysop und Co-Sysop verfügbar",
-    "PID": "PID"
+
+    "PID": "PID",
+
+    "AUTH_LOGIN": "Anmeldung",
+    "AUTH_SYSOP_ACCESS": "Sysop- / Co-Sysop-Zugang",
+    "AUTH_LOGIN_DESCRIPTION": "Melden Sie sich an, um die Steuerbefehle des Knotens zu verwenden",
+    "AUTH_NOT_CONFIGURED": "Die Authentifizierung ist auf dieser Installation nicht konfiguriert",
+    "AUTH_SESSION_INVALID": "Ungültige Sitzung. Bitte versuchen Sie es erneut.",
+    "AUTH_INVALID_CREDENTIALS": "Ungültige Anmeldedaten",
+    "AUTH_USERNAME": "Benutzername",
+    "AUTH_PASSWORD": "Passwort",
+    "AUTH_LOGIN_BUTTON": "Anmelden",
+    "AUTH_BACK_TO_CONFIGURATION": "Zurück zur Konfiguration",
+
+    "AUTH_ACCESS_STATUS": "Zugriffsstatus",
+    "AUTH_NOT_AUTHENTICATED": "Nicht authentifiziert",
+    "AUTH_AUTHENTICATED_AS": "Authentifiziert als",
+    "AUTH_ROLE": "Rolle",
+    "AUTH_LOGOUT_BUTTON": "Abmelden",
+    "AUTH_LOGIN_TO_CONTROL": "Melden Sie sich an, um die Steuerbefehle zu verwenden",
+    "ROLE_SYSOP": "Sysop",
+    "ROLE_COSYSOP": "Co-Sysop",
+
+    "CONTROL_SUCCESS": "Vorgang abgeschlossen",
+    "CONTROL_ERROR": "Vorgang fehlgeschlagen",
+
+    "RESTART_SVXLINK_SUCCESS": "SvxLink wurde erfolgreich neu gestartet",
+    "RESTART_SVXLINK_FAILED": "Der Neustart von SvxLink ist fehlgeschlagen",
+    "RESTART_SVXLINK_TIMEOUT": "Der Neustart von SvxLink hat die zulässige Zeit überschritten",
+    "RESTART_SVXLINK_VERIFICATION_FAILED": "SvxLink ist nach dem Neustart nicht wieder in einen betriebsbereiten Zustand zurückgekehrt",
+    "CONTROL_INVALID_REQUEST": "Ungültige Steuerungsanfrage",
+
+    "PREVIOUS_PID": "Vorherige PID",
+    "CURRENT_PID": "Aktuelle PID"
 }

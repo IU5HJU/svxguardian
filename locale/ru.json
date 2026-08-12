@@ -4,24 +4,29 @@
     "STATUS_WARNING": "Предупреждение",
     "STATUS_CRITICAL": "Критическое состояние",
     "STATUS_UNKNOWN": "Неизвестно",
+
     "REASON_NONE": "Система работает нормально",
     "REASON_CPU_TEMP_HIGH": "Высокая температура CPU",
     "REASON_CPU_TEMP_CRITICAL": "Критическая температура CPU",
     "REASON_SVXLINK_STOPPED": "Служба SvxLink не запущена",
     "REASON_ECHOLINK_DNS_ERROR": "Ошибка DNS EchoLink",
     "REASON_ECHOLINK_DIRECTORY_ERROR": "Ошибка каталога EchoLink",
+
     "SYSTEM": "Система",
     "RADIO": "Радио",
+
     "HOSTNAME": "Имя хоста",
     "CPU_TEMP": "Температура CPU",
     "CPU_USAGE": "Загрузка CPU",
     "RAM_USAGE": "Использование RAM",
     "DISK_USAGE": "Использование диска",
     "UPTIME": "Время работы",
+
     "SVXLINK": "SvxLink",
     "SVXLINK_STATUS": "Состояние SvxLink",
     "SVXLINK_PID": "PID SvxLink",
     "SVXLINK_UPTIME": "Время работы SvxLink",
+
     "ECHOLINK": "EchoLink",
     "ECHOLINK_STATUS": "Состояние EchoLink",
     "ECHOLINK_DIRECTORY": "Каталог EchoLink",
@@ -30,6 +35,7 @@
     "ECHOLINK_NO_STATIONS": "Нет подключённых станций EchoLink",
     "ECHOLINK_LAST_ERROR": "Последняя ошибка EchoLink",
     "ECHOLINK_MODULE": "Модуль EchoLink",
+
     "REFLECTOR": "Reflector",
     "REFLECTOR_STATUS": "Состояние Reflector",
     "REFLECTOR_HOST": "Хост Reflector",
@@ -41,83 +47,136 @@
     "REFLECTOR_LAST_DISCONNECT": "Последнее отключение",
     "REFLECTOR_LAST_ERROR": "Последняя ошибка Reflector",
     "REFLECTOR_NO_NODES": "Нет подключённых узлов",
+
     "UNKNOWN": "Неизвестно",
     "STARTING": "Запуск",
     "RUNNING": "Работает",
     "STOPPING": "Остановка",
     "STOPPED": "Остановлен",
     "ERROR": "Ошибка",
+
     "ONLINE": "В сети",
     "OFFLINE": "Не в сети",
     "DNS_ERROR": "Ошибка DNS",
+
     "CONNECTING": "Подключение",
     "CONNECTED": "Подключён",
     "RECONNECTING": "Переподключение",
     "DISCONNECTED": "Отключён",
     "AUTH_ERROR": "Ошибка аутентификации",
     "TIMEOUT": "Тайм-аут",
+
     "YES": "Да",
     "NO": "Нет",
     "ENCRYPTED": "Зашифровано",
     "NOT_ENCRYPTED": "Без шифрования",
+
     "NOT_MONITORED": "Не отслеживается",
     "NOT_AVAILABLE": "Недоступно",
     "NONE": "Нет",
+
     "DASHBOARD": "Панель",
     "LOGS": "Журнал",
     "CONFIGURATION": "Конфигурация",
     "ABOUT": "Информация",
     "NAV_CONFIGURATION": "Настр.",
     "NAV_ABOUT": "Инфо",
+
     "NODE_IDENTITY": "Идентификация узла",
     "NODE_STATUS": "Состояние узла",
     "MODULES": "Модули",
     "SVXLINK_VERSION": "Версия SvxLink",
     "MODULE_LOADED": "Модуль загружен",
     "CONFIGURED": "Настроено",
+
     "LAST_EVENTS": "Последние события",
     "GUARDIAN_STARTED": "SVX Guardian запущен",
+
     "CPU_TEMP_HISTORY": "История температуры CPU",
     "HISTORICAL_CHART_SOON": "Исторический график скоро будет доступен",
+
     "CALLSIGN": "Позывной",
     "NODE": "Узел",
+
     "OPERATIONAL_VIEW": "Оперативный режим",
     "OPERATIONAL_CONNECTED_STATIONS": "Подключённые станции",
     "OPERATIONAL_LAST_UPDATE": "Последнее обновление",
     "OPERATIONAL_AUTOMATIC": "Автоматически",
     "OPERATIONAL_TRANSMITTING": "Передача",
     "OPERATIONAL_UNSTABLE_CONNECTION": "Нестабильное соединение",
+
     "QTH": "QTH",
     "LOCATOR": "Locator",
     "SYSOP": "Sysop",
     "NODE_CLASS": "Класс",
     "POSITION": "Позиция",
+
     "SVXLINK_CONFIG_FILE": "Файл конфигурации SvxLink",
     "NODEINFO_FILE": "Файл NodeInfo",
     "LOGICS": "Логики",
+
     "RECEPTION": "Приём",
     "RX_NAME": "Имя RX",
     "RX_FREQUENCY": "Частота RX",
     "SQUELCH_TYPE": "Тип шумоподавителя",
     "RX_CTCSS": "CTCSS RX",
+
     "TRANSMISSION": "Передача",
     "TX_NAME": "Имя TX",
     "TX_FREQUENCY": "Частота TX",
     "TX_POWER": "Мощность TX",
     "TX_CTCSS": "CTCSS TX",
+
     "TONE_TO_TALKGROUP": "Тон в разговорную группу",
     "TALK_GROUP": "Разговорная группа",
+
     "STATUS": "Состояние",
     "RESTART_SVXLINK": "Перезапустить SvxLink",
     "STOP_SVXLINK": "Остановить SvxLink",
+
     "SERVICE_CONTROLS": "Сервисные команды",
     "COOLING_FAN": "Вентилятор охлаждения",
     "AUTOMATIC": "Автоматически",
     "FORCE_FAN_ON": "Принудительно включить вентилятор",
+
     "RADIO_MODULE": "Радиомодуль",
     "DISABLE_RADIO_MODULE": "Отключить радиомодуль",
+
     "ACCESS_CONTROL": "Контроль доступа",
     "RESTRICTED_CONTROLS": "Ограниченные команды",
     "SYSOP_COSYSOP_ONLY": "Эти команды доступны только Sysop и Co-Sysop",
-    "PID": "PID"
+
+    "PID": "PID",
+
+    "AUTH_LOGIN": "Вход",
+    "AUTH_SYSOP_ACCESS": "Доступ Sysop / Co-Sysop",
+    "AUTH_LOGIN_DESCRIPTION": "Войдите в систему, чтобы использовать команды управления узлом",
+    "AUTH_NOT_CONFIGURED": "Аутентификация не настроена в этой установке",
+    "AUTH_SESSION_INVALID": "Недействительная сессия. Повторите попытку.",
+    "AUTH_INVALID_CREDENTIALS": "Неверные учётные данные",
+    "AUTH_USERNAME": "Имя пользователя",
+    "AUTH_PASSWORD": "Пароль",
+    "AUTH_LOGIN_BUTTON": "Войти",
+    "AUTH_BACK_TO_CONFIGURATION": "Вернуться к конфигурации",
+
+    "AUTH_ACCESS_STATUS": "Статус доступа",
+    "AUTH_NOT_AUTHENTICATED": "Не аутентифицирован",
+    "AUTH_AUTHENTICATED_AS": "Аутентифицирован как",
+    "AUTH_ROLE": "Роль",
+    "AUTH_LOGOUT_BUTTON": "Выйти",
+    "AUTH_LOGIN_TO_CONTROL": "Войдите в систему, чтобы использовать команды управления",
+    "ROLE_SYSOP": "Sysop",
+    "ROLE_COSYSOP": "Co-Sysop",
+
+    "CONTROL_SUCCESS": "Операция выполнена",
+    "CONTROL_ERROR": "Операция не выполнена",
+
+    "RESTART_SVXLINK_SUCCESS": "SvxLink успешно перезапущен",
+    "RESTART_SVXLINK_FAILED": "Не удалось перезапустить SvxLink",
+    "RESTART_SVXLINK_TIMEOUT": "Перезапуск SvxLink превысил допустимое время ожидания",
+    "RESTART_SVXLINK_VERIFICATION_FAILED": "SvxLink не вернулся в рабочее состояние после перезапуска",
+    "CONTROL_INVALID_REQUEST": "Недопустимый запрос управления",
+
+    "PREVIOUS_PID": "Предыдущий PID",
+    "CURRENT_PID": "Текущий PID"
 }

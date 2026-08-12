@@ -10,6 +10,187 @@
     <section class="svx-dashboard-content">
 
         <!-- =====================================================
+             CONTROL RESULT
+             ===================================================== -->
+
+        {% if control_result %}
+
+            <div class="row g-4 mb-4">
+
+                <div class="col-12">
+
+                    {% if control_result.success %}
+
+                        <div
+                            class="alert alert-success mb-0"
+                            role="alert"
+                        >
+
+                            <div class="d-flex align-items-start gap-3">
+
+                                <i
+                                    class="
+                                        fa-solid
+                                        fa-circle-check
+                                        fa-lg
+                                        mt-1
+                                    "
+                                ></i>
+
+                                <div>
+
+                                    <strong>
+                                        {{ t("CONTROL_SUCCESS") }}
+                                    </strong>
+
+                                    <div class="mt-1">
+
+                                        {% if control_result.message == "ok" %}
+
+                                            {{ t("RESTART_SVXLINK_SUCCESS") }}
+
+                                        {% else %}
+
+                                            {{ t("CONTROL_SUCCESS") }}
+
+                                        {% endif %}
+
+                                    </div>
+
+
+                                    {% if control_result.previous_pid
+                                        or control_result.current_pid %}
+
+                                        <div class="mt-2 small">
+
+                                            {% if control_result.previous_pid %}
+
+                                                <span class="me-3">
+                                                    {{ t("PREVIOUS_PID") }}:
+                                                    <strong>
+                                                        {{ control_result.previous_pid }}
+                                                    </strong>
+                                                </span>
+
+                                            {% endif %}
+
+
+                                            {% if control_result.current_pid %}
+
+                                                <span>
+                                                    {{ t("CURRENT_PID") }}:
+                                                    <strong>
+                                                        {{ control_result.current_pid }}
+                                                    </strong>
+                                                </span>
+
+                                            {% endif %}
+
+                                        </div>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    {% else %}
+
+                        <div
+                            class="alert alert-danger mb-0"
+                            role="alert"
+                        >
+
+                            <div class="d-flex align-items-start gap-3">
+
+                                <i
+                                    class="
+                                        fa-solid
+                                        fa-circle-exclamation
+                                        fa-lg
+                                        mt-1
+                                    "
+                                ></i>
+
+                                <div>
+
+                                    <strong>
+                                        {{ t("CONTROL_ERROR") }}
+                                    </strong>
+
+                                    <div class="mt-1">
+
+                                        {% if control_result.message == "timeout" %}
+
+                                            {{ t("RESTART_SVXLINK_TIMEOUT") }}
+
+                                        {% elif control_result.message == "verification_failed" %}
+
+                                            {{ t("RESTART_SVXLINK_VERIFICATION_FAILED") }}
+
+                                        {% elif control_result.message == "invalid_request" %}
+
+                                            {{ t("CONTROL_INVALID_REQUEST") }}
+
+                                        {% else %}
+
+                                            {{ t("RESTART_SVXLINK_FAILED") }}
+
+                                        {% endif %}
+
+                                    </div>
+
+
+                                    {% if control_result.previous_pid
+                                        or control_result.current_pid %}
+
+                                        <div class="mt-2 small">
+
+                                            {% if control_result.previous_pid %}
+
+                                                <span class="me-3">
+                                                    {{ t("PREVIOUS_PID") }}:
+                                                    <strong>
+                                                        {{ control_result.previous_pid }}
+                                                    </strong>
+                                                </span>
+
+                                            {% endif %}
+
+
+                                            {% if control_result.current_pid %}
+
+                                                <span>
+                                                    {{ t("CURRENT_PID") }}:
+                                                    <strong>
+                                                        {{ control_result.current_pid }}
+                                                    </strong>
+                                                </span>
+
+                                            {% endif %}
+
+                                        </div>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        {% endif %}
+
+
+        <!-- =====================================================
              SVXLINK SERVICE CONTROL
              ===================================================== -->
 
@@ -118,28 +299,94 @@
                                     "
                                 >
 
+                                    <!--
+                                        Restart SvxLink
+
+                                        Enabled:
+                                        authenticated Sysop / Co-Sysop
+
+                                        Disabled:
+                                        grey button for immediate
+                                        visual recognition on mobile
+                                    -->
+
+                                    {% if authenticated and can_control_node %}
+
+                                        <form
+                                            method="post"
+                                            action="{{ url_for(
+                                                'restart_svxlink'
+                                            ) }}"
+                                            class="m-0"
+                                        >
+
+                                            <input
+                                                type="hidden"
+                                                name="csrf_token"
+                                                value="{{ csrf_token }}"
+                                            >
+
+                                            <input
+                                                type="hidden"
+                                                name="lang"
+                                                value="{{ language }}"
+                                            >
+
+                                            <button
+                                                type="submit"
+                                                class="btn btn-warning w-100"
+                                            >
+
+                                                <i
+                                                    class="
+                                                        fa-solid
+                                                        fa-rotate
+                                                        me-2
+                                                    "
+                                                ></i>
+
+                                                {{ t("RESTART_SVXLINK") }}
+
+                                            </button>
+
+                                        </form>
+
+                                    {% else %}
+
+                                        <button
+                                            type="button"
+                                            class="btn btn-secondary w-100"
+                                            disabled
+                                        >
+
+                                            <i
+                                                class="
+                                                    fa-solid
+                                                    fa-rotate
+                                                    me-2
+                                                "
+                                            ></i>
+
+                                            {{ t("RESTART_SVXLINK") }}
+
+                                        </button>
+
+                                    {% endif %}
+
+
+                                    <!--
+                                        Stop SvxLink
+
+                                        Backend not implemented yet.
+                                        Always disabled and grey.
+                                    -->
+
                                     <button
                                         type="button"
-                                        class="btn btn-warning w-100"
+                                        class="btn btn-secondary w-100"
                                         disabled
                                     >
-                                        <i
-                                            class="
-                                                fa-solid
-                                                fa-rotate
-                                                me-2
-                                            "
-                                        ></i>
 
-                                        {{ t("RESTART_SVXLINK") }}
-                                    </button>
-
-
-                                    <button
-                                        type="button"
-                                        class="btn btn-danger w-100"
-                                        disabled
-                                    >
                                         <i
                                             class="
                                                 fa-solid
@@ -149,6 +396,7 @@
                                         ></i>
 
                                         {{ t("STOP_SVXLINK") }}
+
                                     </button>
 
                                 </div>
@@ -212,11 +460,17 @@
                                 </div>
 
 
+                                <!--
+                                    GPIO control not implemented yet.
+                                    Always disabled and grey.
+                                -->
+
                                 <button
                                     type="button"
-                                    class="btn btn-outline-primary w-100"
+                                    class="btn btn-secondary w-100"
                                     disabled
                                 >
+
                                     <i
                                         class="
                                             fa-solid
@@ -226,6 +480,7 @@
                                     ></i>
 
                                     {{ t("FORCE_FAN_ON") }}
+
                                 </button>
 
                             </div>
@@ -258,11 +513,17 @@
                                 </div>
 
 
+                                <!--
+                                    GPIO control not implemented yet.
+                                    Always disabled and grey.
+                                -->
+
                                 <button
                                     type="button"
-                                    class="btn btn-outline-danger w-100"
+                                    class="btn btn-secondary w-100"
                                     disabled
                                 >
+
                                     <i
                                         class="
                                             fa-solid
@@ -272,6 +533,7 @@
                                     ></i>
 
                                     {{ t("DISABLE_RADIO_MODULE") }}
+
                                 </button>
 
                             </div>
@@ -288,7 +550,7 @@
 
 
         <!-- =====================================================
-             ACCESS INFORMATION
+             ACCESS CONTROL
              ===================================================== -->
 
         <div class="row">
@@ -299,35 +561,210 @@
 
                     <div class="card-header">
                         <i class="fa-solid fa-shield-halved"></i>
-                        {{ t("ACCESS_CONTROL") }}
+                        {{ t("AUTH_ACCESS_STATUS") }}
                     </div>
 
                     <div class="card-body">
 
-                        <div class="d-flex align-items-start gap-3">
+                        {% if authenticated and current_user %}
 
-                            <i
-                                class="
-                                    fa-solid
-                                    fa-lock
-                                    fa-lg
-                                    mt-1
-                                "
-                            ></i>
+                            <div class="row g-3 align-items-center">
 
-                            <div>
+                                <div class="col-12 col-lg">
 
-                                <strong>
-                                    {{ t("RESTRICTED_CONTROLS") }}
-                                </strong>
+                                    <div
+                                        class="
+                                            d-flex
+                                            align-items-start
+                                            gap-3
+                                        "
+                                    >
 
-                                <div class="text-muted mt-1">
-                                    {{ t("SYSOP_COSYSOP_ONLY") }}
+                                        <i
+                                            class="
+                                                fa-solid
+                                                fa-lock-open
+                                                fa-lg
+                                                mt-1
+                                                text-success
+                                            "
+                                        ></i>
+
+                                        <div>
+
+                                            <strong>
+                                                {{ t("AUTH_AUTHENTICATED_AS") }}
+                                            </strong>
+
+                                            <div class="mt-1">
+
+                                                <span
+                                                    class="
+                                                        svx-status-value
+                                                    "
+                                                >
+                                                    {{ current_user.username }}
+                                                </span>
+
+                                            </div>
+
+
+                                            <div class="text-muted mt-2">
+
+                                                {{ t("AUTH_ROLE") }}:
+
+                                                <strong>
+
+                                                    {% if current_user.role == "sysop" %}
+
+                                                        {{ t("ROLE_SYSOP") }}
+
+                                                    {% elif current_user.role == "cosysop" %}
+
+                                                        {{ t("ROLE_COSYSOP") }}
+
+                                                    {% else %}
+
+                                                        {{ t("NOT_AVAILABLE") }}
+
+                                                    {% endif %}
+
+                                                </strong>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="col-12 col-lg-auto">
+
+                                    <form
+                                        method="post"
+                                        action="{{ url_for('logout') }}"
+                                    >
+
+                                        <input
+                                            type="hidden"
+                                            name="csrf_token"
+                                            value="{{ csrf_token }}"
+                                        >
+
+                                        <input
+                                            type="hidden"
+                                            name="lang"
+                                            value="{{ language }}"
+                                        >
+
+                                        <button
+                                            type="submit"
+                                            class="
+                                                btn
+                                                btn-outline-secondary
+                                                w-100
+                                            "
+                                        >
+
+                                            <i
+                                                class="
+                                                    fa-solid
+                                                    fa-right-from-bracket
+                                                    me-2
+                                                "
+                                            ></i>
+
+                                            {{ t("AUTH_LOGOUT_BUTTON") }}
+
+                                        </button>
+
+                                    </form>
+
                                 </div>
 
                             </div>
 
-                        </div>
+                        {% else %}
+
+                            <div class="row g-3 align-items-center">
+
+                                <div class="col-12 col-lg">
+
+                                    <div
+                                        class="
+                                            d-flex
+                                            align-items-start
+                                            gap-3
+                                        "
+                                    >
+
+                                        <i
+                                            class="
+                                                fa-solid
+                                                fa-lock
+                                                fa-lg
+                                                mt-1
+                                            "
+                                        ></i>
+
+                                        <div>
+
+                                            <strong>
+                                                {{ t("AUTH_NOT_AUTHENTICATED") }}
+                                            </strong>
+
+                                            <div class="text-muted mt-1">
+                                                {{ t("AUTH_LOGIN_TO_CONTROL") }}
+                                            </div>
+
+                                            <div class="text-muted mt-1">
+                                                {{ t("SYSOP_COSYSOP_ONLY") }}
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                                {% if authentication_available %}
+
+                                    <div class="col-12 col-lg-auto">
+
+                                        <a
+                                            href="{{ url_for(
+                                                'login',
+                                                lang=language
+                                            ) }}"
+                                            class="
+                                                btn
+                                                btn-primary
+                                                w-100
+                                            "
+                                        >
+
+                                            <i
+                                                class="
+                                                    fa-solid
+                                                    fa-right-to-bracket
+                                                    me-2
+                                                "
+                                            ></i>
+
+                                            {{ t("AUTH_LOGIN_BUTTON") }}
+
+                                        </a>
+
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+                        {% endif %}
 
                     </div>
 
