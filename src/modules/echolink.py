@@ -1,4 +1,3 @@
-
 """
 EchoLink monitor.
 
@@ -89,11 +88,23 @@ class EchoLinkMonitor(BaseMonitor):
 
     RECENT_CONNECTION_LIMIT = 20
 
+    RECENT_CONNECTION_EVENT_MARKERS = (
+        "EchoLink QSO state changed to ",
+        "Incoming EchoLink connection from ",
+    )
+
     def __init__(
         self,
         log_file: Path | str = LOG_FILE,
     ) -> None:
         self.log_file = Path(log_file)
+
+        self._recent_connections_cache: list[
+            dict[str, object]
+        ] = []
+
+        self._recent_log_inode: int | None = None
+        self._recent_log_size = 0
 
     def check(self, state: NodeState) -> None:
         """
@@ -267,24 +278,136 @@ class EchoLinkMonitor(BaseMonitor):
         state: NodeState,
     ) -> None:
         """
-        Reconstruct the most recent completed EchoLink sessions.
+        Update the most recent completed EchoLink sessions.
 
-        A completed session is defined by a CONNECTED event
-        followed by a DISCONNECTED event for the same station.
+        The history is cached.
 
-        The log is scanned backwards so the newest completed
-        sessions are discovered first. Unlike the reconstruction
-        of current runtime state, this history intentionally
-        continues across EchoLink module restarts.
+        If the logfile has not changed, the cached history is
+        reused immediately.
 
-        Operator names are associated with the incoming
-        connection announcement immediately preceding the
-        corresponding CONNECTED event when available.
+        If the logfile only grew with lines unrelated to EchoLink
+        connection lifecycle events, the cached history is also
+        reused.
 
-        The instability flag uses the same canonical meaning as
-        the live monitor: at least INSTABILITY_TRANSITIONS real
-        CONNECTED/DISCONNECTED transitions inside
-        INSTABILITY_WINDOW_SECONDS.
+        A full reconstruction is therefore required only on the
+        first check, after logfile rotation/truncation or when new
+        CONNECTED, DISCONNECTED or incoming-connection information
+        has actually been appended.
+
+        Full reconstruction scans the logfile backwards and stops
+        as soon as the twenty required sessions, their operator
+        names and the instability look-back window are complete.
+        """
+
+        if not self.log_file.is_file():
+
+            self._recent_connections_cache = []
+            self._recent_log_inode = None
+            self._recent_log_size = 0
+
+            state.echolink_recent_connections = []
+            return
+
+        try:
+
+            log_stat = self.log_file.stat()
+
+        except OSError:
+
+            state.echolink_recent_connections = list(
+                self._recent_connections_cache
+            )
+            return
+
+        current_inode = log_stat.st_ino
+        current_size = log_stat.st_size
+
+        same_logfile = (
+            self._recent_log_inode == current_inode
+        )
+
+        if (
+            same_logfile
+            and current_size == self._recent_log_size
+        ):
+
+            state.echolink_recent_connections = list(
+                self._recent_connections_cache
+            )
+            return
+
+        rebuild_required = True
+
+        if (
+            same_logfile
+            and current_size > self._recent_log_size
+        ):
+
+            appended_text = (
+                self._read_appended_log_text(
+                    self._recent_log_size,
+                )
+            )
+
+            rebuild_required = any(
+                marker in appended_text
+                for marker
+                in self.RECENT_CONNECTION_EVENT_MARKERS
+            )
+
+        if rebuild_required:
+
+            self._recent_connections_cache = (
+                self._build_recent_connections()
+            )
+
+        self._recent_log_inode = current_inode
+        self._recent_log_size = current_size
+
+        state.echolink_recent_connections = list(
+            self._recent_connections_cache
+        )
+
+    def _read_appended_log_text(
+        self,
+        start_offset: int,
+    ) -> str:
+        """
+        Read logfile data appended after start_offset.
+        """
+
+        try:
+
+            with self.log_file.open(
+                "rb"
+            ) as log_file:
+
+                log_file.seek(
+                    start_offset
+                )
+
+                return log_file.read().decode(
+                    "utf-8",
+                    errors="ignore",
+                )
+
+        except OSError:
+
+            return ""
+
+    def _build_recent_connections(
+        self,
+    ) -> list[dict[str, object]]:
+        """
+        Reconstruct the newest completed EchoLink sessions.
+
+        The logfile is scanned backwards.
+
+        The scan stops once the required twenty completed sessions
+        have been reconstructed, their available operator names
+        have been collected and enough older connection events have
+        been read to evaluate the normal instability window around
+        the oldest retained session.
         """
 
         completed_sessions: list[
@@ -306,20 +429,22 @@ class EchoLinkMonitor(BaseMonitor):
             list[tuple[datetime, bool]],
         ] = {}
 
+        oldest_connected_at: datetime | None = None
+
         for line in self._read_lines_reverse():
+
+            timestamp = (
+                self._extract_log_datetime(line)
+            )
 
             connection_event = (
                 self._extract_connection_event(line)
             )
 
-            if connection_event is not None:
-
-                timestamp = (
-                    self._extract_log_datetime(line)
-                )
-
-                if timestamp is None:
-                    continue
+            if (
+                connection_event is not None
+                and timestamp is not None
+            ):
 
                 station, connected = connection_event
 
@@ -337,134 +462,213 @@ class EchoLinkMonitor(BaseMonitor):
 
                     if (
                         len(completed_sessions)
-                        >= self.RECENT_CONNECTION_LIMIT
+                        < self.RECENT_CONNECTION_LIMIT
                     ):
-                        continue
 
-                    session: dict[str, object] = {
-                        "station": station,
-                        "name": "",
-                        "connected_at": "",
-                        "disconnected_at": (
-                            timestamp.isoformat(
-                                timespec="seconds"
-                            )
-                        ),
-                        "duration_seconds": 0,
-                        "unstable": False,
-                    }
+                        session: dict[str, object] = {
+                            "station": station,
+                            "name": "",
+                            "connected_at": "",
+                            "disconnected_at": (
+                                timestamp.isoformat(
+                                    timespec="seconds"
+                                )
+                            ),
+                            "duration_seconds": 0,
+                            "unstable": False,
+                        }
 
-                    pending_disconnects.setdefault(
-                        station,
-                        [],
-                    ).append(session)
+                        pending_disconnects.setdefault(
+                            station,
+                            [],
+                        ).append(
+                            session
+                        )
 
-                    completed_sessions.append(
-                        session
-                    )
+                        completed_sessions.append(
+                            session
+                        )
 
-                    continue
+                else:
 
-                station_pending = (
-                    pending_disconnects.get(
-                        station
-                    )
-                )
-
-                if not station_pending:
-                    continue
-
-                session = station_pending.pop(0)
-
-                disconnected_at_text = session.get(
-                    "disconnected_at"
-                )
-
-                if not isinstance(
-                    disconnected_at_text,
-                    str,
-                ):
-                    continue
-
-                try:
-                    disconnected_at = (
-                        datetime.fromisoformat(
-                            disconnected_at_text
+                    station_pending = (
+                        pending_disconnects.get(
+                            station
                         )
                     )
-                except ValueError:
-                    continue
 
-                if timestamp > disconnected_at:
-                    continue
+                    if station_pending:
 
-                session["connected_at"] = (
-                    timestamp.isoformat(
-                        timespec="seconds"
+                        session = (
+                            station_pending.pop(0)
+                        )
+
+                        disconnected_at_text = (
+                            session.get(
+                                "disconnected_at"
+                            )
+                        )
+
+                        if isinstance(
+                            disconnected_at_text,
+                            str,
+                        ):
+
+                            try:
+
+                                disconnected_at = (
+                                    datetime.fromisoformat(
+                                        disconnected_at_text
+                                    )
+                                )
+
+                            except ValueError:
+
+                                disconnected_at = None
+
+                            if (
+                                disconnected_at is not None
+                                and timestamp <= disconnected_at
+                            ):
+
+                                session[
+                                    "connected_at"
+                                ] = (
+                                    timestamp.isoformat(
+                                        timespec="seconds"
+                                    )
+                                )
+
+                                session[
+                                    "duration_seconds"
+                                ] = max(
+                                    0,
+                                    int(
+                                        (
+                                            disconnected_at
+                                            - timestamp
+                                        ).total_seconds()
+                                    ),
+                                )
+
+                                awaiting_names.setdefault(
+                                    station,
+                                    [],
+                                ).append(
+                                    session
+                                )
+
+                                if (
+                                    oldest_connected_at is None
+                                    or timestamp
+                                    < oldest_connected_at
+                                ):
+
+                                    oldest_connected_at = (
+                                        timestamp
+                                    )
+
+            incoming_connection = (
+                self._extract_incoming_connection(
+                    line
+                )
+            )
+
+            if incoming_connection is not None:
+
+                station, name = (
+                    incoming_connection
+                )
+
+                if name:
+
+                    station_awaiting_names = (
+                        awaiting_names.get(
+                            station
+                        )
+                    )
+
+                    if station_awaiting_names:
+
+                        session = (
+                            station_awaiting_names.pop(0)
+                        )
+
+                        session["name"] = name
+
+            valid_sessions = [
+                session
+                for session in completed_sessions
+                if session.get(
+                    "connected_at"
+                )
+            ]
+
+            enough_sessions = (
+                len(valid_sessions)
+                >= self.RECENT_CONNECTION_LIMIT
+            )
+
+            names_resolved = not any(
+                sessions
+                for sessions
+                in awaiting_names.values()
+            )
+
+            instability_history_complete = False
+
+            if (
+                enough_sessions
+                and oldest_connected_at is not None
+                and timestamp is not None
+            ):
+
+                instability_history_complete = (
+                    timestamp
+                    <= (
+                        oldest_connected_at
+                        - timedelta(
+                            seconds=(
+                                self.INSTABILITY_WINDOW_SECONDS
+                            )
+                        )
                     )
                 )
 
-                session["duration_seconds"] = max(
-                    0,
-                    int(
-                        (
-                            disconnected_at
-                            - timestamp
-                        ).total_seconds()
-                    ),
-                )
+            if (
+                enough_sessions
+                and names_resolved
+                and instability_history_complete
+            ):
 
-                awaiting_names.setdefault(
-                    station,
-                    [],
-                ).append(session)
-
-                continue
-
-            incoming_connection = (
-                self._extract_incoming_connection(line)
-            )
-
-            if incoming_connection is None:
-                continue
-
-            station, name = incoming_connection
-
-            if not name:
-                continue
-
-            station_awaiting_names = (
-                awaiting_names.get(
-                    station
-                )
-            )
-
-            if not station_awaiting_names:
-                continue
-
-            session = (
-                station_awaiting_names.pop(0)
-            )
-
-            session["name"] = name
+                break
 
         valid_sessions = [
             session
             for session in completed_sessions
-            if session.get("connected_at")
+            if session.get(
+                "connected_at"
+            )
         ]
 
         for session in valid_sessions:
 
-            station = session.get("station")
+            station = session.get(
+                "station"
+            )
+
             connected_at_text = session.get(
                 "connected_at"
             )
+
             disconnected_at_text = session.get(
                 "disconnected_at"
             )
 
-            if not isinstance(station, str):
+            if not isinstance(
+                station,
+                str,
+            ):
                 continue
 
             if not isinstance(
@@ -480,21 +684,22 @@ class EchoLinkMonitor(BaseMonitor):
                 continue
 
             try:
-                connected_at = datetime.fromisoformat(
-                    connected_at_text
-                )
-                disconnected_at = datetime.fromisoformat(
-                    disconnected_at_text
-                )
-            except ValueError:
-                continue
 
-            session_events = (
-                connection_events.get(
-                    station,
-                    []
+                connected_at = (
+                    datetime.fromisoformat(
+                        connected_at_text
+                    )
                 )
-            )
+
+                disconnected_at = (
+                    datetime.fromisoformat(
+                        disconnected_at_text
+                    )
+                )
+
+            except ValueError:
+
+                continue
 
             instability_window_start = (
                 connected_at
@@ -517,7 +722,11 @@ class EchoLinkMonitor(BaseMonitor):
             relevant_events = sorted(
                 (
                     event
-                    for event in session_events
+                    for event
+                    in connection_events.get(
+                        station,
+                        []
+                    )
                     if (
                         instability_window_start
                         <= event[0]
@@ -544,11 +753,9 @@ class EchoLinkMonitor(BaseMonitor):
             reverse=True,
         )
 
-        state.echolink_recent_connections = (
-            valid_sessions[
-                : self.RECENT_CONNECTION_LIMIT
-            ]
-        )
+        return valid_sessions[
+            : self.RECENT_CONNECTION_LIMIT
+        ]
 
     def _update_connection_stability(
         self,
