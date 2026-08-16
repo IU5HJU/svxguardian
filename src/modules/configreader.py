@@ -140,6 +140,12 @@ class ConfigReader:
     ) -> None:
         """
         Read structured Reflector configuration data.
+
+        NODE_INFO_FILE is the current SvxLink configuration
+        option used to reference node_info.json.
+
+        O_FILE is also accepted for compatibility with existing
+        SvxLink installations that use the historical option name.
         """
 
         if not reflector_logic:
@@ -175,6 +181,13 @@ class ConfigReader:
             reflector_logic,
             "NODE_INFO_FILE",
         )
+
+        if not node.node_info_file:
+            node.node_info_file = self._get_value(
+                parser,
+                reflector_logic,
+                "O_FILE",
+            )
 
         node.reflector_mode = self._classify_reflector_mode(
             node.reflector_hosts
