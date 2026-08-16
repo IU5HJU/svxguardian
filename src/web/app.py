@@ -51,6 +51,7 @@ PRIVATE_CONFIG_DIRECTORY = Path(
     "/etc/svxguardian"
 )
 
+
 SECRET_KEY_FILE = (
     PRIVATE_CONFIG_DIRECTORY
     / "secret.key"
@@ -113,11 +114,15 @@ guardian.register(
 )
 
 guardian.register(
-    EchoLinkMonitor()
+    EchoLinkMonitor(
+        log_file=guardian.config.SVXLINK_LOG_FILE
+    )
 )
 
 guardian.register(
-    ReflectorMonitor()
+    ReflectorMonitor(
+        log_file=guardian.config.SVXLINK_LOG_FILE
+    )
 )
 
 
@@ -134,10 +139,12 @@ PROJECT_ROOT = (
     .parents[2]
 )
 
+
 LOCALE_DIRECTORY = (
     PROJECT_ROOT
     / "locale"
 )
+
 
 LANGUAGES_FILE = (
     LOCALE_DIRECTORY
@@ -152,6 +159,7 @@ LANGUAGES_FILE = (
 CSRF_SESSION_KEY = (
     "svxguardian_csrf_token"
 )
+
 
 CONTROL_RESULT_SESSION_KEY = (
     "svxguardian_control_result"
