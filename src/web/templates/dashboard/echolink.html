@@ -230,6 +230,123 @@
 
         </div>
 
+
+        <div class="row mt-4">
+
+            <div class="col-12">
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <i class="fa-solid fa-link"></i>
+
+                        <span style="text-transform: none;">
+                            {{ t("LAST_EVENTS") }}
+                        </span>
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div id="echolink-recent-connections-container">
+
+                            {% if state.echolink_recent_connections %}
+
+                                <div class="table-responsive">
+
+                                    <table class="table align-middle mb-0">
+
+                                        <thead>
+
+                                            <tr>
+                                                <th>{{ t("CALLSIGN") }}</th>
+                                                <th>{{ t("AUTH_USERNAME") }}</th>
+                                                <th>{{ t("UPTIME") }}</th>
+                                                <th>{{ t("STATUS") }}</th>
+                                            </tr>
+
+                                        </thead>
+
+                                        <tbody>
+
+                                            {% for connection in state.echolink_recent_connections %}
+
+                                                <tr>
+                                                    <td>
+                                                        <span class="badge bg-primary">
+                                                            {{ connection.station }}
+                                                        </span>
+
+                                                        <div class="small text-muted mt-1">
+                                                            {{ connection.connected_at }}
+                                                        </div>
+                                                    </td>
+
+                                                    <td>
+                                                        {{ connection.name or t("NOT_AVAILABLE") }}
+                                                    </td>
+
+                                                    <td>
+                                                        <span
+                                                            data-duration-seconds="{{ connection.duration_seconds }}"
+                                                        >
+                                                            {{ connection.duration_seconds }} s
+                                                        </span>
+                                                    </td>
+
+                                                    <td>
+
+                                                        {% if connection.unstable %}
+
+                                                            <span class="badge bg-warning text-dark">
+                                                                {{ t("OPERATIONAL_UNSTABLE_CONNECTION") }}
+                                                            </span>
+
+                                                        {% else %}
+
+                                                            <span class="badge bg-secondary">
+                                                                {{ t("DISCONNECTED") }}
+                                                            </span>
+
+                                                        {% endif %}
+
+                                                        <div class="small text-muted mt-1">
+                                                            {{ connection.disconnected_at }}
+                                                        </div>
+
+                                                    </td>
+                                                </tr>
+
+                                            {% endfor %}
+
+                                        </tbody>
+
+                                    </table>
+
+                                </div>
+
+                            {% else %}
+
+                                <div
+                                    id="echolink-no-recent-connections"
+                                    class="text-muted"
+                                >
+                                    {{ t("NOT_AVAILABLE") }}
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
     </section>
 
 </div>
@@ -243,9 +360,14 @@
         ERROR: {{ t("ERROR") | tojson }},
         UNKNOWN: {{ t("UNKNOWN") | tojson }},
         CONNECTED: {{ t("CONNECTED") | tojson }},
+        DISCONNECTED: {{ t("DISCONNECTED") | tojson }},
         NO_STATIONS: {{ t("ECHOLINK_NO_STATIONS") | tojson }},
+        NOT_AVAILABLE: {{ t("NOT_AVAILABLE") | tojson }},
         CALLSIGN: {{ t("CALLSIGN") | tojson }},
+        USER: {{ t("AUTH_USERNAME") | tojson }},
+        UPTIME: {{ t("UPTIME") | tojson }},
         STATUS: {{ t("ECHOLINK_STATUS") | tojson }},
+        UNSTABLE: {{ t("OPERATIONAL_UNSTABLE_CONNECTION") | tojson }},
         DNS_REASON: {{ t("REASON_ECHOLINK_DNS_ERROR") | tojson }},
         DIRECTORY_REASON:
             {{ t("REASON_ECHOLINK_DIRECTORY_ERROR") | tojson }}
@@ -329,6 +451,171 @@
     }
 
 
+    function formatEchoLinkDuration(seconds) {
+        const totalSeconds = Number(seconds);
+
+        if (!Number.isFinite(totalSeconds) || totalSeconds < 0) {
+            return echoLinkTranslations.NOT_AVAILABLE;
+        }
+
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor(
+            (totalSeconds % 3600) / 60
+        );
+        const remainingSeconds = Math.floor(
+            totalSeconds % 60
+        );
+
+        return [
+            hours,
+            minutes,
+            remainingSeconds
+        ]
+            .map(
+                (value) =>
+                    String(value).padStart(
+                        2,
+                        "0"
+                    )
+            )
+            .join(":");
+    }
+
+
+    function formatEchoLinkTimestamp(timestamp) {
+        if (!timestamp) {
+            return echoLinkTranslations.NOT_AVAILABLE;
+        }
+
+        const date = new Date(timestamp);
+
+        if (Number.isNaN(date.getTime())) {
+            return timestamp;
+        }
+
+        return date.toLocaleString();
+    }
+
+
+    function renderEchoLinkRecentConnections(
+        connections
+    ) {
+        const container = document.getElementById(
+            "echolink-recent-connections-container"
+        );
+
+        if (!connections || connections.length === 0) {
+            container.innerHTML = `
+                <div class="text-muted">
+                    ${echoLinkTranslations.NOT_AVAILABLE}
+                </div>
+            `;
+            return;
+        }
+
+        const rows = connections
+            .slice(
+                0,
+                20
+            )
+            .map(
+                (connection) => {
+
+                    const status = connection.unstable
+                        ? `
+                            <span class="badge bg-warning text-dark">
+                                ${echoLinkTranslations.UNSTABLE}
+                            </span>
+                        `
+                        : `
+                            <span class="badge bg-secondary">
+                                ${echoLinkTranslations.DISCONNECTED}
+                            </span>
+                        `;
+
+                    const name = (
+                        connection.name
+                        || echoLinkTranslations.NOT_AVAILABLE
+                    );
+
+                    return `
+                        <tr>
+
+                            <td>
+
+                                <span class="badge bg-primary">
+                                    ${connection.station}
+                                </span>
+
+                                <div class="small text-muted mt-1">
+                                    ${
+                                        formatEchoLinkTimestamp(
+                                            connection.connected_at
+                                        )
+                                    }
+                                </div>
+
+                            </td>
+
+                            <td>
+                                ${name}
+                            </td>
+
+                            <td>
+                                ${
+                                    formatEchoLinkDuration(
+                                        connection.duration_seconds
+                                    )
+                                }
+                            </td>
+
+                            <td>
+
+                                ${status}
+
+                                <div class="small text-muted mt-1">
+                                    ${
+                                        formatEchoLinkTimestamp(
+                                            connection.disconnected_at
+                                        )
+                                    }
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    `;
+                }
+            )
+            .join("");
+
+        container.innerHTML = `
+            <div class="table-responsive">
+
+                <table class="table align-middle mb-0">
+
+                    <thead>
+
+                        <tr>
+                            <th>${echoLinkTranslations.CALLSIGN}</th>
+                            <th>${echoLinkTranslations.USER}</th>
+                            <th>${echoLinkTranslations.UPTIME}</th>
+                            <th>${echoLinkTranslations.STATUS}</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+                        ${rows}
+                    </tbody>
+
+                </table>
+
+            </div>
+        `;
+    }
+
+
     async function updateEchoLinkState() {
         try {
             const response = await fetch(
@@ -365,7 +652,9 @@
             );
 
             statusElement.textContent =
-                echoLinkTranslations[data.echolink_status]
+                echoLinkTranslations[
+                    data.echolink_status
+                ]
                 || data.echolink_status;
 
             countElement.textContent =
@@ -375,14 +664,24 @@
                 data.echolink_connected_stations
             );
 
-            if (data.echolink_last_error) {
-                errorElement.classList.remove("d-none");
+            renderEchoLinkRecentConnections(
+                data.echolink_recent_connections
+            );
 
-                errorTextElement.textContent = echoLinkErrorText(
-                    data.echolink_last_error
+            if (data.echolink_last_error) {
+                errorElement.classList.remove(
+                    "d-none"
                 );
+
+                errorTextElement.textContent =
+                    echoLinkErrorText(
+                        data.echolink_last_error
+                    );
             } else {
-                errorElement.classList.add("d-none");
+                errorElement.classList.add(
+                    "d-none"
+                );
+
                 errorTextElement.textContent = "";
             }
 

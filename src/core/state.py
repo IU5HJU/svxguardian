@@ -67,6 +67,12 @@ class NodeState:
     echolink_transmitting: bool = False
     echolink_transmitting_station: str = ""
 
+    echolink_recent_connections: list[
+        dict[str, object]
+    ] = field(
+        default_factory=list
+    )
+
     # Reflector
     reflector_status: ReflectorStatus = ReflectorStatus.UNKNOWN
     reflector_host: str = ""
