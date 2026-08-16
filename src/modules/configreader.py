@@ -146,6 +146,7 @@ class ConfigReader:
             node.reflector_configured = False
             node.reflector_mode = "disabled"
             node.reflector = ""
+            node.node_info_file = ""
             return
 
         node.reflector_configured = True
@@ -167,6 +168,12 @@ class ConfigReader:
             parser,
             reflector_logic,
             "DEFAULT_TG",
+        )
+
+        node.node_info_file = self._get_value(
+            parser,
+            reflector_logic,
+            "NODE_INFO_FILE",
         )
 
         node.reflector_mode = self._classify_reflector_mode(

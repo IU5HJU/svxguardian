@@ -51,6 +51,12 @@ class ReflectorMonitor(BaseMonitor):
         "ReflectorLogic: Encrypted connection established"
     )
 
+    def __init__(
+        self,
+        log_file: Path | str = LOG_FILE,
+    ) -> None:
+        self.log_file = Path(log_file)
+
     def check(self, state: NodeState) -> None:
         """
         Update the current Reflector state.
@@ -183,11 +189,11 @@ class ReflectorMonitor(BaseMonitor):
         Read the SvxLink log backwards, one line at a time.
         """
 
-        if not self.LOG_FILE.is_file():
+        if not self.log_file.is_file():
             return
 
         try:
-            with self.LOG_FILE.open("rb") as log_file:
+            with self.log_file.open("rb") as log_file:
                 log_file.seek(0, 2)
                 position = log_file.tell()
                 buffer = b""

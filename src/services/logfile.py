@@ -1,22 +1,32 @@
 """
-Funzioni per leggere il file di log di SvxLink.
+Functions for reading the SvxLink log file.
 """
 
 from pathlib import Path
 
 
-LOGFILE = "/var/log/svxlink"
+DEFAULT_LOG_FILE = Path("/var/log/svxlink")
 
 
-def read_last_lines(lines=100):
+def read_last_lines(
+    lines: int = 100,
+    log_file: Path | str = DEFAULT_LOG_FILE,
+) -> list[str]:
     """
-    Restituisce le ultime righe del file di log.
+    Return the last lines from the SvxLink log file.
     """
 
-    logfile = Path(LOGFILE)
+    logfile = Path(log_file)
 
-    if not logfile.exists():
+    if not logfile.is_file():
         return []
 
-    with logfile.open("r", encoding="utf-8", errors="ignore") as f:
-        return f.readlines()[-lines:]
+    try:
+        with logfile.open(
+            "r",
+            encoding="utf-8",
+            errors="ignore",
+        ) as file:
+            return file.readlines()[-lines:]
+    except OSError:
+        return []

@@ -24,8 +24,18 @@ def main() -> None:
 
     guardian.register(SystemMonitor())
     guardian.register(SvxLinkMonitor())
-    guardian.register(EchoLinkMonitor())
-    guardian.register(ReflectorMonitor())
+
+    guardian.register(
+        EchoLinkMonitor(
+            log_file=guardian.config.SVXLINK_LOG_FILE
+        )
+    )
+
+    guardian.register(
+        ReflectorMonitor(
+            log_file=guardian.config.SVXLINK_LOG_FILE
+        )
+    )
 
     guardian.run()
 

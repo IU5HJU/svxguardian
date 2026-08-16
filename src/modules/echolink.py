@@ -86,6 +86,12 @@ class EchoLinkMonitor(BaseMonitor):
     INSTABILITY_TRANSITIONS = 3
     INSTABILITY_HOLD_SECONDS = 10
 
+    def __init__(
+        self,
+        log_file: Path | str = LOG_FILE,
+    ) -> None:
+        self.log_file = Path(log_file)
+
     def check(self, state: NodeState) -> None:
         """
         Update all EchoLink runtime information.
@@ -930,12 +936,12 @@ class EchoLinkMonitor(BaseMonitor):
         Read the SvxLink log backwards, one line at a time.
         """
 
-        if not self.LOG_FILE.is_file():
+        if not self.log_file.is_file():
             return
 
         try:
 
-            with self.LOG_FILE.open(
+            with self.log_file.open(
                 "rb"
             ) as log_file:
 

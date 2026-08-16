@@ -9,6 +9,7 @@ from datetime import datetime
 
 from ..modules.configreader import ConfigReader
 from ..modules.nodeinforeader import NodeInfoReader
+from .config import ConfigManager
 from .health import HealthEngine
 from .nodeinfo import NodeInfo
 from .state import NodeState
@@ -26,8 +27,11 @@ class Guardian:
         self.monitors = []
 
         self.health_engine = HealthEngine()
-        self.config_reader = ConfigReader()
-        self.node_info_reader = NodeInfoReader()
+        self.config = ConfigManager()
+
+        self.config_reader = ConfigReader(
+            self.config.SVXLINK_CONFIG_FILE
+        )
 
         self.load_node_info()
 
@@ -40,14 +44,24 @@ class Guardian:
 
     def load_node_info(self) -> None:
         """
-        Load and merge the static SvxLink node information.
+        Load static SvxLink node information.
 
-        Data is first read from svxlink.conf and then enriched
-        with values from node_info.json.
+        The main SvxLink configuration is always read first.
+
+        node_info.json is read only when the active ReflectorLogic
+        explicitly declares NODE_INFO_FILE. This prevents SVX Guardian
+        from treating the upstream example node_info.json template as
+        real node information.
         """
 
         node = self.config_reader.load()
-        node = self.node_info_reader.enrich(node)
+
+        if node.node_info_file:
+            node_info_reader = NodeInfoReader(
+                node.node_info_file
+            )
+
+            node = node_info_reader.enrich(node)
 
         self.node_info = node
 
