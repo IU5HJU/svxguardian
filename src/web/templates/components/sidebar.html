@@ -78,8 +78,14 @@
 
 
         <a
-            class="svx-sidebar-link"
-            href="#"
+            class="svx-sidebar-link
+            {% if request.endpoint == 'logs_page' %}
+                active
+            {% endif %}"
+            href="{{ url_for(
+                'logs_page',
+                lang=language
+            ) }}"
             title="{{ t('LOGS') }}"
         >
             <i class="fa-solid fa-list"></i>

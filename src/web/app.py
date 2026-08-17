@@ -30,7 +30,7 @@ from ..modules.echolink import EchoLinkMonitor
 from ..modules.reflector import ReflectorMonitor
 from ..modules.svxlink import SvxLinkMonitor
 from ..modules.system import SystemMonitor
-
+from ..services.logfile import IncrementalLogReader
 from .auth import (
     AUTH_FILE,
     authenticate,
@@ -127,7 +127,11 @@ guardian.register(
 
 
 guardian_lock = RLock()
-
+operational_log = IncrementalLogReader(
+    log_file=guardian.config.SVXLINK_LOG_FILE,
+    history_limit=1000,
+    initial_lines=200,
+)
 
 # ============================================================
 # Project paths
@@ -622,6 +626,17 @@ def reflector_page():
     )
 
 
+@app.route("/logs")
+def logs_page():
+    """
+    Render the real-time SvxLink operational log.
+    """
+
+    return render_template(
+        "dashboard/logs.html",
+        **build_page_context(),
+    )
+
 # ============================================================
 # Configuration
 # ============================================================
@@ -966,6 +981,54 @@ def restart_svxlink():
 # ============================================================
 # REST API
 # ============================================================
+
+@app.route("/api/logs")
+def api_logs():
+    """
+    Return incremental SvxLink logfile entries.
+
+    The optional "after" query parameter acts as a client cursor.
+    Only entries with an ID greater than the supplied cursor are
+    returned.
+
+    This endpoint does not execute guardian.run(), so frequent
+    logfile polling does not trigger the complete monitoring
+    cycle.
+    """
+
+    after_value = request.args.get(
+        "after",
+        "0",
+    )
+
+    try:
+        after_id = max(
+            0,
+            int(after_value),
+        )
+
+    except (
+        TypeError,
+        ValueError,
+    ):
+        after_id = 0
+
+    entries = operational_log.get_entries(
+        after_id=after_id,
+        limit=200,
+    )
+
+    latest_id = (
+        operational_log.get_latest_id()
+    )
+
+    return jsonify(
+        {
+            "entries": entries,
+            "latest_id": latest_id,
+        }
+    )
+
 
 @app.route("/api/state")
 def api_state():

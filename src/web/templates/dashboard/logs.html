@@ -1,0 +1,483 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="svx-dashboard-layout">
+
+    {% include "components/sidebar.html" %}
+
+
+    <section class="svx-dashboard-content">
+
+        <div class="row">
+
+            <div class="col-12">
+
+                <div class="card">
+
+                    <div
+                        class="card-header
+                        d-flex
+                        justify-content-between
+                        align-items-center
+                        flex-wrap
+                        gap-2"
+                    >
+
+                        <div>
+
+                            <i class="fa-solid fa-list"></i>
+
+                            <span>
+                                {{ t("LOGS") }}
+                            </span>
+
+                        </div>
+
+
+                        <div
+                            class="d-flex
+                            align-items-center
+                            gap-2"
+                        >
+
+                            <span
+                                id="operational-log-status"
+                                class="badge bg-success"
+                            >
+                                LIVE
+                            </span>
+
+
+                            <button
+                                id="operational-log-toggle"
+                                type="button"
+                                class="btn btn-sm btn-outline-light"
+                            >
+                                <i
+                                    id="operational-log-toggle-icon"
+                                    class="fa-solid fa-pause"
+                                ></i>
+
+                                <span
+                                    id="operational-log-toggle-text"
+                                >
+                                    Pause
+                                </span>
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="card-body">
+
+                        <div
+                            id="operational-log-error"
+                            class="alert alert-danger d-none"
+                        >
+                            <i
+                                class="fa-solid
+                                fa-triangle-exclamation"
+                            ></i>
+
+                            <span>
+                                Errore durante la lettura del log.
+                            </span>
+                        </div>
+
+
+                        <div
+                            class="small text-muted mb-3"
+                        >
+                            {{ guardian.config.SVXLINK_LOG_FILE
+                               if guardian is defined
+                               else "" }}
+                        </div>
+
+
+                        <div
+                            id="operational-log"
+                            style="
+                                height: 65vh;
+                                min-height: 320px;
+                                overflow-y: auto;
+                                background: #111;
+                                color: #e9ecef;
+                                border-radius: 0.375rem;
+                                padding: 1rem;
+                                font-family:
+                                    ui-monospace,
+                                    SFMono-Regular,
+                                    Menlo,
+                                    Monaco,
+                                    Consolas,
+                                    'Liberation Mono',
+                                    'Courier New',
+                                    monospace;
+                                font-size: 0.85rem;
+                                line-height: 1.45;
+                            "
+                        >
+
+                            <div
+                                id="operational-log-empty"
+                                class="text-muted"
+                            >
+                                In attesa degli eventi...
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<script>
+
+    let operationalLogCursor = 0;
+
+    let operationalLogPaused = false;
+
+    let operationalLogInitialized = false;
+
+    let operationalLogRequestRunning = false;
+
+
+    const operationalLogElement =
+        document.getElementById(
+            "operational-log"
+        );
+
+
+    const operationalLogEmptyElement =
+        document.getElementById(
+            "operational-log-empty"
+        );
+
+
+    const operationalLogErrorElement =
+        document.getElementById(
+            "operational-log-error"
+        );
+
+
+    const operationalLogStatusElement =
+        document.getElementById(
+            "operational-log-status"
+        );
+
+
+    const operationalLogToggleElement =
+        document.getElementById(
+            "operational-log-toggle"
+        );
+
+
+    const operationalLogToggleIconElement =
+        document.getElementById(
+            "operational-log-toggle-icon"
+        );
+
+
+    const operationalLogToggleTextElement =
+        document.getElementById(
+            "operational-log-toggle-text"
+        );
+
+
+    function removeOperationalLogEmptyMessage() {
+
+        if (
+            operationalLogEmptyElement
+            && operationalLogEmptyElement.parentNode
+        ) {
+
+            operationalLogEmptyElement.remove();
+
+        }
+
+    }
+
+
+    function createOperationalLogLine(
+        entry
+    ) {
+
+        const lineElement =
+            document.createElement(
+                "div"
+            );
+
+        lineElement.dataset.logId =
+            String(
+                entry.id
+            );
+
+        lineElement.textContent =
+            entry.line;
+
+        lineElement.style.whiteSpace =
+            "pre-wrap";
+
+        lineElement.style.overflowWrap =
+            "anywhere";
+
+        return lineElement;
+
+    }
+
+
+    function appendOperationalLogEntries(
+        entries
+    ) {
+
+        if (
+            !Array.isArray(entries)
+            || entries.length === 0
+        ) {
+            return;
+        }
+
+
+        removeOperationalLogEmptyMessage();
+
+
+        const fragment =
+            document.createDocumentFragment();
+
+
+        for (
+            const entry
+            of entries
+        ) {
+
+            fragment.appendChild(
+                createOperationalLogLine(
+                    entry
+                )
+            );
+
+        }
+
+
+        operationalLogElement.appendChild(
+            fragment
+        );
+
+
+        while (
+            operationalLogElement.children.length
+            > 500
+        ) {
+
+            operationalLogElement.removeChild(
+                operationalLogElement.firstElementChild
+            );
+
+        }
+
+
+        operationalLogElement.scrollTop =
+            operationalLogElement.scrollHeight;
+
+    }
+
+
+    function setOperationalLogLiveState() {
+
+        operationalLogStatusElement.className =
+            "badge bg-success";
+
+        operationalLogStatusElement.textContent =
+            "LIVE";
+
+
+        operationalLogToggleIconElement.className =
+            "fa-solid fa-pause";
+
+        operationalLogToggleTextElement.textContent =
+            "Pause";
+
+    }
+
+
+    function setOperationalLogPausedState() {
+
+        operationalLogStatusElement.className =
+            "badge bg-warning text-dark";
+
+        operationalLogStatusElement.textContent =
+            "PAUSED";
+
+
+        operationalLogToggleIconElement.className =
+            "fa-solid fa-play";
+
+        operationalLogToggleTextElement.textContent =
+            "Play";
+
+    }
+
+
+    async function updateOperationalLog() {
+
+        if (
+            operationalLogPaused
+            || operationalLogRequestRunning
+        ) {
+            return;
+        }
+
+
+        operationalLogRequestRunning = true;
+
+
+        try {
+
+            const response = await fetch(
+                "{{ url_for('api_logs') }}"
+                + "?after="
+                + encodeURIComponent(
+                    operationalLogCursor
+                ),
+                {
+                    cache: "no-store"
+                }
+            );
+
+
+            if (!response.ok) {
+
+                operationalLogErrorElement.classList.remove(
+                    "d-none"
+                );
+
+                return;
+
+            }
+
+
+            const data =
+                await response.json();
+
+
+            operationalLogErrorElement.classList.add(
+                "d-none"
+            );
+
+
+            const entries =
+                Array.isArray(
+                    data.entries
+                )
+                    ? data.entries
+                    : [];
+
+
+            appendOperationalLogEntries(
+                entries
+            );
+
+
+            /*
+             * Move the client cursor only after the received
+             * entries have been rendered.
+             *
+             * During Pause no request is made and therefore the
+             * cursor remains unchanged. When Play is pressed
+             * again, /api/logs returns the events accumulated
+             * since this cursor.
+             */
+
+            if (
+                Number.isInteger(
+                    data.latest_id
+                )
+                && data.latest_id
+                    > operationalLogCursor
+            ) {
+
+                operationalLogCursor =
+                    data.latest_id;
+
+            }
+
+
+            operationalLogInitialized = true;
+
+        } catch (error) {
+
+            operationalLogErrorElement.classList.remove(
+                "d-none"
+            );
+
+
+            console.error(
+                "SVX Guardian operational log update failed:",
+                error
+            );
+
+        } finally {
+
+            operationalLogRequestRunning = false;
+
+        }
+
+    }
+
+
+    operationalLogToggleElement.addEventListener(
+        "click",
+        () => {
+
+            operationalLogPaused =
+                !operationalLogPaused;
+
+
+            if (operationalLogPaused) {
+
+                setOperationalLogPausedState();
+
+                return;
+
+            }
+
+
+            setOperationalLogLiveState();
+
+
+            /*
+             * Immediately recover events accumulated while
+             * the visual display was paused.
+             */
+
+            updateOperationalLog();
+
+        }
+    );
+
+
+    setOperationalLogLiveState();
+
+    updateOperationalLog();
+
+
+    window.setInterval(
+        updateOperationalLog,
+        2000
+    );
+
+</script>
+
+{% endblock %}
