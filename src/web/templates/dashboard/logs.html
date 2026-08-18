@@ -38,8 +38,18 @@
                         <div
                             class="d-flex
                             align-items-center
+                            flex-wrap
                             gap-2"
                         >
+
+                            <span
+                                id="operational-log-counter"
+                                class="badge bg-secondary"
+                                title="Righe visualizzate"
+                            >
+                                0 / 500
+                            </span>
+
 
                             <span
                                 id="operational-log-status"
@@ -47,6 +57,39 @@
                             >
                                 LIVE
                             </span>
+
+
+                            <button
+                                id="operational-log-autoscroll"
+                                type="button"
+                                class="btn btn-sm btn-outline-light"
+                                title="Abilita o disabilita lo scorrimento automatico"
+                            >
+                                <i
+                                    id="operational-log-autoscroll-icon"
+                                    class="fa-solid fa-arrow-down"
+                                ></i>
+
+                                <span
+                                    id="operational-log-autoscroll-text"
+                                >
+                                    Auto-scroll ON
+                                </span>
+                            </button>
+
+
+                            <button
+                                id="operational-log-clear"
+                                type="button"
+                                class="btn btn-sm btn-outline-light"
+                                title="Svuota soltanto la visualizzazione"
+                            >
+                                <i class="fa-solid fa-eraser"></i>
+
+                                <span>
+                                    Clear
+                                </span>
+                            </button>
 
 
                             <button
@@ -89,11 +132,18 @@
 
 
                         <div
-                            class="small text-muted mb-3"
+                            class="d-flex
+                            align-items-center
+                            gap-2
+                            small
+                            text-muted
+                            mb-3"
                         >
-                            {{ guardian.config.SVXLINK_LOG_FILE
-                               if guardian is defined
-                               else "" }}
+                            <i class="fa-regular fa-file-lines"></i>
+
+                            <span>
+                                /var/log/svxlink
+                            </span>
                         </div>
 
 
@@ -145,11 +195,14 @@
 
 <script>
 
+    const OPERATIONAL_LOG_MAX_LINES = 500;
+
+
     let operationalLogCursor = 0;
 
     let operationalLogPaused = false;
 
-    let operationalLogInitialized = false;
+    let operationalLogAutoScroll = true;
 
     let operationalLogRequestRunning = false;
 
@@ -157,12 +210,6 @@
     const operationalLogElement =
         document.getElementById(
             "operational-log"
-        );
-
-
-    const operationalLogEmptyElement =
-        document.getElementById(
-            "operational-log-empty"
         );
 
 
@@ -175,6 +222,12 @@
     const operationalLogStatusElement =
         document.getElementById(
             "operational-log-status"
+        );
+
+
+    const operationalLogCounterElement =
+        document.getElementById(
+            "operational-log-counter"
         );
 
 
@@ -196,16 +249,105 @@
         );
 
 
+    const operationalLogAutoScrollElement =
+        document.getElementById(
+            "operational-log-autoscroll"
+        );
+
+
+    const operationalLogAutoScrollIconElement =
+        document.getElementById(
+            "operational-log-autoscroll-icon"
+        );
+
+
+    const operationalLogAutoScrollTextElement =
+        document.getElementById(
+            "operational-log-autoscroll-text"
+        );
+
+
+    const operationalLogClearElement =
+        document.getElementById(
+            "operational-log-clear"
+        );
+
+
+    function getOperationalLogLines() {
+
+        return operationalLogElement.querySelectorAll(
+            "[data-log-id]"
+        );
+
+    }
+
+
+    function updateOperationalLogCounter() {
+
+        const lineCount =
+            getOperationalLogLines().length;
+
+        operationalLogCounterElement.textContent =
+            String(lineCount)
+            + " / "
+            + String(
+                OPERATIONAL_LOG_MAX_LINES
+            );
+
+    }
+
+
     function removeOperationalLogEmptyMessage() {
 
+        const emptyElement =
+            document.getElementById(
+                "operational-log-empty"
+            );
+
+
         if (
-            operationalLogEmptyElement
-            && operationalLogEmptyElement.parentNode
+            emptyElement
+            && emptyElement.parentNode
         ) {
 
-            operationalLogEmptyElement.remove();
+            emptyElement.remove();
 
         }
+
+    }
+
+
+    function showOperationalLogEmptyMessage(
+        message = "In attesa degli eventi..."
+    ) {
+
+        if (
+            document.getElementById(
+                "operational-log-empty"
+            )
+        ) {
+            return;
+        }
+
+
+        const emptyElement =
+            document.createElement(
+                "div"
+            );
+
+        emptyElement.id =
+            "operational-log-empty";
+
+        emptyElement.className =
+            "text-muted";
+
+        emptyElement.textContent =
+            message;
+
+
+        operationalLogElement.appendChild(
+            emptyElement
+        );
 
     }
 
@@ -234,6 +376,35 @@
             "anywhere";
 
         return lineElement;
+
+    }
+
+
+    function trimOperationalLog() {
+
+        let lines =
+            getOperationalLogLines();
+
+
+        while (
+            lines.length
+            > OPERATIONAL_LOG_MAX_LINES
+        ) {
+
+            lines[0].remove();
+
+            lines =
+                getOperationalLogLines();
+
+        }
+
+    }
+
+
+    function scrollOperationalLogToBottom() {
+
+        operationalLogElement.scrollTop =
+            operationalLogElement.scrollHeight;
 
     }
 
@@ -276,20 +447,41 @@
         );
 
 
-        while (
-            operationalLogElement.children.length
-            > 500
+        trimOperationalLog();
+
+        updateOperationalLogCounter();
+
+
+        if (operationalLogAutoScroll) {
+
+            scrollOperationalLogToBottom();
+
+        }
+
+    }
+
+
+    function clearOperationalLogDisplay() {
+
+        const lines =
+            getOperationalLogLines();
+
+
+        for (
+            const line
+            of lines
         ) {
 
-            operationalLogElement.removeChild(
-                operationalLogElement.firstElementChild
-            );
+            line.remove();
 
         }
 
 
-        operationalLogElement.scrollTop =
-            operationalLogElement.scrollHeight;
+        showOperationalLogEmptyMessage(
+            "Visualizzazione svuotata. In attesa di nuovi eventi..."
+        );
+
+        updateOperationalLogCounter();
 
     }
 
@@ -326,6 +518,46 @@
 
         operationalLogToggleTextElement.textContent =
             "Play";
+
+    }
+
+
+    function setOperationalLogAutoScrollState() {
+
+        if (operationalLogAutoScroll) {
+
+            operationalLogAutoScrollIconElement.className =
+                "fa-solid fa-arrow-down";
+
+            operationalLogAutoScrollTextElement.textContent =
+                "Auto-scroll ON";
+
+            operationalLogAutoScrollElement.classList.remove(
+                "btn-outline-warning"
+            );
+
+            operationalLogAutoScrollElement.classList.add(
+                "btn-outline-light"
+            );
+
+            return;
+
+        }
+
+
+        operationalLogAutoScrollIconElement.className =
+            "fa-solid fa-hand";
+
+        operationalLogAutoScrollTextElement.textContent =
+            "Auto-scroll OFF";
+
+        operationalLogAutoScrollElement.classList.remove(
+            "btn-outline-light"
+        );
+
+        operationalLogAutoScrollElement.classList.add(
+            "btn-outline-warning"
+        );
 
     }
 
@@ -391,13 +623,16 @@
 
 
             /*
-             * Move the client cursor only after the received
-             * entries have been rendered.
+             * The cursor represents the last logfile event already
+             * received by this browser.
              *
-             * During Pause no request is made and therefore the
-             * cursor remains unchanged. When Play is pressed
-             * again, /api/logs returns the events accumulated
-             * since this cursor.
+             * Pause prevents requests completely, so the cursor does
+             * not advance while paused. Pressing Play therefore
+             * retrieves the events accumulated during the pause.
+             *
+             * Clear intentionally does not change this cursor:
+             * clearing the screen must not cause old logfile entries
+             * to be downloaded again.
              */
 
             if (
@@ -412,9 +647,6 @@
                     data.latest_id;
 
             }
-
-
-            operationalLogInitialized = true;
 
         } catch (error) {
 
@@ -468,7 +700,42 @@
     );
 
 
+    operationalLogAutoScrollElement.addEventListener(
+        "click",
+        () => {
+
+            operationalLogAutoScroll =
+                !operationalLogAutoScroll;
+
+
+            setOperationalLogAutoScrollState();
+
+
+            if (operationalLogAutoScroll) {
+
+                scrollOperationalLogToBottom();
+
+            }
+
+        }
+    );
+
+
+    operationalLogClearElement.addEventListener(
+        "click",
+        () => {
+
+            clearOperationalLogDisplay();
+
+        }
+    );
+
+
     setOperationalLogLiveState();
+
+    setOperationalLogAutoScrollState();
+
+    updateOperationalLogCounter();
 
     updateOperationalLog();
 
