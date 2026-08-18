@@ -6,7 +6,6 @@
 
     {% include "components/sidebar.html" %}
 
-
     <section class="svx-dashboard-content">
 
         <div class="row">
@@ -15,99 +14,50 @@
 
                 <div class="card">
 
-                    <div
-                        class="card-header
-                        d-flex
-                        justify-content-between
-                        align-items-center
-                        flex-wrap
-                        gap-2"
-                    >
-
-                        <div>
-
-                            <i class="fa-solid fa-list"></i>
-
-                            <span>
-                                {{ t("LOGS") }}
-                            </span>
-
-                        </div>
-
+                    <div class="card-header">
 
                         <div
                             class="d-flex
+                            justify-content-between
                             align-items-center
                             flex-wrap
                             gap-2"
                         >
 
-                            <span
-                                id="operational-log-counter"
-                                class="badge bg-secondary"
-                                title="Righe visualizzate"
+                            <div
+                                class="d-flex
+                                align-items-center
+                                gap-2"
                             >
-                                0 / 500
-                            </span>
-
-
-                            <span
-                                id="operational-log-status"
-                                class="badge bg-success"
-                            >
-                                LIVE
-                            </span>
-
-
-                            <button
-                                id="operational-log-autoscroll"
-                                type="button"
-                                class="btn btn-sm btn-outline-light"
-                                title="Abilita o disabilita lo scorrimento automatico"
-                            >
-                                <i
-                                    id="operational-log-autoscroll-icon"
-                                    class="fa-solid fa-arrow-down"
-                                ></i>
-
-                                <span
-                                    id="operational-log-autoscroll-text"
-                                >
-                                    Auto-scroll ON
-                                </span>
-                            </button>
-
-
-                            <button
-                                id="operational-log-clear"
-                                type="button"
-                                class="btn btn-sm btn-outline-light"
-                                title="Svuota soltanto la visualizzazione"
-                            >
-                                <i class="fa-solid fa-eraser"></i>
+                                <i class="fa-solid fa-list"></i>
 
                                 <span>
-                                    Clear
+                                    {{ t("LOGS") }}
                                 </span>
-                            </button>
+                            </div>
 
 
-                            <button
-                                id="operational-log-toggle"
-                                type="button"
-                                class="btn btn-sm btn-outline-light"
+                            <div
+                                class="d-flex
+                                align-items-center
+                                gap-2"
                             >
-                                <i
-                                    id="operational-log-toggle-icon"
-                                    class="fa-solid fa-pause"
-                                ></i>
 
                                 <span
-                                    id="operational-log-toggle-text"
+                                    id="operational-log-status"
+                                    class="badge bg-success"
                                 >
-                                    Pause
+                                    LIVE
                                 </span>
-                            </button>
+
+                                <span
+                                    id="operational-log-counter"
+                                    class="badge bg-secondary"
+                                >
+                                    0 / 500
+                                </span>
+
+                            </div>
 
                         </div>
 
@@ -128,6 +78,64 @@
                             <span>
                                 Errore durante la lettura del log.
                             </span>
+                        </div>
+
+
+                        <div
+                            class="d-flex
+                            flex-wrap
+                            gap-2
+                            mb-3"
+                        >
+
+                            <button
+                                id="operational-log-toggle"
+                                type="button"
+                                class="btn btn-sm btn-outline-secondary"
+                            >
+                                <i
+                                    id="operational-log-toggle-icon"
+                                    class="fa-solid fa-pause"
+                                ></i>
+
+                                <span
+                                    id="operational-log-toggle-text"
+                                >
+                                    Pause
+                                </span>
+                            </button>
+
+
+                            <button
+                                id="operational-log-autoscroll"
+                                type="button"
+                                class="btn btn-sm btn-outline-secondary"
+                            >
+                                <i
+                                    id="operational-log-autoscroll-icon"
+                                    class="fa-solid fa-arrow-down"
+                                ></i>
+
+                                <span
+                                    id="operational-log-autoscroll-text"
+                                >
+                                    Auto-scroll
+                                </span>
+                            </button>
+
+
+                            <button
+                                id="operational-log-clear"
+                                type="button"
+                                class="btn btn-sm btn-outline-secondary"
+                            >
+                                <i class="fa-solid fa-eraser"></i>
+
+                                <span>
+                                    Clear
+                                </span>
+                            </button>
+
                         </div>
 
 
@@ -197,13 +205,9 @@
 
     const OPERATIONAL_LOG_MAX_LINES = 500;
 
-
     let operationalLogCursor = 0;
-
     let operationalLogPaused = false;
-
     let operationalLogAutoScroll = true;
-
     let operationalLogRequestRunning = false;
 
 
@@ -212,60 +216,50 @@
             "operational-log"
         );
 
-
     const operationalLogErrorElement =
         document.getElementById(
             "operational-log-error"
         );
-
 
     const operationalLogStatusElement =
         document.getElementById(
             "operational-log-status"
         );
 
-
     const operationalLogCounterElement =
         document.getElementById(
             "operational-log-counter"
         );
-
 
     const operationalLogToggleElement =
         document.getElementById(
             "operational-log-toggle"
         );
 
-
     const operationalLogToggleIconElement =
         document.getElementById(
             "operational-log-toggle-icon"
         );
-
 
     const operationalLogToggleTextElement =
         document.getElementById(
             "operational-log-toggle-text"
         );
 
-
     const operationalLogAutoScrollElement =
         document.getElementById(
             "operational-log-autoscroll"
         );
-
 
     const operationalLogAutoScrollIconElement =
         document.getElementById(
             "operational-log-autoscroll-icon"
         );
 
-
     const operationalLogAutoScrollTextElement =
         document.getElementById(
             "operational-log-autoscroll-text"
         );
-
 
     const operationalLogClearElement =
         document.getElementById(
@@ -304,14 +298,11 @@
                 "operational-log-empty"
             );
 
-
         if (
             emptyElement
             && emptyElement.parentNode
         ) {
-
             emptyElement.remove();
-
         }
 
     }
@@ -329,7 +320,6 @@
             return;
         }
 
-
         const emptyElement =
             document.createElement(
                 "div"
@@ -343,7 +333,6 @@
 
         emptyElement.textContent =
             message;
-
 
         operationalLogElement.appendChild(
             emptyElement
@@ -385,7 +374,6 @@
         let lines =
             getOperationalLogLines();
 
-
         while (
             lines.length
             > OPERATIONAL_LOG_MAX_LINES
@@ -420,13 +408,10 @@
             return;
         }
 
-
         removeOperationalLogEmptyMessage();
-
 
         const fragment =
             document.createDocumentFragment();
-
 
         for (
             const entry
@@ -441,21 +426,15 @@
 
         }
 
-
         operationalLogElement.appendChild(
             fragment
         );
 
-
         trimOperationalLog();
-
         updateOperationalLogCounter();
 
-
         if (operationalLogAutoScroll) {
-
             scrollOperationalLogToBottom();
-
         }
 
     }
@@ -466,16 +445,12 @@
         const lines =
             getOperationalLogLines();
 
-
         for (
             const line
             of lines
         ) {
-
             line.remove();
-
         }
-
 
         showOperationalLogEmptyMessage(
             "Visualizzazione svuotata. In attesa di nuovi eventi..."
@@ -494,7 +469,6 @@
         operationalLogStatusElement.textContent =
             "LIVE";
 
-
         operationalLogToggleIconElement.className =
             "fa-solid fa-pause";
 
@@ -512,7 +486,6 @@
         operationalLogStatusElement.textContent =
             "PAUSED";
 
-
         operationalLogToggleIconElement.className =
             "fa-solid fa-play";
 
@@ -526,38 +499,26 @@
 
         if (operationalLogAutoScroll) {
 
+            operationalLogAutoScrollElement.className =
+                "btn btn-sm btn-outline-secondary";
+
             operationalLogAutoScrollIconElement.className =
                 "fa-solid fa-arrow-down";
 
             operationalLogAutoScrollTextElement.textContent =
-                "Auto-scroll ON";
-
-            operationalLogAutoScrollElement.classList.remove(
-                "btn-outline-warning"
-            );
-
-            operationalLogAutoScrollElement.classList.add(
-                "btn-outline-light"
-            );
+                "Auto-scroll";
 
             return;
-
         }
 
+        operationalLogAutoScrollElement.className =
+            "btn btn-sm btn-outline-secondary";
 
         operationalLogAutoScrollIconElement.className =
             "fa-solid fa-hand";
 
         operationalLogAutoScrollTextElement.textContent =
             "Auto-scroll OFF";
-
-        operationalLogAutoScrollElement.classList.remove(
-            "btn-outline-light"
-        );
-
-        operationalLogAutoScrollElement.classList.add(
-            "btn-outline-warning"
-        );
 
     }
 
@@ -571,9 +532,7 @@
             return;
         }
 
-
         operationalLogRequestRunning = true;
-
 
         try {
 
@@ -588,7 +547,6 @@
                 }
             );
 
-
             if (!response.ok) {
 
                 operationalLogErrorElement.classList.remove(
@@ -596,18 +554,14 @@
                 );
 
                 return;
-
             }
-
 
             const data =
                 await response.json();
 
-
             operationalLogErrorElement.classList.add(
                 "d-none"
             );
-
 
             const entries =
                 Array.isArray(
@@ -616,24 +570,9 @@
                     ? data.entries
                     : [];
 
-
             appendOperationalLogEntries(
                 entries
             );
-
-
-            /*
-             * The cursor represents the last logfile event already
-             * received by this browser.
-             *
-             * Pause prevents requests completely, so the cursor does
-             * not advance while paused. Pressing Play therefore
-             * retrieves the events accumulated during the pause.
-             *
-             * Clear intentionally does not change this cursor:
-             * clearing the screen must not cause old logfile entries
-             * to be downloaded again.
-             */
 
             if (
                 Number.isInteger(
@@ -653,7 +592,6 @@
             operationalLogErrorElement.classList.remove(
                 "d-none"
             );
-
 
             console.error(
                 "SVX Guardian operational log update failed:",
@@ -676,23 +614,13 @@
             operationalLogPaused =
                 !operationalLogPaused;
 
-
             if (operationalLogPaused) {
 
                 setOperationalLogPausedState();
-
                 return;
-
             }
 
-
             setOperationalLogLiveState();
-
-
-            /*
-             * Immediately recover events accumulated while
-             * the visual display was paused.
-             */
 
             updateOperationalLog();
 
@@ -707,14 +635,10 @@
             operationalLogAutoScroll =
                 !operationalLogAutoScroll;
 
-
             setOperationalLogAutoScrollState();
 
-
             if (operationalLogAutoScroll) {
-
                 scrollOperationalLogToBottom();
-
             }
 
         }
@@ -732,13 +656,9 @@
 
 
     setOperationalLogLiveState();
-
     setOperationalLogAutoScrollState();
-
     updateOperationalLogCounter();
-
     updateOperationalLog();
-
 
     window.setInterval(
         updateOperationalLog,
