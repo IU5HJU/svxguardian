@@ -1,20 +1,19 @@
-# Contributing to SVX Guardian
+# Contribuire a SVX Guardian
 
-Versione documento: 1.0
+## 1. Scopo
 
----
+Questo documento definisce le regole di sviluppo e contribuzione del
+progetto SVX Guardian.
 
-# 1. Scopo
-
-Questo documento definisce le regole di sviluppo del progetto SVX Guardian.
-
-L'obiettivo è mantenere il codice, la documentazione e l'architettura coerenti nel tempo, indipendentemente dal numero di sviluppatori o dalle sessioni di lavoro.
+L'obiettivo è mantenere codice, documentazione e architettura coerenti,
+verificabili e manutenibili nel tempo, indipendentemente dal numero di
+sviluppatori o dalle sessioni di lavoro.
 
 Tutte le modifiche al progetto devono rispettare queste linee guida.
 
 ---
 
-# 2. Filosofia di sviluppo
+## 2. Filosofia di sviluppo
 
 SVX Guardian privilegia:
 
@@ -22,172 +21,348 @@ SVX Guardian privilegia:
 - chiarezza;
 - modularità;
 - leggibilità;
+- affidabilità;
 - stabilità;
-- compatibilità.
+- compatibilità;
+- verificabilità.
 
-Una soluzione semplice e ben documentata è preferibile a una soluzione complessa.
+Una soluzione semplice, verificabile e ben documentata è preferibile
+a una soluzione inutilmente complessa.
 
----
-
-# 3. Metodo di lavoro
-
-Ogni attività deve seguire questo flusso:
-
-1. analisi;
-2. implementazione;
-3. verifica;
-4. documentazione;
-5. commit;
-6. push.
-
-Nessuna milestone è considerata conclusa senza documentazione aggiornata.
+Non deve essere dichiarata implementata o completata una funzionalità
+che è soltanto progettata o prevista.
 
 ---
 
-# 4. Modalità operativa
+## 3. Ambienti di lavoro
 
-Durante lo sviluppo si procede sempre:
+Lo sviluppo utilizza due ambienti distinti:
+
+- **LAB**: sviluppo, modifica e test;
+- **Legacy**: nodo reale con traffico radio, utilizzato dopo la
+  validazione sul LAB e su GitHub.
+
+Il Legacy non deve essere utilizzato come ambiente primario di
+sviluppo.
+
+Il suo scopo è verificare il comportamento di Guardian in una reale
+installazione SvxLink e con traffico radio effettivo.
+
+---
+
+## 4. Flusso di sviluppo
+
+Il flusso operativo di riferimento è:
+
+```text
+Design → LAB → pytest → test funzionale → commit GPG → GitHub
+→ Legacy (merge --ff-only) → pytest → restart → traffico reale
+```
+
+Ogni passaggio deve essere verificato prima di procedere al successivo.
+
+Le modifiche devono essere prima validate sul LAB.
+
+Solo dopo la pubblicazione e la validazione del relativo commit si
+procede all'aggiornamento del Legacy.
+
+Una funzionalità che richiede traffico reale non deve essere
+considerata definitivamente validata sulla sola base dei test LAB.
+
+---
+
+## 5. Metodo operativo
+
+Durante lo sviluppo si procede preferibilmente:
 
 - un passo alla volta;
-- un comando alla volta;
-- una verifica prima del passo successivo.
+- con modifiche chiaramente delimitate;
+- con una verifica prima del passo successivo;
+- leggendo sempre la versione reale corrente di un file prima di
+  modificarlo.
 
-Questo metodo riduce gli errori e rende ogni modifica facilmente verificabile.
+Quando una modifica viene fornita manualmente per copia/incolla,
+preferire il file completo pronto da copiare anziché patch parziali,
+quando questo riduce il rischio di errori o perdita di contesto.
 
----
-
-# 5. Modifica dei file
-
-Le modifiche devono essere eseguite sull'intero file.
-
-Non utilizzare modifiche parziali quando possono compromettere la struttura del documento o del codice.
-
-Prima delle modifiche importanti è consigliato creare una copia di sicurezza.
+Non utilizzare `sudo` per modificare i file interni al repository.
 
 ---
 
-# 6. Repository Git
+## 6. Controlli prima del commit
 
-Il repository deve rimanere sempre in uno stato coerente.
+Prima di ogni commit eseguire almeno:
 
-Prima di ogni commit verificare:
+```bash
+git diff --check
+pytest -q
+git status --short
+```
 
-- documentazione aggiornata;
-- test eseguiti;
-- `git status`;
-- assenza di file indesiderati;
-- working tree pulito dopo il push.
+Verificare inoltre:
 
-Non utilizzare `sudo` per modificare file interni al repository.
+- che i test previsti siano superati;
+- che la documentazione interessata sia aggiornata;
+- che non siano presenti file temporanei o indesiderati;
+- che non siano inclusi segreti, credenziali o configurazioni private;
+- che il diff corrisponda esclusivamente alle modifiche previste.
+
+I commit destinati al repository di produzione devono essere firmati.
 
 ---
 
-# 7. Documentazione
+## 7. Git e pubblicazione
+
+Il branch principale è `main`.
+
+Le modifiche validate vengono pubblicate su GitHub secondo il flusso
+di progetto.
+
+Sul Legacy, l'allineamento con il repository deve preservare una
+storia lineare utilizzando, quando previsto dal flusso operativo:
+
+```bash
+git merge --ff-only
+```
+
+Dopo l'aggiornamento del Legacy devono essere ripetuti i test
+automatici pertinenti prima del riavvio e del collaudo con traffico
+reale.
+
+Dopo il push verificare che il repository locale e remoto siano nello
+stato previsto.
+
+---
+
+## 8. Documentazione
 
 La documentazione è parte integrante del progetto.
 
-## PROJECT.md
+La struttura principale comprende:
 
-Visione generale del progetto.
+### `README.md` / `README.en.md`
 
-## ARCHITECTURE.md
+Presentazione sintetica del progetto rispettivamente in italiano e
+inglese.
 
-Architettura software.
+### `docs/PROJECT.md` / `docs/PROJECT.en.md`
 
-## DEVELOPMENT.md
+Visione generale e obiettivi del progetto.
 
-Diario cronologico dello sviluppo.
+### `docs/ARCHITECTURE.md` / `docs/ARCHITECTURE.en.md`
 
-## ROADMAP.md
+Architettura software e principi strutturali.
 
-Milestone future.
+### `docs/DEVELOPMENT.md` / `docs/DEVELOPMENT.en.md`
 
-## DASHBOARD.md
+Informazioni e procedure relative allo sviluppo.
 
-Specifiche funzionali della dashboard.
+### `docs/ROADMAP.md` / `docs/ROADMAP.en.md`
+
+Direzione e attività future del progetto.
+
+### `docs/DASHBOARD.md` / `docs/DASHBOARD.en.md`
+
+Specifiche funzionali e organizzazione della dashboard.
+
+La documentazione deve distinguere chiaramente tra:
+
+- funzionalità implementate;
+- funzionalità in sviluppo;
+- funzionalità previste.
+
+Non inventare numeri di release o milestone non formalizzati nel
+repository.
 
 ---
 
-# 8. Convenzioni di codice
+## 9. Convenzioni Python
 
-## Python
+Il codice Python deve privilegiare:
 
-- una responsabilità per modulo;
+- una responsabilità chiaramente identificabile per componente;
 - codice leggibile;
-- funzioni brevi;
-- type hint quando opportuno;
-- docstring per classi e funzioni pubbliche.
+- funzioni di dimensione ragionevole;
+- type hints quando opportuno;
+- docstring per classi e funzioni pubbliche;
+- logging al posto di output diagnostico non strutturato;
+- separazione tra acquisizione, stato e presentazione.
 
-## HTML
+I monitor devono operare attraverso le interfacce e gli oggetti di
+stato previsti dall'architettura.
 
-Nessuna stringa visibile deve essere hardcoded.
-
-Utilizzare sempre il Translation Manager.
-
-## CSS
-
-Preferire nomi descrittivi.
-
-Evitare duplicazioni.
-
-## JSON
-
-Mantenere una struttura stabile e documentata.
+Non introdurre dipendenze dirette tra monitor quando la comunicazione
+può avvenire attraverso lo stato condiviso.
 
 ---
 
-# 9. Internazionalizzazione
+## 10. HTML e presentazione
 
-Le stringhe visibili devono essere tradotte.
+Le stringhe visibili destinate all'interfaccia devono utilizzare il
+sistema di traduzione previsto dal progetto.
 
-I termini tecnici internazionali possono rimanere invariati.
+Non spostare logica tecnica o interpretazione dello stato nei template
+quando appartiene al livello applicativo.
 
-Esempi:
+Le modifiche all'interfaccia devono essere verificate sia su desktop
+sia su mobile.
 
-- SvxLink
-- EchoLink
-- Reflector
-- RX
-- TX
-- TG
-- CTCSS
-
-Ogni modifica deve mantenere sincronizzati tutti i file presenti nella directory `locale/`.
+Lo stile visivo e i colori consolidati di Guardian devono essere
+preservati salvo una decisione esplicita di progetto.
 
 ---
 
-# 10. Compatibilità
+## 11. CSS
 
-SVX Guardian deve funzionare su installazioni differenti.
+Preferire nomi descrittivi e regole facilmente manutenibili.
 
-Non assumere mai una configurazione hardware specifica.
+Evitare duplicazioni quando una regola comune può essere riutilizzata.
 
-Il nodo utilizzato per lo sviluppo rappresenta un ambiente di test, non un modello di riferimento.
+Le modifiche responsive non devono risolvere un problema desktop
+creandone uno mobile, o viceversa.
 
 ---
 
-# 11. Controlli qualità
+## 12. JSON e dati strutturati
 
-Prima di considerare conclusa una milestone verificare:
+Mantenere strutture stabili, documentate e coerenti con il modello
+interno.
+
+I valori di stato interni devono essere tecnici e canonici.
+
+La rappresentazione localizzata appartiene al livello di
+presentazione e non deve modificare il significato dei dati interni.
+
+---
+
+## 13. Internazionalizzazione
+
+Lo stato interno di Guardian è indipendente dalla lingua.
+
+La traduzione viene applicata nei livelli di presentazione, come
+dashboard, console e output descrittivi destinati all'utente.
+
+I termini tecnici internazionali possono rimanere invariati, ad
+esempio:
+
+- SvxLink;
+- EchoLink;
+- Reflector;
+- RX;
+- TX;
+- TG;
+- CTCSS.
+
+Quando viene aggiunta o modificata una stringa traducibile, mantenere
+sincronizzati i file di localizzazione pertinenti nella directory
+`locale/`.
+
+---
+
+## 14. Segreti e configurazione privata
+
+Credenziali, password, chiavi, token e altri segreti non devono essere
+inseriti nel repository Git.
+
+La configurazione privata di Guardian deve essere mantenuta fuori dal
+repository.
+
+L'installazione attuale utilizza:
+
+```text
+/etc/svxguardian
+```
+
+La chiave persistente delle sessioni Flask è mantenuta in:
+
+```text
+/etc/svxguardian/secret.key
+```
+
+Le future procedure di installazione e provisioning devono creare e
+configurare i file privati con proprietario e permessi appropriati,
+senza segreti hardcoded.
+
+---
+
+## 15. Log e prestazioni
+
+Il RAW LOG SvxLink deve restare RAW.
+
+La pagina e l'API dedicate al RAW LOG non devono reinterpretare o
+classificare le righe mostrate.
+
+Le funzioni eseguite frequentemente devono evitare scansioni complete
+e ripetute dei logfile quando è possibile utilizzare una strategia
+incrementale o equivalente.
+
+Ottimizzazioni che modificano il comportamento osservabile devono
+essere testate prima sul LAB e successivamente, quando necessario, sul
+Legacy.
+
+---
+
+## 16. Compatibilità
+
+SVX Guardian deve poter funzionare su installazioni SvxLink differenti.
+
+Non assumere una configurazione hardware specifica o una sola variante
+dei file di configurazione.
+
+Le compatibilità legacy già supportate devono essere preservate salvo
+una decisione esplicita e documentata.
+
+Il nodo utilizzato per lo sviluppo è un ambiente di test, non un
+modello universale di installazione.
+
+---
+
+## 17. Reflector e client applicativi
+
+I nodi SvxLink connessi al Reflector e gli utenti/client applicativi
+sono concetti distinti.
+
+Non inserire artificialmente utenti provenienti da client applicativi,
+come LATRY, in `reflector_connected_nodes`.
+
+Eventuali nuovi modelli di stato per gli utenti Reflector devono essere
+prima analizzati e collaudati con traffico reale.
+
+La vista `/monitor` non deve essere modificata per integrare questi
+utenti finché il relativo modello non è stabile e validato nella pagina
+`/reflector`.
+
+---
+
+## 18. Controlli qualità
+
+Prima di considerare conclusa un'attività verificare, secondo la sua
+natura:
 
 - test automatici;
-- strumenti di audit;
+- test funzionali;
+- comportamento desktop e mobile;
+- eventuale collaudo con traffico reale;
 - documentazione;
-- stato del repository.
+- stato del repository;
+- assenza di errori di formattazione rilevati da `git diff --check`.
 
 Le verifiche devono essere ripetibili.
 
 ---
 
-# 12. Obiettivo
+## 19. Obiettivo delle modifiche
 
 Ogni modifica deve migliorare almeno uno dei seguenti aspetti:
 
 - affidabilità;
 - semplicità;
 - leggibilità;
+- manutenibilità;
 - documentazione;
 - compatibilità;
-- esperienza del sysop.
+- prestazioni;
+- esperienza del Sysop.
 
-Una funzionalità non documentata non è considerata completa.
+Una funzionalità non sufficientemente verificata e documentata non deve
+essere considerata completa.
