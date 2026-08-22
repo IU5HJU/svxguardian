@@ -76,6 +76,10 @@
     "NONE": "None",
 
     "DASHBOARD": "Dashboard",
+    "PUBLIC_DASHBOARD": "Public dashboard",
+    "TALKER_SOURCE": "Source",
+    "SOURCE_SVXLINK_NODE": "SvxLink node",
+    "SOURCE_APPLICATION_CLIENT": "Application client",
     "LOGS": "Logs",
     "CONFIGURATION": "Configuration",
     "ABOUT": "About",

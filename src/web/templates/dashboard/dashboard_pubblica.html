@@ -1,0 +1,469 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/dashboard_pubblica.css') }}">
+
+<div class="public-dashboard">
+
+    <section class="public-dashboard-header">
+
+        <div>
+            <div class="public-dashboard-eyebrow">
+                {{ t("APP_NAME") }}
+            </div>
+
+            <h1>
+                {{ t("PUBLIC_DASHBOARD") }}
+            </h1>
+        </div>
+
+        <div
+            id="public-reflector-status"
+            class="public-status-badge"
+        >
+            {{ t(state.reflector_status) }}
+        </div>
+
+    </section>
+
+
+    <section class="public-summary-grid">
+
+        <div class="public-summary-card">
+            <span class="public-summary-label">
+                {{ t("REFLECTOR_CONNECTED_NODES") }}
+            </span>
+
+            <strong id="public-node-count">
+                {{ state.reflector_connection_count }}
+            </strong>
+        </div>
+
+
+        <div class="public-summary-card">
+            <span class="public-summary-label">
+                {{ t("REFLECTOR_CONNECTED_CLIENTS") }}
+            </span>
+
+            <strong id="public-client-count">
+                {{ state.reflector_connected_clients | length }}
+            </strong>
+        </div>
+
+
+        <div class="public-summary-card">
+            <span class="public-summary-label">
+                {{ t("REFLECTOR_TG") }}
+            </span>
+
+            <strong id="public-reflector-tg">
+                {% if state.reflector_tg %}
+                    {{ state.reflector_tg }}
+                {% else %}
+                    —
+                {% endif %}
+            </strong>
+        </div>
+
+
+        <div class="public-summary-card">
+            <span class="public-summary-label">
+                {{ t("REFLECTOR_ENCRYPTION") }}
+            </span>
+
+            <strong id="public-encryption">
+                {% if state.reflector_encrypted %}
+                    {{ t("ENCRYPTED") }}
+                {% else %}
+                    {{ t("NOT_ENCRYPTED") }}
+                {% endif %}
+            </strong>
+        </div>
+
+    </section>
+
+
+    <section class="public-talker-card">
+
+        <div class="public-talker-label">
+            {{ t("OPERATIONAL_TRANSMITTING") }}
+        </div>
+
+        <div
+            id="public-talker-station"
+            class="public-talker-station"
+        >
+            {% if state.reflector_transmitting
+                and state.reflector_transmitting_station %}
+                {{ state.reflector_transmitting_station }}
+            {% else %}
+                —
+            {% endif %}
+        </div>
+
+        <div class="public-talker-meta">
+
+            <span>
+                TG
+                <strong id="public-talker-tg">
+                    {% if state.reflector_tg %}
+                        {{ state.reflector_tg }}
+                    {% else %}
+                        —
+                    {% endif %}
+                </strong>
+            </span>
+
+            <span>
+                {{ t("TALKER_SOURCE") }}:
+                <strong id="public-talker-source">
+                    {{ t("UNKNOWN") }}
+                </strong>
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <section class="public-lists-grid">
+
+        <div class="public-list-card">
+
+            <h2>
+                {{ t("REFLECTOR_CONNECTED_NODES") }}
+            </h2>
+
+            <div id="public-nodes-list">
+
+                {% for node_name in state.reflector_connected_nodes %}
+                    <span class="public-list-item">
+                        {{ node_name }}
+                    </span>
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+
+        <div class="public-list-card">
+
+            <h2>
+                {{ t("REFLECTOR_CONNECTED_CLIENTS") }}
+            </h2>
+
+            <div id="public-clients-list">
+
+                {% for client_name in state.reflector_connected_clients %}
+                    <span class="public-list-item">
+                        {{ client_name }}
+                    </span>
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<script>
+
+    const publicDashboardTranslations = {
+        echolink:
+            {{ t("ECHOLINK") | tojson }},
+
+        svxlinkNode:
+            {{ t("SOURCE_SVXLINK_NODE") | tojson }},
+
+        applicationClient:
+            {{ t("SOURCE_APPLICATION_CLIENT") | tojson }},
+
+        unknown:
+            {{ t("UNKNOWN") | tojson }},
+
+        encrypted:
+            {{ t("ENCRYPTED") | tojson }},
+
+        notEncrypted:
+            {{ t("NOT_ENCRYPTED") | tojson }},
+
+        connecting:
+            {{ t("CONNECTING") | tojson }},
+
+        connected:
+            {{ t("CONNECTED") | tojson }},
+
+        reconnecting:
+            {{ t("RECONNECTING") | tojson }},
+
+        disconnected:
+            {{ t("DISCONNECTED") | tojson }},
+
+        authError:
+            {{ t("AUTH_ERROR") | tojson }},
+
+        timeout:
+            {{ t("TIMEOUT") | tojson }},
+
+        error:
+            {{ t("ERROR") | tojson }}
+    };
+
+
+    function publicReflectorStatusText(status) {
+
+        const translations = {
+            CONNECTING:
+                publicDashboardTranslations.connecting,
+
+            CONNECTED:
+                publicDashboardTranslations.connected,
+
+            RECONNECTING:
+                publicDashboardTranslations.reconnecting,
+
+            DISCONNECTED:
+                publicDashboardTranslations.disconnected,
+
+            AUTH_ERROR:
+                publicDashboardTranslations.authError,
+
+            TIMEOUT:
+                publicDashboardTranslations.timeout,
+
+            ERROR:
+                publicDashboardTranslations.error
+        };
+
+        return (
+            translations[status]
+            || publicDashboardTranslations.unknown
+        );
+    }
+
+
+    function normalizePublicCallsign(value) {
+
+        if (!value) {
+            return "";
+        }
+
+        return String(value)
+            .trim()
+            .toUpperCase();
+    }
+
+
+    function publicListContains(
+        values,
+        callsign
+    ) {
+
+        const normalizedCallsign =
+            normalizePublicCallsign(
+                callsign
+            );
+
+        return (values || []).some(
+            (value) =>
+                normalizePublicCallsign(value)
+                === normalizedCallsign
+        );
+    }
+
+
+    function classifyPublicTalker(data) {
+
+        const reflectorTalker =
+            normalizePublicCallsign(
+                data.reflector_transmitting_station
+            );
+
+        if (!reflectorTalker) {
+            return publicDashboardTranslations.unknown;
+        }
+
+
+        if (
+            data.echolink_transmitting
+            &&
+            normalizePublicCallsign(
+                data.echolink_transmitting_station
+            ) === reflectorTalker
+        ) {
+            return publicDashboardTranslations.echolink;
+        }
+
+
+        if (
+            publicListContains(
+                data.reflector_connected_nodes,
+                reflectorTalker
+            )
+        ) {
+            return publicDashboardTranslations.svxlinkNode;
+        }
+
+
+        if (
+            publicListContains(
+                data.reflector_connected_clients,
+                reflectorTalker
+            )
+        ) {
+            return publicDashboardTranslations.applicationClient;
+        }
+
+
+        return publicDashboardTranslations.unknown;
+    }
+
+
+    function renderPublicList(
+        elementId,
+        values
+    ) {
+
+        const container =
+            document.getElementById(
+                elementId
+            );
+
+        const items =
+            (values || []).map(
+                (value) => `
+                    <span class="public-list-item">
+                        ${value}
+                    </span>
+                `
+            );
+
+        container.innerHTML =
+            items.join("");
+    }
+
+
+    async function updatePublicDashboard() {
+
+        try {
+
+            const response = await fetch(
+                "{{ url_for('api_state') }}",
+                {
+                    cache: "no-store"
+                }
+            );
+
+            if (!response.ok) {
+                return;
+            }
+
+            const data =
+                await response.json();
+
+
+            document.getElementById(
+                "public-reflector-status"
+            ).textContent =
+                publicReflectorStatusText(
+                    data.reflector_status
+                );
+
+
+            document.getElementById(
+                "public-node-count"
+            ).textContent =
+                data.reflector_connection_count
+                ?? 0;
+
+
+            document.getElementById(
+                "public-client-count"
+            ).textContent =
+                (
+                    data.reflector_connected_clients
+                    || []
+                ).length;
+
+
+            document.getElementById(
+                "public-reflector-tg"
+            ).textContent =
+                data.reflector_tg
+                || "—";
+
+
+            document.getElementById(
+                "public-encryption"
+            ).textContent =
+                data.reflector_encrypted
+                ? publicDashboardTranslations.encrypted
+                : publicDashboardTranslations.notEncrypted;
+
+
+            const talker =
+                data.reflector_transmitting
+                ? data.reflector_transmitting_station
+                : "";
+
+
+            document.getElementById(
+                "public-talker-station"
+            ).textContent =
+                talker
+                || "—";
+
+
+            document.getElementById(
+                "public-talker-tg"
+            ).textContent =
+                data.reflector_tg
+                || "—";
+
+
+            document.getElementById(
+                "public-talker-source"
+            ).textContent =
+                talker
+                ? classifyPublicTalker(data)
+                : publicDashboardTranslations.unknown;
+
+
+            renderPublicList(
+                "public-nodes-list",
+                data.reflector_connected_nodes
+            );
+
+
+            renderPublicList(
+                "public-clients-list",
+                data.reflector_connected_clients
+            );
+
+        } catch (error) {
+
+            console.error(
+                "SVX Guardian public dashboard update failed:",
+                error
+            );
+        }
+    }
+
+
+    updatePublicDashboard();
+
+    window.setInterval(
+        updatePublicDashboard,
+        2000
+    );
+
+</script>
+
+{% endblock %}

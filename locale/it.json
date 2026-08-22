@@ -76,6 +76,10 @@
     "NONE": "Nessuno",
 
     "DASHBOARD": "Dashboard",
+    "PUBLIC_DASHBOARD": "Dashboard pubblica",
+    "TALKER_SOURCE": "Provenienza",
+    "SOURCE_SVXLINK_NODE": "Nodo SvxLink",
+    "SOURCE_APPLICATION_CLIENT": "Client applicativo",
     "LOGS": "Log",
     "CONFIGURATION": "Configurazione",
     "ABOUT": "Informazioni",

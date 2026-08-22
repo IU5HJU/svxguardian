@@ -635,6 +635,18 @@ def reflector_page():
     )
 
 
+@app.route("/dashboard_pubblica")
+def public_dashboard_page():
+    """
+    Render the public Reflector dashboard.
+    """
+
+    return render_template(
+        "dashboard/dashboard_pubblica.html",
+        **build_page_context(),
+    )
+
+
 @app.route("/info")
 def info_page():
     """

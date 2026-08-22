@@ -76,6 +76,10 @@
     "NONE": "Keine",
 
     "DASHBOARD": "Übersicht",
+    "PUBLIC_DASHBOARD": "Öffentliche Übersicht",
+    "TALKER_SOURCE": "Herkunft",
+    "SOURCE_SVXLINK_NODE": "SvxLink-Knoten",
+    "SOURCE_APPLICATION_CLIENT": "Anwendungsclient",
     "LOGS": "Protokolle",
     "CONFIGURATION": "Konfiguration",
     "ABOUT": "Informationen",

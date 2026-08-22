@@ -76,6 +76,10 @@
     "NONE": "Ninguno",
 
     "DASHBOARD": "Panel de control",
+    "PUBLIC_DASHBOARD": "Panel público",
+    "TALKER_SOURCE": "Procedencia",
+    "SOURCE_SVXLINK_NODE": "Nodo SvxLink",
+    "SOURCE_APPLICATION_CLIENT": "Cliente de aplicación",
     "LOGS": "Registros",
     "CONFIGURATION": "Configuración",
     "ABOUT": "Acerca de",

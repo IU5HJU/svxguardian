@@ -76,6 +76,10 @@
     "NONE": "Aucun",
 
     "DASHBOARD": "Tableau de bord",
+    "PUBLIC_DASHBOARD": "Tableau de bord public",
+    "TALKER_SOURCE": "Provenance",
+    "SOURCE_SVXLINK_NODE": "Nœud SvxLink",
+    "SOURCE_APPLICATION_CLIENT": "Client applicatif",
     "LOGS": "Journaux",
     "CONFIGURATION": "Configuration",
     "ABOUT": "À propos",

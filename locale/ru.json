@@ -76,6 +76,10 @@
     "NONE": "Нет",
 
     "DASHBOARD": "Панель",
+    "PUBLIC_DASHBOARD": "Публичная панель",
+    "TALKER_SOURCE": "Источник",
+    "SOURCE_SVXLINK_NODE": "Узел SvxLink",
+    "SOURCE_APPLICATION_CLIENT": "Клиент приложения",
     "LOGS": "Журнал",
     "CONFIGURATION": "Конфигурация",
     "ABOUT": "Информация",

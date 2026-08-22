@@ -1,0 +1,698 @@
+.public-dashboard {
+    max-width: 1680px;
+    margin: 0 auto;
+    padding: 1.4rem;
+
+    color: var(--pub-text);
+}
+
+
+/* ============================================================
+   Header
+   ============================================================ */
+
+.public-dashboard-header {
+    position: relative;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 1.5rem;
+
+    margin-bottom: 1rem;
+    padding: 1.35rem 1.6rem;
+
+    border: 1px solid var(--pub-border);
+    border-radius: 1rem;
+
+    background:
+        linear-gradient(
+            135deg,
+            #102746 0%,
+            #0b192a 52%,
+            #08121f 100%
+        );
+
+    box-shadow:
+        0 18px 45px rgba(0, 0, 0, 0.28);
+}
+
+
+.public-dashboard-header::after {
+    content: "";
+
+    position: absolute;
+    top: -80px;
+    right: -80px;
+
+    width: 220px;
+    height: 220px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(53, 200, 255, 0.16),
+            transparent 68%
+        );
+
+    pointer-events: none;
+}
+
+
+.public-dashboard-eyebrow {
+    margin-bottom: 0.28rem;
+
+    color: var(--pub-cyan);
+
+    font-size: 0.72rem;
+    font-weight: 800;
+
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+
+.public-dashboard-header h1 {
+    margin: 0;
+
+    color: var(--pub-text);
+
+    font-size: clamp(1.55rem, 3vw, 2.35rem);
+    font-weight: 850;
+    letter-spacing: -0.02em;
+}
+
+
+.public-status-badge {
+    position: relative;
+    z-index: 1;
+
+    flex-shrink: 0;
+
+    padding: 0.58rem 1.05rem;
+
+    border: 1px solid rgba(77, 227, 154, 0.38);
+    border-radius: 999px;
+
+    background: rgba(77, 227, 154, 0.11);
+
+    color: var(--pub-green);
+
+    font-size: 0.75rem;
+    font-weight: 850;
+
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+
+    box-shadow:
+        0 0 20px rgba(77, 227, 154, 0.08);
+}
+
+
+/* ============================================================
+   Summary cards
+   ============================================================ */
+
+.public-summary-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 0.85rem;
+
+    margin-bottom: 1rem;
+}
+
+
+.public-summary-card {
+    position: relative;
+    overflow: hidden;
+
+    min-height: 116px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    padding: 1.05rem 1.1rem;
+
+    border: 1px solid var(--pub-border);
+    border-radius: 0.9rem;
+
+    background:
+        linear-gradient(
+            145deg,
+            var(--pub-panel-2),
+            var(--pub-panel)
+        );
+
+    box-shadow:
+        0 10px 28px rgba(0, 0, 0, 0.2);
+}
+
+
+.public-summary-card::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 4px;
+    height: 100%;
+}
+
+
+.public-summary-card:nth-child(1)::before {
+    background: var(--pub-cyan);
+}
+
+
+.public-summary-card:nth-child(2)::before {
+    background: var(--pub-green);
+}
+
+
+.public-summary-card:nth-child(3)::before {
+    background: var(--pub-purple);
+}
+
+
+.public-summary-card:nth-child(4)::before {
+    background: var(--pub-orange);
+}
+
+
+.public-summary-label {
+    color: var(--pub-muted);
+
+    font-size: 0.72rem;
+    font-weight: 800;
+
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+
+.public-summary-card strong {
+    color: var(--pub-text);
+
+    font-size: clamp(1.9rem, 4vw, 2.7rem);
+    font-weight: 900;
+
+    line-height: 1;
+}
+
+
+/* ============================================================
+   Active talker
+   ============================================================ */
+
+.public-talker-card {
+    position: relative;
+    overflow: hidden;
+
+    margin-bottom: 1rem;
+    padding: 2.3rem 1.4rem;
+
+    border: 1px solid rgba(255, 95, 109, 0.42);
+    border-radius: 1rem;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(150, 22, 38, 0.34) 0%,
+            rgba(70, 18, 30, 0.24) 42%,
+            rgba(13, 26, 43, 0.96) 100%
+        );
+
+    text-align: center;
+
+    box-shadow:
+        0 14px 40px rgba(0, 0, 0, 0.24),
+        inset 0 0 45px rgba(255, 95, 109, 0.05);
+}
+
+
+.public-talker-card::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 15%;
+
+    width: 70%;
+    height: 2px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--pub-red),
+            transparent
+        );
+}
+
+
+.public-talker-label {
+    margin-bottom: 0.65rem;
+
+    color: var(--pub-red);
+
+    font-size: 0.74rem;
+    font-weight: 900;
+
+    letter-spacing: 0.17em;
+    text-transform: uppercase;
+}
+
+
+.public-talker-station {
+    margin-bottom: 1rem;
+
+    color: #ffffff;
+
+    font-size: clamp(2.6rem, 7vw, 4.8rem);
+    font-weight: 950;
+
+    line-height: 1;
+
+    letter-spacing: 0.04em;
+
+    text-shadow:
+        0 0 22px rgba(255, 95, 109, 0.16);
+}
+
+
+.public-talker-meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    gap: 0.7rem;
+}
+
+
+.public-talker-meta span {
+    min-width: 145px;
+
+    padding: 0.52rem 0.9rem;
+
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
+
+    background: rgba(3, 10, 19, 0.45);
+
+    color: var(--pub-muted);
+
+    font-size: 0.86rem;
+}
+
+
+.public-talker-meta strong {
+    color: var(--pub-text);
+    font-weight: 850;
+}
+
+
+/* ============================================================
+   Lists
+   ============================================================ */
+
+.public-lists-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 0.85rem;
+}
+
+
+.public-list-card {
+    min-height: 270px;
+
+    padding: 1.1rem;
+
+    border: 1px solid var(--pub-border);
+    border-radius: 0.9rem;
+
+    background:
+        linear-gradient(
+            145deg,
+            var(--pub-panel-2),
+            var(--pub-panel)
+        );
+
+    box-shadow:
+        0 10px 28px rgba(0, 0, 0, 0.18);
+}
+
+
+.public-list-card:first-child {
+    border-top:
+        2px solid rgba(53, 200, 255, 0.55);
+}
+
+
+.public-list-card:last-child {
+    border-top:
+        2px solid rgba(166, 124, 255, 0.55);
+}
+
+
+.public-list-card h2 {
+    margin: 0 0 0.9rem;
+
+    color: var(--pub-text);
+
+    font-size: 0.95rem;
+    font-weight: 850;
+
+    letter-spacing: 0.03em;
+}
+
+
+#public-nodes-list,
+#public-clients-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+
+    gap: 0.55rem;
+
+    max-height: 370px;
+    overflow-y: auto;
+
+    padding-right: 0.25rem;
+}
+
+
+.public-list-item {
+    display: inline-flex;
+    align-items: center;
+
+    min-height: 2.05rem;
+
+    padding: 0.38rem 0.7rem;
+
+    border: 1px solid rgba(53, 200, 255, 0.24);
+    border-radius: 0.55rem;
+
+    background: rgba(53, 200, 255, 0.07);
+
+    color: #dcecff;
+
+    font-size: 0.84rem;
+    font-weight: 750;
+}
+
+
+#public-clients-list .public-list-item {
+    border-color:
+        rgba(166, 124, 255, 0.28);
+
+    background:
+        rgba(166, 124, 255, 0.08);
+}
+
+
+/* ============================================================
+   Dark public canvas
+   ============================================================ */
+
+.public-dashboard::before {
+    content: "";
+
+    position: fixed;
+    inset: 0;
+
+    z-index: -1;
+
+    background:
+        radial-gradient(
+            circle at top,
+            #10233e 0%,
+            #081423 45%,
+            #050b13 100%
+        );
+}
+
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+
+@media (max-width: 991.98px) {
+
+    .public-summary-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+
+    .public-lists-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 575.98px) {
+
+    .public-dashboard {
+        padding: 0.7rem;
+    }
+
+
+    .public-dashboard-header {
+        align-items: flex-start;
+        flex-direction: column;
+
+        padding: 1.05rem;
+    }
+
+
+    .public-summary-grid {
+        gap: 0.6rem;
+    }
+
+
+    .public-summary-card {
+        min-height: 98px;
+        padding: 0.85rem;
+    }
+
+
+    .public-summary-card strong {
+        font-size: 1.75rem;
+    }
+
+
+    .public-talker-card {
+        padding: 1.9rem 0.9rem;
+    }
+
+
+    .public-talker-station {
+        font-size: 2.5rem;
+    }
+
+
+    .public-talker-meta {
+        flex-direction: column;
+        align-items: center;
+    }
+
+
+    .public-talker-meta span {
+        width: 100%;
+        max-width: 280px;
+    }
+
+
+    .public-list-card {
+        min-height: 220px;
+        padding: 0.9rem;
+    }
+
+}
+
+
+/* ============================================================
+   Guardian theme integration
+   ============================================================ */
+
+/*
+ * Light theme is the default public-dashboard palette.
+ * Dark theme overrides follow Guardian's global
+ * html[data-theme="dark"] mechanism.
+ */
+
+.public-dashboard {
+    --pub-bg: #f3f7fb;
+    --pub-panel: #ffffff;
+    --pub-panel-2: #f7faff;
+    --pub-border: rgba(35, 60, 90, 0.16);
+
+    --pub-text: #18283a;
+    --pub-muted: #667b91;
+
+    --pub-cyan: #087ca7;
+    --pub-green: #16865a;
+    --pub-purple: #7957bd;
+    --pub-orange: #b56b12;
+    --pub-red: #c83c4d;
+}
+
+
+html[data-theme="dark"] .public-dashboard {
+    --pub-bg: #07111f;
+    --pub-panel: #0d1a2b;
+    --pub-panel-2: #101f33;
+    --pub-border: rgba(116, 151, 190, 0.18);
+
+    --pub-text: #edf5ff;
+    --pub-muted: #8fa6bf;
+
+    --pub-cyan: #35c8ff;
+    --pub-green: #4de39a;
+    --pub-purple: #a67cff;
+    --pub-orange: #ffb24d;
+    --pub-red: #ff5f6d;
+}
+
+
+/* Public page canvas */
+
+.public-dashboard::before {
+    background:
+        radial-gradient(
+            circle at top,
+            #ffffff 0%,
+            #f3f7fb 48%,
+            #e8eef5 100%
+        );
+}
+
+
+html[data-theme="dark"] .public-dashboard::before {
+    background:
+        radial-gradient(
+            circle at top,
+            #10233e 0%,
+            #081423 45%,
+            #050b13 100%
+        );
+}
+
+
+/* Header */
+
+.public-dashboard-header {
+    background:
+        linear-gradient(
+            135deg,
+            #ffffff 0%,
+            #f5f9fd 52%,
+            #edf4fa 100%
+        );
+
+    box-shadow:
+        0 14px 32px rgba(25, 50, 75, 0.1);
+}
+
+
+html[data-theme="dark"] .public-dashboard-header {
+    background:
+        linear-gradient(
+            135deg,
+            #102746 0%,
+            #0b192a 52%,
+            #08121f 100%
+        );
+
+    box-shadow:
+        0 18px 45px rgba(0, 0, 0, 0.28);
+}
+
+
+/* Summary and list cards */
+
+.public-summary-card,
+.public-list-card {
+    background:
+        linear-gradient(
+            145deg,
+            var(--pub-panel-2),
+            var(--pub-panel)
+        );
+
+    box-shadow:
+        0 10px 24px rgba(25, 50, 75, 0.08);
+}
+
+
+html[data-theme="dark"] .public-summary-card,
+html[data-theme="dark"] .public-list-card {
+    box-shadow:
+        0 10px 28px rgba(0, 0, 0, 0.2);
+}
+
+
+/* Active talker */
+
+.public-talker-card {
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(200, 60, 77, 0.12) 0%,
+            rgba(200, 60, 77, 0.05) 42%,
+            #ffffff 100%
+        );
+
+    box-shadow:
+        0 12px 30px rgba(25, 50, 75, 0.09),
+        inset 0 0 35px rgba(200, 60, 77, 0.04);
+}
+
+
+html[data-theme="dark"] .public-talker-card {
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(150, 22, 38, 0.34) 0%,
+            rgba(70, 18, 30, 0.24) 42%,
+            rgba(13, 26, 43, 0.96) 100%
+        );
+
+    box-shadow:
+        0 14px 40px rgba(0, 0, 0, 0.24),
+        inset 0 0 45px rgba(255, 95, 109, 0.05);
+}
+
+
+/* Talker metadata pills */
+
+.public-talker-meta span {
+    background: rgba(255, 255, 255, 0.82);
+}
+
+
+html[data-theme="dark"] .public-talker-meta span {
+    background: rgba(3, 10, 19, 0.45);
+}
+
+
+/* List items */
+
+.public-list-item {
+    color: var(--pub-text);
+}
