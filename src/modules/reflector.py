@@ -3,6 +3,9 @@ Reflector monitor.
 
 Reads the SvxLink log and reconstructs the current Reflector
 connection state, encryption, connected nodes and talk group.
+
+Live Reflector client and talker state is tracked incrementally
+through ReflectorEventTracker.
 """
 
 from collections.abc import Iterator
@@ -11,6 +14,7 @@ import re
 
 from ..core.state import NodeState
 from ..core.status import ReflectorStatus
+from ..services.reflector_events import ReflectorEventTracker
 from .base import BaseMonitor
 
 
@@ -57,6 +61,10 @@ class ReflectorMonitor(BaseMonitor):
     ) -> None:
         self.log_file = Path(log_file)
 
+        self.event_tracker = ReflectorEventTracker(
+            log_file=self.log_file
+        )
+
     def check(self, state: NodeState) -> None:
         """
         Update the current Reflector state.
@@ -68,9 +76,26 @@ class ReflectorMonitor(BaseMonitor):
         state.reflector_tg = 0
         state.reflector_encrypted = False
         state.reflector_connected_nodes = []
+        state.reflector_connected_clients = []
         state.reflector_connection_count = 0
+        state.reflector_transmitting = False
+        state.reflector_transmitting_station = ""
         state.reflector_last_error = ""
         state.reflector_last_disconnect_reason = ""
+
+        self.event_tracker.sync()
+
+        state.reflector_connected_clients = list(
+            self.event_tracker.connected_clients
+        )
+
+        state.reflector_transmitting = (
+            self.event_tracker.transmitting
+        )
+
+        state.reflector_transmitting_station = (
+            self.event_tracker.transmitting_station
+        )
 
         connection_state_found = False
         previous_disconnect_found = False
@@ -105,11 +130,15 @@ class ReflectorMonitor(BaseMonitor):
                     state.reflector_status = (
                         ReflectorStatus.DISCONNECTED
                     )
+
                     state.reflector_host = disconnect.group("host")
+
                     state.reflector_port = int(
                         disconnect.group("port")
                     )
+
                     state.reflector_last_disconnect_reason = reason
+
                     connection_state_found = True
                     previous_disconnect_found = True
                     break
@@ -123,10 +152,13 @@ class ReflectorMonitor(BaseMonitor):
 
             if connected and not connection_state_found:
                 state.reflector_status = ReflectorStatus.CONNECTED
+
                 state.reflector_host = connected.group("host")
+
                 state.reflector_port = int(
                     connected.group("port")
                 )
+
                 connection_state_found = True
                 continue
 

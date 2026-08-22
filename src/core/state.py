@@ -84,7 +84,15 @@ class NodeState:
         default_factory=list
     )
 
+    reflector_connected_clients: list[str] = field(
+        default_factory=list
+    )
+
     reflector_connection_count: int = 0
+
+    reflector_transmitting: bool = False
+    reflector_transmitting_station: str = ""
+
     reflector_last_error: str = ""
     reflector_last_disconnect_reason: str = ""
 

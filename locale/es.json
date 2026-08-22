@@ -178,5 +178,11 @@
     "CONTROL_INVALID_REQUEST": "Solicitud de control no válida",
 
     "PREVIOUS_PID": "PID anterior",
-    "CURRENT_PID": "PID actual"
+    "CURRENT_PID": "PID actual",
+
+    "REFLECTOR_CONNECTED_CLIENTS": "Usuarios conectados",
+    "REFLECTOR_NO_CLIENTS": "Ningún usuario conectado",
+    "CLIENT": "Usuario",
+    "REFLECTOR_ACTIVE_TALKER": "Transmisor activo",
+    "NO_ACTIVE_TALKER": "Ningún transmisor activo"
 }

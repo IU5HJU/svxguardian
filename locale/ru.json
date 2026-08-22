@@ -178,5 +178,11 @@
     "CONTROL_INVALID_REQUEST": "Недопустимый запрос управления",
 
     "PREVIOUS_PID": "Предыдущий PID",
-    "CURRENT_PID": "Текущий PID"
+    "CURRENT_PID": "Текущий PID",
+
+    "REFLECTOR_CONNECTED_CLIENTS": "Подключённые пользователи",
+    "REFLECTOR_NO_CLIENTS": "Нет подключённых пользователей",
+    "CLIENT": "Пользователь",
+    "REFLECTOR_ACTIVE_TALKER": "Активный говорящий",
+    "NO_ACTIVE_TALKER": "Нет активного говорящего"
 }

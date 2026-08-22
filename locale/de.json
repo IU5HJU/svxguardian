@@ -178,5 +178,11 @@
     "CONTROL_INVALID_REQUEST": "Ungültige Steuerungsanfrage",
 
     "PREVIOUS_PID": "Vorherige PID",
-    "CURRENT_PID": "Aktuelle PID"
+    "CURRENT_PID": "Aktuelle PID",
+
+    "REFLECTOR_CONNECTED_CLIENTS": "Verbundene Benutzer",
+    "REFLECTOR_NO_CLIENTS": "Keine verbundenen Benutzer",
+    "CLIENT": "Benutzer",
+    "REFLECTOR_ACTIVE_TALKER": "Aktiver Sprecher",
+    "NO_ACTIVE_TALKER": "Kein aktiver Sprecher"
 }
