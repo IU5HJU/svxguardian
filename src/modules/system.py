@@ -16,7 +16,25 @@ from .base import BaseMonitor
 class SystemMonitor(BaseMonitor):
     """
     Collects system information and updates NodeState.
+
+    The default CPU sampling interval is intentionally kept
+    compatible with the normal Guardian monitoring cycle.
+
+    A non-blocking instance can use cpu_interval=None for
+    lightweight live web updates.
     """
+
+    def __init__(
+        self,
+        cpu_interval: float | None = 0.2,
+    ) -> None:
+        self.cpu_interval = cpu_interval
+
+        if self.cpu_interval is None:
+            # Prime psutil's non-blocking CPU sampler.
+            psutil.cpu_percent(
+                interval=None
+            )
 
     def check(self, state: NodeState) -> None:
         """
@@ -25,7 +43,9 @@ class SystemMonitor(BaseMonitor):
 
         state.hostname = socket.gethostname()
 
-        state.cpu_usage = psutil.cpu_percent(interval=0.2)
+        state.cpu_usage = psutil.cpu_percent(
+            interval=self.cpu_interval
+        )
 
         state.ram_usage = psutil.virtual_memory().percent
 
@@ -51,15 +71,25 @@ class SystemMonitor(BaseMonitor):
                 encoding="utf-8"
             ).split()
 
-            uptime_seconds = int(float(uptime_data[0]))
+            uptime_seconds = int(
+                float(uptime_data[0])
+            )
         else:
             uptime_seconds = 0
 
         days = uptime_seconds // 86400
-        hours = (uptime_seconds % 86400) // 3600
-        minutes = (uptime_seconds % 3600) // 60
+        hours = (
+            uptime_seconds % 86400
+        ) // 3600
+        minutes = (
+            uptime_seconds % 3600
+        ) // 60
 
         if days > 0:
-            state.uptime = f"{days}d {hours}h {minutes}m"
+            state.uptime = (
+                f"{days}d {hours}h {minutes}m"
+            )
         else:
-            state.uptime = f"{hours}h {minutes}m"
+            state.uptime = (
+                f"{hours}h {minutes}m"
+            )

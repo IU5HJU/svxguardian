@@ -26,6 +26,7 @@ from ..core.exporter import StateExporter
 from ..core.guardian import Guardian
 from ..core.i18n import TranslationManager
 from ..core.node_control import NodeControl
+from ..core.state import NodeState
 from ..modules.echolink import EchoLinkMonitor
 from ..modules.reflector import ReflectorMonitor
 from ..modules.svxlink import SvxLinkMonitor
@@ -107,6 +108,14 @@ guardian = Guardian()
 
 guardian.register(
     SystemMonitor()
+)
+
+# Lightweight non-blocking sampler used exclusively by the
+# live system web endpoint. It does not execute Guardian.run()
+# and therefore does not touch SvxLink, EchoLink, Reflector
+# or operational log monitoring.
+live_system_monitor = SystemMonitor(
+    cpu_interval=None
 )
 
 guardian.register(
@@ -1038,6 +1047,45 @@ def api_logs():
         {
             "entries": entries,
             "latest_id": latest_id,
+        }
+    )
+
+
+@app.route("/api/system")
+def api_system():
+    """
+    Return lightweight live operating-system metrics.
+
+    This endpoint intentionally avoids Guardian.run().
+    Only SystemMonitor is executed, preventing unnecessary
+    SvxLink, EchoLink, Reflector and logfile processing.
+    """
+
+    state_snapshot = NodeState()
+
+    live_system_monitor.check(
+        state_snapshot
+    )
+
+    return jsonify(
+        {
+            "hostname":
+                state_snapshot.hostname,
+
+            "cpu_temp":
+                state_snapshot.cpu_temp,
+
+            "cpu_usage":
+                state_snapshot.cpu_usage,
+
+            "ram_usage":
+                state_snapshot.ram_usage,
+
+            "disk_usage":
+                state_snapshot.disk_usage,
+
+            "uptime":
+                state_snapshot.uptime,
         }
     )
 

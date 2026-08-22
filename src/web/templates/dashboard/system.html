@@ -7,7 +7,12 @@
     {% include "components/sidebar.html" %}
 
 
-    <section class="svx-dashboard-content">
+    <section
+        class="svx-dashboard-content"
+        data-system-live
+        data-system-endpoint="{{ url_for('api_system') }}"
+        data-not-available="{{ t('NOT_AVAILABLE') }}"
+    >
 
         <div class="row g-4 mb-4">
 
@@ -28,7 +33,10 @@
                                 {{ t("HOSTNAME") }}
                             </span>
 
-                            <span class="svx-status-value">
+                            <span
+                                class="svx-status-value"
+                                data-system-value="hostname"
+                            >
                                 {{ state.hostname or t("NOT_AVAILABLE") }}
                             </span>
 
@@ -41,7 +49,10 @@
                                 {{ t("UPTIME") }}
                             </span>
 
-                            <span class="svx-status-value">
+                            <span
+                                class="svx-status-value"
+                                data-system-value="uptime"
+                            >
                                 {{ state.uptime or t("NOT_AVAILABLE") }}
                             </span>
 
@@ -71,7 +82,10 @@
                                 {{ t("CPU_TEMP") }}
                             </span>
 
-                            <span class="svx-status-value">
+                            <span
+                                class="svx-status-value"
+                                data-system-value="cpu_temp"
+                            >
 
                                 {% if state.cpu_temp > 0 %}
 
@@ -115,7 +129,10 @@
                                 {{ t("CPU_USAGE") }}
                             </span>
 
-                            <span class="svx-status-value">
+                            <span
+                                class="svx-status-value"
+                                data-system-value="cpu_usage"
+                            >
                                 {{ "%.1f"|format(state.cpu_usage) }} %
                             </span>
 
@@ -134,6 +151,7 @@
                                     bg-success
                                 {% endif %}"
                                 role="progressbar"
+                                data-system-progress="cpu_usage"
                                 style="width: {{ state.cpu_usage }}%;"
                                 aria-valuenow="{{ state.cpu_usage }}"
                                 aria-valuemin="0"
@@ -166,7 +184,10 @@
                                 {{ t("RAM_USAGE") }}
                             </span>
 
-                            <span class="svx-status-value">
+                            <span
+                                class="svx-status-value"
+                                data-system-value="ram_usage"
+                            >
                                 {{ "%.1f"|format(state.ram_usage) }} %
                             </span>
 
@@ -185,6 +206,7 @@
                                     bg-success
                                 {% endif %}"
                                 role="progressbar"
+                                data-system-progress="ram_usage"
                                 style="width: {{ state.ram_usage }}%;"
                                 aria-valuenow="{{ state.ram_usage }}"
                                 aria-valuemin="0"
@@ -217,7 +239,10 @@
                                 {{ t("DISK_USAGE") }}
                             </span>
 
-                            <span class="svx-status-value">
+                            <span
+                                class="svx-status-value"
+                                data-system-value="disk_usage"
+                            >
                                 {{ "%.1f"|format(state.disk_usage) }} %
                             </span>
 
@@ -236,6 +261,7 @@
                                     bg-success
                                 {% endif %}"
                                 role="progressbar"
+                                data-system-progress="disk_usage"
                                 style="width: {{ state.disk_usage }}%;"
                                 aria-valuenow="{{ state.disk_usage }}"
                                 aria-valuemin="0"
@@ -256,4 +282,13 @@
 
 </div>
 
+
+<script
+    src="{{ url_for(
+        'static',
+        filename='js/system-live.js'
+    ) }}"
+></script>
+
 {% endblock %}
+

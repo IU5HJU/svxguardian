@@ -7,7 +7,12 @@
     {% include "components/sidebar.html" %}
 
 
-    <section class="svx-dashboard-content">
+    <section
+        class="svx-dashboard-content"
+        data-system-live
+        data-system-endpoint="{{ url_for('api_system') }}"
+        data-not-available="{{ t('NOT_AVAILABLE') }}"
+    >
 
         <!-- =====================================================
              GENERAL HEALTH
@@ -168,7 +173,7 @@
                                         {{ t("CPU_USAGE") }}
                                     </div>
 
-                                    <strong>
+                                    <strong data-system-value="cpu_usage">
                                         {{ "%.1f"|format(state.cpu_usage) }} %
                                     </strong>
 
@@ -181,7 +186,7 @@
                                         {{ t("CPU_TEMP") }}
                                     </div>
 
-                                    <strong>
+                                    <strong data-system-value="cpu_temp">
 
                                         {% if state.cpu_temp > 0 %}
 
@@ -204,7 +209,7 @@
                                         {{ t("RAM_USAGE") }}
                                     </div>
 
-                                    <strong>
+                                    <strong data-system-value="ram_usage">
                                         {{ "%.1f"|format(state.ram_usage) }} %
                                     </strong>
 
@@ -217,7 +222,7 @@
                                         {{ t("DISK_USAGE") }}
                                     </div>
 
-                                    <strong>
+                                    <strong data-system-value="disk_usage">
                                         {{ "%.1f"|format(state.disk_usage) }} %
                                     </strong>
 
@@ -451,4 +456,13 @@
 
 </div>
 
+
+<script
+    src="{{ url_for(
+        'static',
+        filename='js/system-live.js'
+    ) }}"
+></script>
+
 {% endblock %}
+
