@@ -626,6 +626,18 @@ def reflector_page():
     )
 
 
+@app.route("/info")
+def info_page():
+    """
+    Render information about the SVX Guardian project.
+    """
+
+    return render_template(
+        "dashboard/info.html",
+        **build_page_context(),
+    )
+
+
 @app.route("/logs")
 def logs_page():
     """

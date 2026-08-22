@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="svx-dashboard-layout">
+
+    {% include "components/sidebar.html" %}
+
+
+    <section class="svx-dashboard-content">
+
+        <div class="row g-4 mb-4">
+
+            <div class="col-12">
+
+                <div class="card">
+
+                    <div class="card-header">
+                        <i class="fa-solid fa-circle-info"></i>
+                        {{ t("ABOUT") }}
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="text-center py-3">
+
+                            <img
+                                src="{{ url_for(
+                                    'static',
+                                    filename='img/logos/logo-compact.png'
+                                ) }}"
+                                alt="SVX Guardian"
+                                class="img-fluid mb-3"
+                                style="max-width: 280px;"
+                            >
+
+                            <h2 class="mb-2">
+                                SVX Guardian
+                            </h2>
+
+                            <p class="lead mb-2">
+                                {{ t("ABOUT_TAGLINE") }}
+                            </p>
+
+                            <p class="text-muted mb-0">
+                                {{ t("ABOUT_DESCRIPTION") }}
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="row g-4 mb-4">
+
+            <div class="col-lg-6">
+
+                <div class="card h-100">
+
+                    <div class="card-header">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        {{ t("ABOUT_PROJECT") }}
+                    </div>
+
+                    <div class="card-body">
+
+                        <p>
+                            {{ t("ABOUT_PROJECT_DESCRIPTION") }}
+                        </p>
+
+                        <p class="mb-0">
+                            {{ t("ABOUT_OPEN_SOURCE") }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-lg-6">
+
+                <div class="card h-100">
+
+                    <div class="card-header">
+                        <i class="fa-solid fa-user"></i>
+                        {{ t("ABOUT_AUTHOR") }}
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="svx-service-row">
+
+                            <span class="svx-service-name">
+                                {{ t("ABOUT_DEVELOPED_BY") }}
+                            </span>
+
+                            <span class="svx-status-value">
+                                Michele Maccaoni – IU5HJU
+                            </span>
+
+                        </div>
+
+
+                        <div class="svx-service-row mb-0">
+
+                            <span class="svx-service-name">
+                                {{ t("ABOUT_LICENSE") }}
+                            </span>
+
+                            <span class="svx-status-value">
+                                MIT
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="row g-4">
+
+            <div class="col-lg-6">
+
+                <div class="card h-100">
+
+                    <div class="card-header">
+                        <i class="fa-brands fa-github"></i>
+                        GitHub
+                    </div>
+
+                    <div class="card-body">
+
+                        <p>
+                            {{ t("ABOUT_GITHUB_DESCRIPTION") }}
+                        </p>
+
+                        <a
+                            class="btn btn-outline-primary"
+                            href="https://github.com/IU5HJU/svxguardian"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <i class="fa-brands fa-github me-2"></i>
+                            {{ t("ABOUT_OPEN_GITHUB") }}
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-lg-6">
+
+                <div class="card h-100">
+
+                    <div class="card-header">
+                        <i class="fa-solid fa-users"></i>
+                        {{ t("ABOUT_COMMUNITY") }}
+                    </div>
+
+                    <div class="card-body">
+
+                        <p>
+                            {{ t("ABOUT_COMMUNITY_DESCRIPTION") }}
+                        </p>
+
+                        <p class="mb-0 text-muted small">
+                            {{ t("ABOUT_SVXLINK_NOTICE") }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="text-center text-muted small mt-4 mb-3">
+
+            SVX Guardian
+            &mdash;
+            {{ t("ABOUT_FOOTER") }}
+
+        </div>
+
+    </section>
+
+</div>
+
+{% endblock %}

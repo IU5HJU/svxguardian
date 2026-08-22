@@ -184,5 +184,20 @@
     "REFLECTOR_NO_CLIENTS": "No connected users",
     "CLIENT": "User",
     "REFLECTOR_ACTIVE_TALKER": "Active talker",
-    "NO_ACTIVE_TALKER": "No active talker"
+    "NO_ACTIVE_TALKER": "No active talker",
+
+    "ABOUT_TAGLINE": "Modern monitoring for SvxLink",
+    "ABOUT_DESCRIPTION": "An open-source web platform for monitoring and operational management of SvxLink nodes.",
+    "ABOUT_PROJECT": "The project",
+    "ABOUT_PROJECT_DESCRIPTION": "SVX Guardian was created to provide a clear, modern and immediate view of the status of an SvxLink node.",
+    "ABOUT_OPEN_SOURCE": "The project is open source and is developed with the goal of being easy to install, use and improve.",
+    "ABOUT_AUTHOR": "Author",
+    "ABOUT_DEVELOPED_BY": "Developed by",
+    "ABOUT_LICENSE": "License",
+    "ABOUT_GITHUB_DESCRIPTION": "Source code, documentation, issue reporting and project development are available on GitHub.",
+    "ABOUT_OPEN_GITHUB": "Open repository",
+    "ABOUT_COMMUNITY": "Community",
+    "ABOUT_COMMUNITY_DESCRIPTION": "Contributions, issue reports and proposals for new features are welcome.",
+    "ABOUT_SVXLINK_NOTICE": "SVX Guardian is an independent project and is not officially affiliated with the SvxLink project.",
+    "ABOUT_FOOTER": "Developed for the Amateur Radio Community"
 }

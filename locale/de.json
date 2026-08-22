@@ -184,5 +184,20 @@
     "REFLECTOR_NO_CLIENTS": "Keine verbundenen Benutzer",
     "CLIENT": "Benutzer",
     "REFLECTOR_ACTIVE_TALKER": "Aktiver Sprecher",
-    "NO_ACTIVE_TALKER": "Kein aktiver Sprecher"
+    "NO_ACTIVE_TALKER": "Kein aktiver Sprecher",
+
+    "ABOUT_TAGLINE": "Modernes Monitoring für SvxLink",
+    "ABOUT_DESCRIPTION": "Eine quelloffene Webplattform zur Überwachung und Betriebsverwaltung von SvxLink-Knoten.",
+    "ABOUT_PROJECT": "Das Projekt",
+    "ABOUT_PROJECT_DESCRIPTION": "SVX Guardian wurde entwickelt, um einen klaren, modernen und unmittelbaren Überblick über den Status eines SvxLink-Knotens zu bieten.",
+    "ABOUT_OPEN_SOURCE": "Das Projekt ist Open Source und wird mit dem Ziel entwickelt, einfach zu installieren, zu verwenden und zu verbessern zu sein.",
+    "ABOUT_AUTHOR": "Autor",
+    "ABOUT_DEVELOPED_BY": "Entwickelt von",
+    "ABOUT_LICENSE": "Lizenz",
+    "ABOUT_GITHUB_DESCRIPTION": "Quellcode, Dokumentation, Fehlermeldungen und Projektentwicklung sind auf GitHub verfügbar.",
+    "ABOUT_OPEN_GITHUB": "Repository öffnen",
+    "ABOUT_COMMUNITY": "Community",
+    "ABOUT_COMMUNITY_DESCRIPTION": "Beiträge, Fehlermeldungen und Vorschläge für neue Funktionen sind willkommen.",
+    "ABOUT_SVXLINK_NOTICE": "SVX Guardian ist ein unabhängiges Projekt und nicht offiziell mit dem SvxLink-Projekt verbunden.",
+    "ABOUT_FOOTER": "Entwickelt für die Amateurfunk-Community"
 }
