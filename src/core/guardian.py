@@ -9,6 +9,7 @@ from datetime import datetime
 
 from ..modules.configreader import ConfigReader
 from ..modules.nodeinforeader import NodeInfoReader
+from ..modules.svxlinkversion import SvxLinkVersionDetector
 from .config import ConfigManager
 from .health import HealthEngine
 from .nodeinfo import NodeInfo
@@ -33,6 +34,10 @@ class Guardian:
             self.config.SVXLINK_CONFIG_FILE
         )
 
+        self.svxlink_version_detector = (
+            SvxLinkVersionDetector()
+        )
+
         self.load_node_info()
 
     def register(self, monitor) -> None:
@@ -52,6 +57,10 @@ class Guardian:
         explicitly declares NODE_INFO_FILE. This prevents SVX Guardian
         from treating the upstream example node_info.json template as
         real node information.
+
+        The installed SvxLink version is detected once while loading
+        static node information and is not queried during normal
+        monitoring cycles.
         """
 
         node = self.config_reader.load()
@@ -62,6 +71,10 @@ class Guardian:
             )
 
             node = node_info_reader.enrich(node)
+
+        node.svxlink_version = (
+            self.svxlink_version_detector.detect()
+        )
 
         self.node_info = node
 
