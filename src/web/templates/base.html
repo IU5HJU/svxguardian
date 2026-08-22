@@ -305,6 +305,84 @@
         })();
     </script>
 
+    <script>
+        (() => {
+
+            const MOBILE_SIDEBAR_QUERY =
+                window.matchMedia(
+                    "(max-width: 575.98px)"
+                );
+
+
+            function revealActiveSidebarItem() {
+
+                if (!MOBILE_SIDEBAR_QUERY.matches) {
+                    return;
+                }
+
+
+                const sidebar =
+                    document.querySelector(
+                        ".svx-sidebar"
+                    );
+
+                const activeItem =
+                    document.querySelector(
+                        ".svx-sidebar-link.active"
+                    );
+
+
+                if (!sidebar || !activeItem) {
+                    return;
+                }
+
+
+                const targetLeft =
+                    activeItem.offsetLeft
+                    - (
+                        sidebar.clientWidth
+                        - activeItem.offsetWidth
+                    ) / 2;
+
+
+                sidebar.scrollTo({
+                    left: Math.max(
+                        0,
+                        targetLeft
+                    ),
+                    behavior: "auto"
+                });
+            }
+
+
+            /*
+             * Wait until the browser has completed the
+             * initial mobile layout before calculating
+             * the sidebar position.
+             */
+            requestAnimationFrame(() => {
+
+                requestAnimationFrame(
+                    revealActiveSidebarItem
+                );
+
+            });
+
+
+            window.addEventListener(
+                "orientationchange",
+                () => {
+
+                    requestAnimationFrame(
+                        revealActiveSidebarItem
+                    );
+
+                }
+            );
+
+        })();
+    </script>
+
 </body>
 
 </html>
