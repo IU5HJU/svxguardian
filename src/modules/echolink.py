@@ -33,6 +33,10 @@ class EchoLinkMonitor(BaseMonitor):
 
     MODULE_START_MESSAGE = "Module EchoLink"
 
+    MODULE_DEACTIVATION_MESSAGE = (
+        "Deactivating module EchoLink"
+    )
+
     CONNECTION_PATTERN = re.compile(
         r"(?P<station>[A-Za-z0-9/._-]+): "
         r"EchoLink QSO state changed to "
@@ -129,6 +133,34 @@ class EchoLinkMonitor(BaseMonitor):
         self._update_recent_connections(state)
         self._update_connection_stability(state)
         self._update_transmission_state(state)
+
+        # A deactivated EchoLink module cannot have active
+        # EchoLink stations.  This is the final authoritative
+        # consistency rule for the operational state.
+        if self._is_module_deactivated():
+            state.echolink_connected_stations = []
+            state.echolink_station_names = {}
+            state.echolink_connection_started = {}
+            state.echolink_unstable_stations = []
+            state.echolink_connection_count = 0
+            state.echolink_transmitting = False
+            state.echolink_transmitting_station = ""
+
+    def _is_module_deactivated(self) -> bool:
+        """
+        Return whether the latest EchoLink module lifecycle event
+        indicates that the module is currently deactivated.
+        """
+
+        for line in self._read_lines_reverse():
+
+            if self.MODULE_DEACTIVATION_MESSAGE in line:
+                return True
+
+            if self._is_module_start(line):
+                return False
+
+        return False
 
     def _update_directory_status(
         self,
