@@ -101,6 +101,9 @@
 
     "CALLSIGN": "Nominativo",
     "NODE": "Nodo",
+    "REFLECTOR_CONNECTED_STATIONS": "Stazioni connesse",
+    "REFLECTOR_NO_STATIONS": "Nessuna stazione connessa",
+    "STATION": "Stazione",
 
     "OPERATIONAL_VIEW": "Vista operativa",
     "OPERATIONAL_CONNECTED_STATIONS": "Stazioni connesse",

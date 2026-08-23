@@ -101,6 +101,9 @@
 
     "CALLSIGN": "Rufzeichen",
     "NODE": "Knoten",
+    "REFLECTOR_CONNECTED_STATIONS": "Verbundene Stationen",
+    "REFLECTOR_NO_STATIONS": "Keine Stationen verbunden",
+    "STATION": "Station",
 
     "OPERATIONAL_VIEW": "Betriebsansicht",
     "OPERATIONAL_CONNECTED_STATIONS": "Verbundene Stationen",

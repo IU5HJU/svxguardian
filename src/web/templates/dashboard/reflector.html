@@ -292,7 +292,7 @@
                     <div class="card-header">
 
                         <i class="fa-solid fa-diagram-project"></i>
-                        {{ t("REFLECTOR_CONNECTED_NODES") }}
+                        {{ t("REFLECTOR_CONNECTED_STATIONS") }}
 
                     </div>
 
@@ -311,7 +311,7 @@
                                             <tr>
 
                                                 <th>
-                                                    {{ t("NODE") }}
+                                                    {{ t("STATION") }}
                                                 </th>
 
                                                 <th>
@@ -357,7 +357,7 @@
                             {% else %}
 
                                 <div class="text-muted">
-                                    {{ t("REFLECTOR_NO_NODES") }}
+                                    {{ t("REFLECTOR_NO_STATIONS") }}
                                 </div>
 
                             {% endif %}
@@ -375,95 +375,9 @@
 
         <div class="row g-4 mt-1">
 
-            <div class="col-xl-8">
+            <div class="col-12">
 
-                <div class="card h-100">
-
-                    <div class="card-header">
-
-                        <i class="fa-solid fa-users"></i>
-                        {{ t("REFLECTOR_CONNECTED_CLIENTS") }}
-
-                    </div>
-
-                    <div class="card-body">
-
-                        <div id="reflector-clients-container">
-
-                            {% if state.reflector_connected_clients %}
-
-                                <div class="table-responsive">
-
-                                    <table class="table align-middle mb-0">
-
-                                        <thead>
-
-                                            <tr>
-
-                                                <th>
-                                                    {{ t("CLIENT") }}
-                                                </th>
-
-                                                <th>
-                                                    {{ t("REFLECTOR_STATUS") }}
-                                                </th>
-
-                                            </tr>
-
-                                        </thead>
-
-                                        <tbody>
-
-                                            {% for client_name in state.reflector_connected_clients %}
-
-                                                <tr>
-
-                                                    <td>
-
-                                                        <span class="badge bg-primary">
-                                                            {{ client_name }}
-                                                        </span>
-
-                                                    </td>
-
-                                                    <td>
-
-                                                        <span class="badge bg-success">
-                                                            {{ t("CONNECTED") }}
-                                                        </span>
-
-                                                    </td>
-
-                                                </tr>
-
-                                            {% endfor %}
-
-                                        </tbody>
-
-                                    </table>
-
-                                </div>
-
-                            {% else %}
-
-                                <div class="text-muted">
-                                    {{ t("REFLECTOR_NO_CLIENTS") }}
-                                </div>
-
-                            {% endif %}
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="col-xl-4">
-
-                <div class="card h-100">
+                <div class="card">
 
                     <div class="card-header">
 
@@ -476,23 +390,70 @@
 
                         <div
                             id="reflector-talker-container"
-                            class="d-flex align-items-center h-100"
+                            class="d-flex flex-wrap
+                                   align-items-center
+                                   justify-content-between
+                                   gap-3"
                         >
 
-                            {% if state.reflector_transmitting
-                                and state.reflector_transmitting_station %}
+                            <div id="reflector-talker-station">
 
-                                <span class="badge bg-danger fs-6">
-                                    {{ state.reflector_transmitting_station }}
+                                {% if state.reflector_transmitting
+                                    and state.reflector_transmitting_station %}
+
+                                    <span
+                                        class="badge bg-danger fs-5 px-3 py-2"
+                                    >
+                                        {{ state.reflector_transmitting_station }}
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="text-muted">
+                                        {{ t("NO_ACTIVE_TALKER") }}
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+                            <div
+                                class="d-flex align-items-center gap-2"
+                            >
+
+                                <span class="fw-semibold">
+                                    {{ t("TALKER_SOURCE") }}:
                                 </span>
 
-                            {% else %}
+                                <span
+                                    id="reflector-talker-source"
+                                    class="badge bg-primary"
+                                >
+                                    {% if state.reflector_transmitting
+                                        and state.reflector_transmitting_station %}
 
-                                <span class="text-muted">
-                                    {{ t("NO_ACTIVE_TALKER") }}
+                                        {% if state.echolink_transmitting
+                                            and
+                                            state.echolink_transmitting_station
+                                            ==
+                                            state.reflector_transmitting_station %}
+
+                                            {{ t("ECHOLINK") }}
+
+                                        {% else %}
+
+                                            {{ t("REFLECTOR") }}
+
+                                        {% endif %}
+
+                                    {% else %}
+
+                                        {{ t("UNKNOWN") }}
+
+                                    {% endif %}
                                 </span>
 
-                            {% endif %}
+                            </div>
 
                         </div>
 
@@ -537,6 +498,12 @@
         UNKNOWN:
             {{ t("UNKNOWN") | tojson }},
 
+        ECHOLINK:
+            {{ t("ECHOLINK") | tojson }},
+
+        REFLECTOR:
+            {{ t("REFLECTOR") | tojson }},
+
         ENCRYPTED:
             {{ t("ENCRYPTED") | tojson }},
 
@@ -549,20 +516,14 @@
         NONE:
             {{ t("NONE") | tojson }},
 
-        NO_NODES:
-            {{ t("REFLECTOR_NO_NODES") | tojson }},
+        NO_STATIONS:
+            {{ t("REFLECTOR_NO_STATIONS") | tojson }},
 
-        NODE:
-            {{ t("NODE") | tojson }},
-
-        CLIENT:
-            {{ t("CLIENT") | tojson }},
+        STATION:
+            {{ t("STATION") | tojson }},
 
         STATUS:
             {{ t("REFLECTOR_STATUS") | tojson }},
-
-        NO_CLIENTS:
-            {{ t("REFLECTOR_NO_CLIENTS") | tojson }},
 
         NO_ACTIVE_TALKER:
             {{ t("NO_ACTIVE_TALKER") | tojson }}
@@ -632,7 +593,7 @@
 
             container.innerHTML = `
                 <div class="text-muted">
-                    ${reflectorTranslations.NO_NODES}
+                    ${reflectorTranslations.NO_STATIONS}
                 </div>
             `;
 
@@ -662,64 +623,7 @@
                     <thead>
                         <tr>
                             <th>
-                                ${reflectorTranslations.NODE}
-                            </th>
-                            <th>
-                                ${reflectorTranslations.STATUS}
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${rows}
-                    </tbody>
-                </table>
-            </div>
-        `;
-    }
-
-
-    function renderReflectorClients(clients) {
-
-        const container =
-            document.getElementById(
-                "reflector-clients-container"
-            );
-
-        if (!clients || clients.length === 0) {
-
-            container.innerHTML = `
-                <div class="text-muted">
-                    ${reflectorTranslations.NO_CLIENTS}
-                </div>
-            `;
-
-            return;
-        }
-
-
-        const rows = clients.map((clientName) => `
-            <tr>
-                <td>
-                    <span class="badge bg-primary">
-                        ${clientName}
-                    </span>
-                </td>
-                <td>
-                    <span class="badge bg-success">
-                        ${reflectorTranslations.CONNECTED}
-                    </span>
-                </td>
-            </tr>
-        `).join("");
-
-
-        container.innerHTML = `
-            <div class="table-responsive">
-                <table class="table align-middle mb-0">
-                    <thead>
-                        <tr>
-                            <th>
-                                ${reflectorTranslations.CLIENT}
+                                ${reflectorTranslations.STATION}
                             </th>
                             <th>
                                 ${reflectorTranslations.STATUS}
@@ -737,12 +641,19 @@
 
     function renderReflectorTalker(
         transmitting,
-        station
+        station,
+        echolinkTransmitting,
+        echolinkStation
     ) {
 
-        const container =
+        const stationContainer =
             document.getElementById(
-                "reflector-talker-container"
+                "reflector-talker-station"
+            );
+
+        const sourceElement =
+            document.getElementById(
+                "reflector-talker-source"
             );
 
         if (
@@ -750,20 +661,41 @@
             && station
         ) {
 
-            container.innerHTML = `
-                <span class="badge bg-danger fs-6">
+            stationContainer.innerHTML = `
+                <span class="badge bg-danger fs-5 px-3 py-2">
                     ${station}
                 </span>
             `;
 
+            const isEchoLink =
+                echolinkTransmitting
+                && echolinkStation
+                && (
+                    String(echolinkStation)
+                        .trim()
+                        .toUpperCase()
+                    ===
+                    String(station)
+                        .trim()
+                        .toUpperCase()
+                );
+
+            sourceElement.textContent =
+                isEchoLink
+                ? reflectorTranslations.ECHOLINK
+                : reflectorTranslations.REFLECTOR;
+
             return;
         }
 
-        container.innerHTML = `
+        stationContainer.innerHTML = `
             <span class="text-muted">
                 ${reflectorTranslations.NO_ACTIVE_TALKER}
             </span>
         `;
+
+        sourceElement.textContent =
+            reflectorTranslations.UNKNOWN;
     }
 
 
@@ -919,13 +851,11 @@
                 data.reflector_connected_nodes
             );
 
-            renderReflectorClients(
-                data.reflector_connected_clients
-            );
-
             renderReflectorTalker(
                 data.reflector_transmitting,
-                data.reflector_transmitting_station
+                data.reflector_transmitting_station,
+                data.echolink_transmitting,
+                data.echolink_transmitting_station
             );
 
         } catch (error) {

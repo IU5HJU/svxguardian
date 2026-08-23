@@ -101,6 +101,9 @@
 
     "CALLSIGN": "Indicativo",
     "NODE": "Nodo",
+    "REFLECTOR_CONNECTED_STATIONS": "Estaciones conectadas",
+    "REFLECTOR_NO_STATIONS": "No hay estaciones conectadas",
+    "STATION": "Estación",
 
     "OPERATIONAL_VIEW": "Vista operativa",
     "OPERATIONAL_CONNECTED_STATIONS": "Estaciones conectadas",

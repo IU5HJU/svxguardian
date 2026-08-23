@@ -101,6 +101,9 @@
 
     "CALLSIGN": "Callsign",
     "NODE": "Node",
+    "REFLECTOR_CONNECTED_STATIONS": "Connected Stations",
+    "REFLECTOR_NO_STATIONS": "No connected stations",
+    "STATION": "Station",
 
     "OPERATIONAL_VIEW": "Operational View",
     "OPERATIONAL_CONNECTED_STATIONS": "Connected Stations",

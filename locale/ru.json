@@ -101,6 +101,9 @@
 
     "CALLSIGN": "Позывной",
     "NODE": "Узел",
+    "REFLECTOR_CONNECTED_STATIONS": "Подключённые станции",
+    "REFLECTOR_NO_STATIONS": "Нет подключённых станций",
+    "STATION": "Станция",
 
     "OPERATIONAL_VIEW": "Оперативный режим",
     "OPERATIONAL_CONNECTED_STATIONS": "Подключённые станции",
