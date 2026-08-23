@@ -148,8 +148,12 @@ class EchoLinkMonitor(BaseMonitor):
 
     def _is_module_deactivated(self) -> bool:
         """
-        Return whether the latest EchoLink module lifecycle event
-        indicates that the module is currently deactivated.
+        Return whether the latest relevant EchoLink event indicates
+        that the module is currently deactivated.
+
+        A CONNECTED event newer than a module deactivation proves
+        that EchoLink became operational again, even when SvxLink
+        did not emit a module-start message in between.
         """
 
         for line in self._read_lines_reverse():
@@ -158,6 +162,18 @@ class EchoLinkMonitor(BaseMonitor):
                 return True
 
             if self._is_module_start(line):
+                return False
+
+            connection_event = (
+                self._extract_connection_event(line)
+            )
+
+            if connection_event is None:
+                continue
+
+            _, connected = connection_event
+
+            if connected:
                 return False
 
         return False
