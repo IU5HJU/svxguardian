@@ -272,3 +272,35 @@ def test_reflector_monitor_detects_modern_connected_log(tmp_path):
     assert state.reflector_status.value == "CONNECTED"
     assert state.reflector_host == "192.168.1.36"
     assert state.reflector_port == 5300
+
+
+def test_reflector_monitor_replays_join_left_after_snapshot(tmp_path):
+    log_file = tmp_path / "svxlink.log"
+
+    log_file.write_text(
+        (
+            "ReflectorLogic: Connected nodes: IU5HJU, IR5UV\n"
+            "ReflectorLogic: Node left: IU5HJU\n"
+            "ReflectorLogic: Node joined: IU5HJU\n"
+            "ReflectorLogic: Node joined: IZ5FSN\n"
+            "ReflectorLogic: Node left: IU5HJU\n"
+            "ReflectorLogic: Node joined: IU5HJU\n"
+            "ReflectorLogic: Node left: IU5HJU\n"
+        ),
+        encoding="utf-8",
+    )
+
+    monitor = ReflectorMonitor(
+        log_file=log_file
+    )
+
+    state = NodeState()
+
+    monitor.check(state)
+
+    assert state.reflector_connected_nodes == [
+        "IR5UV",
+        "IZ5FSN",
+    ]
+
+    assert state.reflector_connection_count == 2

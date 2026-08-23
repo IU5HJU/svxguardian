@@ -46,6 +46,14 @@ class ReflectorMonitor(BaseMonitor):
         r"ReflectorLogic: Connected nodes:\s*(?P<nodes>.*)"
     )
 
+    NODE_JOINED_PATTERN = re.compile(
+        r"ReflectorLogic: Node joined:\s*(?P<node>\S+)"
+    )
+
+    NODE_LEFT_PATTERN = re.compile(
+        r"ReflectorLogic: Node left:\s*(?P<node>\S+)"
+    )
+
     TALKER_PATTERN = re.compile(
         r"ReflectorLogic: Talker "
         r"(?:start|stop) on TG #(?P<talkgroup>\d+): "
@@ -98,6 +106,14 @@ class ReflectorMonitor(BaseMonitor):
             self.event_tracker.transmitting_station
         )
 
+        state.reflector_connected_nodes = (
+            self._reconstruct_connected_nodes()
+        )
+
+        state.reflector_connection_count = len(
+            state.reflector_connected_nodes
+        )
+
         connection_state_found = False
         previous_disconnect_found = False
 
@@ -107,17 +123,6 @@ class ReflectorMonitor(BaseMonitor):
 
                 if talkgroup is not None:
                     state.reflector_tg = talkgroup
-
-            if not state.reflector_connected_nodes:
-                connected_nodes = self._extract_connected_nodes(
-                    line
-                )
-
-                if connected_nodes is not None:
-                    state.reflector_connected_nodes = connected_nodes
-                    state.reflector_connection_count = len(
-                        connected_nodes
-                    )
 
             if self.ENCRYPTED_MESSAGE in line:
                 state.reflector_encrypted = True
@@ -170,6 +175,56 @@ class ReflectorMonitor(BaseMonitor):
                 state.reflector_status = ReflectorStatus.CONNECTING
                 connection_state_found = True
                 break
+
+    def _reconstruct_connected_nodes(self) -> list[str]:
+        """
+        Reconstruct the current Reflector participant list.
+
+        The newest Connected nodes line is used as a snapshot.
+        Node joined / Node left events newer than that snapshot
+        are then replayed in chronological order.
+        """
+
+        events: list[tuple[str, str]] = []
+
+        for line in self._read_lines_reverse():
+            connected_nodes = self._extract_connected_nodes(
+                line
+            )
+
+            if connected_nodes is not None:
+                nodes = set(connected_nodes)
+
+                for event, node in reversed(events):
+                    if event == "joined":
+                        nodes.add(node)
+                    else:
+                        nodes.discard(node)
+
+                return sorted(nodes)
+
+            joined = self.NODE_JOINED_PATTERN.search(line)
+
+            if joined:
+                events.append(
+                    (
+                        "joined",
+                        joined.group("node").upper(),
+                    )
+                )
+                continue
+
+            left = self.NODE_LEFT_PATTERN.search(line)
+
+            if left:
+                events.append(
+                    (
+                        "left",
+                        left.group("node").upper(),
+                    )
+                )
+
+        return []
 
     @staticmethod
     def _extract_connected_nodes(
