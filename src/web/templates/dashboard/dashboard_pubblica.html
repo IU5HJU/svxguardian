@@ -88,8 +88,15 @@
 
     <section class="public-talker-card">
 
-        <div class="public-talker-label">
-            {{ t("OPERATIONAL_TRANSMITTING") }}
+        <div
+            id="public-talker-label"
+            class="public-talker-label"
+        >
+            {% if state.reflector_transmitting %}
+                {{ t("OPERATIONAL_TRANSMITTING") }}
+            {% else %}
+                {{ t("NO_ACTIVE_TALKER") }}
+            {% endif %}
         </div>
 
         <div
@@ -187,6 +194,12 @@
 
         unknown:
             {{ t("UNKNOWN") | tojson }},
+
+        transmitting:
+            {{ t("OPERATIONAL_TRANSMITTING") | tojson }},
+
+        noActiveTalker:
+            {{ t("NO_ACTIVE_TALKER") | tojson }},
 
         encrypted:
             {{ t("ENCRYPTED") | tojson }},
@@ -412,6 +425,14 @@
                 data.reflector_transmitting
                 ? data.reflector_transmitting_station
                 : "";
+
+
+            document.getElementById(
+                "public-talker-label"
+            ).textContent =
+                talker
+                ? publicDashboardTranslations.transmitting
+                : publicDashboardTranslations.noActiveTalker;
 
 
             document.getElementById(

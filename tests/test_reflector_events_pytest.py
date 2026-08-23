@@ -246,3 +246,29 @@ def test_reflector_monitor_exports_live_talker_state(tmp_path):
 
     assert state.reflector_transmitting is False
     assert state.reflector_transmitting_station == ""
+
+def test_reflector_monitor_detects_modern_connected_log(tmp_path):
+    log_file = tmp_path / "svxlink.log"
+
+    log_file.write_text(
+        (
+            "Sun 23 Aug 2026 17:54:06 CEST: "
+            "ReflectorLogic: Connecting to service\n"
+            "Sun 23 Aug 2026 17:54:06 CEST: "
+            "NOTICE[ReflectorLogic]: "
+            "Connected to 192.168.1.36:5300 (primary)\n"
+        ),
+        encoding="utf-8",
+    )
+
+    monitor = ReflectorMonitor(
+        log_file=log_file
+    )
+
+    state = NodeState()
+
+    monitor.check(state)
+
+    assert state.reflector_status.value == "CONNECTED"
+    assert state.reflector_host == "192.168.1.36"
+    assert state.reflector_port == 5300

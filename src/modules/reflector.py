@@ -31,7 +31,8 @@ class ReflectorMonitor(BaseMonitor):
     )
 
     CONNECTED_PATTERN = re.compile(
-        r"ReflectorLogic: Connection established to "
+        r"(?:ReflectorLogic: Connection established to |"
+        r"NOTICE\[ReflectorLogic\]: Connected to )"
         r"(?P<host>[^:]+):(?P<port>\d+)"
     )
 
