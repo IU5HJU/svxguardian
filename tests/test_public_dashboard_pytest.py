@@ -83,3 +83,54 @@ def test_existing_reflector_page_still_available(
         )
 
     assert response.status_code == 200
+
+
+def test_public_dashboard_prefers_echolink_station_over_reflector_node(
+    monkeypatch,
+) -> None:
+    """
+    When EchoLink audio is carried into the reflector by the local
+    SvxLink node, the public dashboard must show the EchoLink station
+    as the active talker and identify EchoLink as the source.
+    """
+
+    def fake_guardian_run() -> None:
+        guardian.state.reflector_status = "CONNECTED"
+        guardian.state.reflector_tg = 2225
+
+        guardian.state.reflector_transmitting = True
+        guardian.state.reflector_transmitting_station = (
+            "IR5UV"
+        )
+
+        guardian.state.echolink_transmitting = True
+        guardian.state.echolink_transmitting_station = (
+            "IU5HJU"
+        )
+
+        guardian.state.reflector_connected_nodes = [
+            "IR5UV",
+            "IZ5FSN",
+        ]
+
+        guardian.state.reflector_connection_count = 2
+
+    monkeypatch.setattr(
+        guardian,
+        "run",
+        fake_guardian_run,
+    )
+
+    with app.test_client() as client:
+        response = client.get(
+            "/dashboard_pubblica?lang=it"
+        )
+
+    assert response.status_code == 200
+
+    page = response.get_data(
+        as_text=True
+    )
+
+    assert "IU5HJU" in page
+    assert "EchoLink" in page

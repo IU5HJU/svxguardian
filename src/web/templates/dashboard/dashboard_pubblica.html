@@ -70,7 +70,10 @@
             id="public-talker-label"
             class="public-talker-label"
         >
-            {% if state.reflector_transmitting %}
+            {% if (
+                state.echolink_transmitting
+                and state.echolink_transmitting_station
+            ) or state.reflector_transmitting %}
                 {{ t("OPERATIONAL_TRANSMITTING") }}
             {% else %}
                 {{ t("NO_ACTIVE_TALKER") }}
@@ -81,7 +84,10 @@
             id="public-talker-station"
             class="public-talker-station"
         >
-            {% if state.reflector_transmitting
+            {% if state.echolink_transmitting
+                and state.echolink_transmitting_station %}
+                {{ state.echolink_transmitting_station }}
+            {% elif state.reflector_transmitting
                 and state.reflector_transmitting_station %}
                 {{ state.reflector_transmitting_station }}
             {% else %}
@@ -105,7 +111,14 @@
             <span>
                 {{ t("TALKER_SOURCE") }}:
                 <strong id="public-talker-source">
-                    {{ t("UNKNOWN") }}
+                    {% if state.echolink_transmitting
+                        and state.echolink_transmitting_station %}
+                        {{ t("ECHOLINK") }}
+                    {% elif state.reflector_transmitting %}
+                        {{ t("REFLECTOR") }}
+                    {% else %}
+                        {{ t("UNKNOWN") }}
+                    {% endif %}
                 </strong>
             </span>
 
@@ -213,40 +226,23 @@
     }
 
 
-    function normalizePublicCallsign(value) {
-
-        if (!value) {
-            return "";
-        }
-
-        return String(value)
-            .trim()
-            .toUpperCase();
-    }
-
-
     function classifyPublicTalker(data) {
-
-        const reflectorTalker =
-            normalizePublicCallsign(
-                data.reflector_transmitting_station
-            );
-
-        if (!reflectorTalker) {
-            return publicDashboardTranslations.unknown;
-        }
 
         if (
             data.echolink_transmitting
-            &&
-            normalizePublicCallsign(
-                data.echolink_transmitting_station
-            ) === reflectorTalker
+            && data.echolink_transmitting_station
         ) {
             return publicDashboardTranslations.echolink;
         }
 
-        return publicDashboardTranslations.reflector;
+        if (
+            data.reflector_transmitting
+            && data.reflector_transmitting_station
+        ) {
+            return publicDashboardTranslations.reflector;
+        }
+
+        return publicDashboardTranslations.unknown;
     }
 
 
@@ -317,9 +313,16 @@
 
 
             const talker =
-                data.reflector_transmitting
-                ? data.reflector_transmitting_station
-                : "";
+                (
+                    data.echolink_transmitting
+                    && data.echolink_transmitting_station
+                )
+                ? data.echolink_transmitting_station
+                : (
+                    data.reflector_transmitting
+                    ? data.reflector_transmitting_station
+                    : ""
+                );
 
 
             document.getElementById(
