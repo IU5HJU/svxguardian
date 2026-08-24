@@ -9,6 +9,9 @@ Type=simple
 User=@SVXGUARDIAN_USER@
 Group=@SVXGUARDIAN_GROUP@
 
+StateDirectory=svxguardian
+StateDirectoryMode=0750
+
 WorkingDirectory=@SVXGUARDIAN_DIRECTORY@
 
 ExecStart=@SVXGUARDIAN_DIRECTORY@/.venv/bin/gunicorn \

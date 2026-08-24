@@ -105,6 +105,10 @@
     "REFLECTOR_NO_STATIONS": "Нет подключённых станций",
     "STATION": "Станция",
 
+    "PUBLIC_REFLECTOR_NAME": "Публичное имя рефлектора",
+    "PUBLIC_REFLECTOR_NAME_HELP": "Имя, отображаемое на публичной панели.",
+    "SAVE_SETTINGS": "Сохранить настройки",
+
     "OPERATIONAL_VIEW": "Оперативный режим",
     "OPERATIONAL_CONNECTED_STATIONS": "Подключённые станции",
     "OPERATIONAL_LAST_UPDATE": "Последнее обновление",

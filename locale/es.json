@@ -105,6 +105,10 @@
     "REFLECTOR_NO_STATIONS": "No hay estaciones conectadas",
     "STATION": "Estación",
 
+    "PUBLIC_REFLECTOR_NAME": "Nombre público del reflector",
+    "PUBLIC_REFLECTOR_NAME_HELP": "Nombre mostrado en el panel público.",
+    "SAVE_SETTINGS": "Guardar configuración",
+
     "OPERATIONAL_VIEW": "Vista operativa",
     "OPERATIONAL_CONNECTED_STATIONS": "Estaciones conectadas",
     "OPERATIONAL_LAST_UPDATE": "Última actualización",

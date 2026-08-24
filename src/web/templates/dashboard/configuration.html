@@ -191,6 +191,131 @@
 
 
         <!-- =====================================================
+             PUBLIC DASHBOARD SETTINGS
+             ===================================================== -->
+
+        <div class="row g-4 mb-4">
+
+            <div class="col-12">
+
+                <div class="card">
+
+                    <div class="card-header">
+                        <i class="fa-solid fa-display"></i>
+                        {{ t("PUBLIC_DASHBOARD") }}
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="row g-3">
+
+                            <div class="col-12 col-lg-8">
+
+                                <label
+                                    for="public-reflector-name"
+                                    class="form-label"
+                                >
+                                    {{ t("PUBLIC_REFLECTOR_NAME") }}
+                                </label>
+
+                                <input
+                                    id="public-reflector-name"
+                                    type="text"
+                                    name="reflector_name"
+                                    class="form-control"
+                                    form="public-dashboard-settings-form"
+                                    maxlength="80"
+                                    value="{{
+                                        public_dashboard_settings.get(
+                                            'reflector_name',
+                                            'SvxReflector'
+                                        )
+                                    }}"
+                                >
+
+                                <div class="form-text">
+                                    {{ t("PUBLIC_REFLECTOR_NAME_HELP") }}
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-12 col-lg-4">
+
+                                {% if authenticated and can_control_node %}
+
+                                    <form
+                                        id="public-dashboard-settings-form"
+                                        method="post"
+                                        action="{{ url_for(
+                                            'update_public_dashboard_settings'
+                                        ) }}"
+                                        class="
+                                            h-100
+                                            d-flex
+                                            align-items-end
+                                        "
+                                    >
+
+                                        <input
+                                            type="hidden"
+                                            name="csrf_token"
+                                            value="{{ csrf_token }}"
+                                        >
+
+                                        <input
+                                            type="hidden"
+                                            name="lang"
+                                            value="{{ language }}"
+                                        >
+
+                                        <button
+                                            type="submit"
+                                            class="btn btn-primary w-100"
+                                        >
+                                            <i class="fa-solid fa-floppy-disk me-2"></i>
+                                            {{ t("SAVE_SETTINGS") }}
+                                        </button>
+
+                                    </form>
+
+                                {% else %}
+
+                                    <div
+                                        class="
+                                            h-100
+                                            d-flex
+                                            align-items-end
+                                        "
+                                    >
+
+                                        <button
+                                            type="button"
+                                            class="btn btn-secondary w-100"
+                                            disabled
+                                        >
+                                            <i class="fa-solid fa-lock me-2"></i>
+                                            {{ t("SAVE_SETTINGS") }}
+                                        </button>
+
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
              SVXLINK SERVICE CONTROL
              ===================================================== -->
 

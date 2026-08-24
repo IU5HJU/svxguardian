@@ -12,11 +12,14 @@
 
         <div>
             <div class="public-dashboard-eyebrow">
-                {{ t("APP_NAME") }}
+                {{ t("PUBLIC_DASHBOARD") }}
             </div>
 
             <h1>
-                {{ t("PUBLIC_DASHBOARD") }}
+                {{ public_dashboard_settings.get(
+                    "reflector_name",
+                    "SvxReflector"
+                ) }}
             </h1>
         </div>
 
@@ -34,22 +37,11 @@
 
         <div class="public-summary-card">
             <span class="public-summary-label">
-                {{ t("REFLECTOR_CONNECTED_NODES") }}
+                {{ t("REFLECTOR_CONNECTED_STATIONS") }}
             </span>
 
-            <strong id="public-node-count">
+            <strong id="public-station-count">
                 {{ state.reflector_connection_count }}
-            </strong>
-        </div>
-
-
-        <div class="public-summary-card">
-            <span class="public-summary-label">
-                {{ t("REFLECTOR_CONNECTED_CLIENTS") }}
-            </span>
-
-            <strong id="public-client-count">
-                {{ state.reflector_connected_clients | length }}
             </strong>
         </div>
 
@@ -68,20 +60,6 @@
             </strong>
         </div>
 
-
-        <div class="public-summary-card">
-            <span class="public-summary-label">
-                {{ t("REFLECTOR_ENCRYPTION") }}
-            </span>
-
-            <strong id="public-encryption">
-                {% if state.reflector_encrypted %}
-                    {{ t("ENCRYPTED") }}
-                {% else %}
-                    {{ t("NOT_ENCRYPTED") }}
-                {% endif %}
-            </strong>
-        </div>
 
     </section>
 
@@ -141,10 +119,10 @@
         <div class="public-list-card">
 
             <h2>
-                {{ t("REFLECTOR_CONNECTED_NODES") }}
+                {{ t("REFLECTOR_CONNECTED_STATIONS") }}
             </h2>
 
-            <div id="public-nodes-list">
+            <div id="public-stations-list">
 
                 {% for node_name in state.reflector_connected_nodes %}
                     <span class="public-list-item">
@@ -157,24 +135,6 @@
         </div>
 
 
-        <div class="public-list-card">
-
-            <h2>
-                {{ t("REFLECTOR_CONNECTED_CLIENTS") }}
-            </h2>
-
-            <div id="public-clients-list">
-
-                {% for client_name in state.reflector_connected_clients %}
-                    <span class="public-list-item">
-                        {{ client_name }}
-                    </span>
-                {% endfor %}
-
-            </div>
-
-        </div>
-
     </section>
 
 </div>
@@ -186,11 +146,8 @@
         echolink:
             {{ t("ECHOLINK") | tojson }},
 
-        svxlinkNode:
-            {{ t("SOURCE_SVXLINK_NODE") | tojson }},
-
-        applicationClient:
-            {{ t("SOURCE_APPLICATION_CLIENT") | tojson }},
+        reflector:
+            {{ t("REFLECTOR") | tojson }},
 
         unknown:
             {{ t("UNKNOWN") | tojson }},
@@ -200,12 +157,6 @@
 
         noActiveTalker:
             {{ t("NO_ACTIVE_TALKER") | tojson }},
-
-        encrypted:
-            {{ t("ENCRYPTED") | tojson }},
-
-        notEncrypted:
-            {{ t("NOT_ENCRYPTED") | tojson }},
 
         connecting:
             {{ t("CONNECTING") | tojson }},
@@ -274,24 +225,6 @@
     }
 
 
-    function publicListContains(
-        values,
-        callsign
-    ) {
-
-        const normalizedCallsign =
-            normalizePublicCallsign(
-                callsign
-            );
-
-        return (values || []).some(
-            (value) =>
-                normalizePublicCallsign(value)
-                === normalizedCallsign
-        );
-    }
-
-
     function classifyPublicTalker(data) {
 
         const reflectorTalker =
@@ -303,7 +236,6 @@
             return publicDashboardTranslations.unknown;
         }
 
-
         if (
             data.echolink_transmitting
             &&
@@ -314,28 +246,7 @@
             return publicDashboardTranslations.echolink;
         }
 
-
-        if (
-            publicListContains(
-                data.reflector_connected_nodes,
-                reflectorTalker
-            )
-        ) {
-            return publicDashboardTranslations.svxlinkNode;
-        }
-
-
-        if (
-            publicListContains(
-                data.reflector_connected_clients,
-                reflectorTalker
-            )
-        ) {
-            return publicDashboardTranslations.applicationClient;
-        }
-
-
-        return publicDashboardTranslations.unknown;
+        return publicDashboardTranslations.reflector;
     }
 
 
@@ -391,19 +302,10 @@
 
 
             document.getElementById(
-                "public-node-count"
+                "public-station-count"
             ).textContent =
                 data.reflector_connection_count
                 ?? 0;
-
-
-            document.getElementById(
-                "public-client-count"
-            ).textContent =
-                (
-                    data.reflector_connected_clients
-                    || []
-                ).length;
 
 
             document.getElementById(
@@ -412,13 +314,6 @@
                 data.reflector_tg
                 || "—";
 
-
-            document.getElementById(
-                "public-encryption"
-            ).textContent =
-                data.reflector_encrypted
-                ? publicDashboardTranslations.encrypted
-                : publicDashboardTranslations.notEncrypted;
 
 
             const talker =
@@ -458,15 +353,10 @@
 
 
             renderPublicList(
-                "public-nodes-list",
+                "public-stations-list",
                 data.reflector_connected_nodes
             );
 
-
-            renderPublicList(
-                "public-clients-list",
-                data.reflector_connected_clients
-            );
 
         } catch (error) {
 

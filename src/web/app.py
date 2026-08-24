@@ -26,6 +26,7 @@ from ..core.exporter import StateExporter
 from ..core.guardian import Guardian
 from ..core.i18n import TranslationManager
 from ..core.node_control import NodeControl
+from ..core.settings import SettingsManager
 from ..core.state import NodeState
 from ..modules.echolink import EchoLinkMonitor
 from ..modules.reflector import ReflectorMonitor
@@ -105,6 +106,7 @@ app.config.update(
 # ============================================================
 
 guardian = Guardian()
+settings_manager = SettingsManager()
 
 guardian.register(
     SystemMonitor()
@@ -419,6 +421,13 @@ def build_page_context() -> dict[str, Any]:
         else None
     )
 
+    settings = settings_manager.load()
+
+    public_dashboard_settings = settings.get(
+        "public_dashboard",
+        {},
+    )
+
     return {
         "state": state_snapshot,
         "node": node_snapshot,
@@ -443,6 +452,9 @@ def build_page_context() -> dict[str, Any]:
                 if current_user
                 else False
             ),
+
+        "public_dashboard_settings":
+            public_dashboard_settings,
     }
 
 
@@ -880,6 +892,108 @@ def logout():
         )
 
     logout_user()
+
+    return redirect(
+        url_for(
+            "configuration_page",
+            lang=language,
+        )
+    )
+
+
+# ============================================================
+# Public dashboard settings
+# ============================================================
+
+@app.route(
+    "/configuration/public-dashboard",
+    methods=[
+        "POST",
+    ],
+)
+def update_public_dashboard_settings():
+    """
+    Update persistent public-dashboard settings.
+
+    The operation is available only to an authenticated
+    Sysop or Co-Sysop and requires a valid CSRF token.
+    """
+
+    languages = load_languages()
+
+    requested_language = request.form.get(
+        "lang",
+        "it",
+    )
+
+    language = normalize_language(
+        requested_language,
+        languages,
+    )
+
+    if not authentication_available():
+
+        return redirect(
+            url_for(
+                "configuration_page",
+                lang=language,
+            )
+        )
+
+    current_user = get_current_user()
+
+    if current_user is None:
+
+        return redirect(
+            url_for(
+                "login",
+                lang=language,
+            )
+        )
+
+    if not current_user.can_control_node:
+
+        return redirect(
+            url_for(
+                "configuration_page",
+                lang=language,
+            )
+        )
+
+    submitted_csrf = request.form.get(
+        "csrf_token",
+        "",
+    )
+
+    if not validate_csrf_token(
+        submitted_csrf
+    ):
+
+        return redirect(
+            url_for(
+                "configuration_page",
+                lang=language,
+            )
+        )
+
+    reflector_name = (
+        request.form.get(
+            "reflector_name",
+            "",
+        )
+        .strip()
+    )
+
+    if not reflector_name:
+        reflector_name = "SvxReflector"
+
+    settings_manager.update_section(
+        "public_dashboard",
+        {
+            "reflector_name":
+                reflector_name,
+        },
+    )
 
     return redirect(
         url_for(
