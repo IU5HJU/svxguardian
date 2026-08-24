@@ -132,7 +132,7 @@
         <div class="public-list-card">
 
             <h2>
-                {{ t("REFLECTOR_CONNECTED_STATIONS") }}
+                {{ t("PUBLIC_REFLECTOR_CONNECTED_STATIONS") }}
             </h2>
 
             <div id="public-stations-list">
@@ -140,6 +140,25 @@
                 {% for node_name in state.reflector_connected_nodes %}
                     <span class="public-list-item">
                         {{ node_name }}
+                    </span>
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+
+        <div class="public-list-card">
+
+            <h2>
+                {{ t("PUBLIC_ECHOLINK_CONNECTED_STATIONS") }}
+            </h2>
+
+            <div id="public-echolink-stations-list">
+
+                {% for station in state.echolink_connected_stations %}
+                    <span class="public-list-item">
+                        {{ station }}
                     </span>
                 {% endfor %}
 
@@ -358,6 +377,11 @@
             renderPublicList(
                 "public-stations-list",
                 data.reflector_connected_nodes
+            );
+
+            renderPublicList(
+                "public-echolink-stations-list",
+                data.echolink_connected_stations
             );
 
 

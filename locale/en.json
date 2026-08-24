@@ -105,6 +105,8 @@
     "REFLECTOR_NO_STATIONS": "No connected stations",
     "STATION": "Station",
 
+    "PUBLIC_REFLECTOR_CONNECTED_STATIONS": "Stations connected to the reflector",
+    "PUBLIC_ECHOLINK_CONNECTED_STATIONS": "Stations connected to EchoLink",
     "PUBLIC_REFLECTOR_NAME": "Public reflector name",
     "PUBLIC_REFLECTOR_NAME_HELP": "Name displayed on the public dashboard.",
     "SAVE_SETTINGS": "Save settings",
