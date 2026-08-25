@@ -134,3 +134,59 @@ def test_public_dashboard_prefers_echolink_station_over_reflector_node(
 
     assert "IU5HJU" in page
     assert "EchoLink" in page
+
+
+def test_root_route_is_public_dashboard(
+    monkeypatch,
+) -> None:
+    """
+    The site root must render the public dashboard.
+    """
+
+    monkeypatch.setattr(
+        guardian,
+        "run",
+        lambda: None,
+    )
+
+    with app.test_client() as client:
+        response = client.get(
+            "/?lang=it"
+        )
+
+    assert response.status_code == 200
+
+    page = response.get_data(
+        as_text=True
+    )
+
+    assert "Dashboard pubblica" in page
+    assert "dashboard_pubblica.css" in page
+
+
+def test_control_dashboard_has_dedicated_route(
+    monkeypatch,
+) -> None:
+    """
+    The former main Guardian dashboard must remain available
+    at /dashboard.
+    """
+
+    monkeypatch.setattr(
+        guardian,
+        "run",
+        lambda: None,
+    )
+
+    with app.test_client() as client:
+        response = client.get(
+            "/dashboard?lang=it"
+        )
+
+    assert response.status_code == 200
+
+    page = response.get_data(
+        as_text=True
+    )
+
+    assert "Dashboard di controllo" in page

@@ -75,6 +75,7 @@
     "NOT_AVAILABLE": "Non disponible",
     "NONE": "Aucun",
 
+    "CONTROL_DASHBOARD": "Tableau de bord de contrôle",
     "DASHBOARD": "Tableau de bord",
     "PUBLIC_DASHBOARD": "Tableau de bord public",
     "TALKER_SOURCE": "Provenance",

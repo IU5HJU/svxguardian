@@ -75,6 +75,7 @@
     "NOT_AVAILABLE": "Not Available",
     "NONE": "None",
 
+    "CONTROL_DASHBOARD": "Control dashboard",
     "DASHBOARD": "Dashboard",
     "PUBLIC_DASHBOARD": "Public dashboard",
     "TALKER_SOURCE": "Source",

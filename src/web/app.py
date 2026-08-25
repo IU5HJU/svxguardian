@@ -575,10 +575,10 @@ def export_node_info(
 # Dashboard routes
 # ============================================================
 
-@app.route("/")
+@app.route("/dashboard")
 def dashboard():
     """
-    Render the general dashboard.
+    Render the Guardian control dashboard.
     """
 
     return render_template(
@@ -647,6 +647,7 @@ def reflector_page():
     )
 
 
+@app.route("/")
 @app.route("/dashboard_pubblica")
 def public_dashboard_page():
     """
