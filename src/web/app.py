@@ -10,6 +10,7 @@ import json
 from pathlib import Path
 import secrets
 from threading import RLock
+from time import monotonic
 from typing import Any
 
 from flask import (
@@ -102,6 +103,27 @@ app.config.update(
 
 
 # ============================================================
+# HTTP security headers
+# ============================================================
+
+@app.after_request
+def add_security_headers(response):
+    """
+    Add baseline security headers to every HTTP response.
+    """
+
+    response.headers["X-Frame-Options"] = "SAMEORIGIN"
+    response.headers["X-Content-Type-Options"] = "nosniff"
+
+    response.headers["Referrer-Policy"] = "same-origin"
+
+    response.headers["Permissions-Policy"] = (
+        "camera=(), microphone=(), geolocation=()"
+    )
+    return response
+
+
+# ============================================================
 # Guardian engine
 # ============================================================
 
@@ -138,6 +160,19 @@ guardian.register(
 
 
 guardian_lock = RLock()
+
+# Short-lived shared snapshot for /api/state.
+#
+# Public and operational dashboards poll this endpoint
+# frequently. Requests arriving inside this window reuse the
+# same completed Guardian cycle instead of executing all
+# monitors again.
+API_STATE_CACHE_SECONDS = 1.0
+
+_api_state_cache_time = 0.0
+_api_state_cache_state: NodeState | None = None
+_api_state_cache_node: Any | None = None
+
 operational_log = IncrementalLogReader(
     log_file=guardian.config.SVXLINK_LOG_FILE,
     history_limit=1000,
@@ -1221,17 +1256,47 @@ def api_system():
 def api_state():
     """
     Return an isolated current-state snapshot as JSON.
+
+    Requests arriving inside the short cache window reuse one
+    completed Guardian monitoring cycle.
     """
 
+    global _api_state_cache_time
+    global _api_state_cache_state
+    global _api_state_cache_node
+
     with guardian_lock:
-        guardian.run()
+
+        now = monotonic()
+
+        cache_valid = (
+            _api_state_cache_state is not None
+            and _api_state_cache_node is not None
+            and (
+                now - _api_state_cache_time
+                < API_STATE_CACHE_SECONDS
+            )
+        )
+
+        if not cache_valid:
+            guardian.run()
+
+            _api_state_cache_state = deepcopy(
+                guardian.state
+            )
+
+            _api_state_cache_node = deepcopy(
+                guardian.node_info
+            )
+
+            _api_state_cache_time = monotonic()
 
         state_snapshot = deepcopy(
-            guardian.state
+            _api_state_cache_state
         )
 
         node_snapshot = deepcopy(
-            guardian.node_info
+            _api_state_cache_node
         )
 
     data = StateExporter.to_dict(
