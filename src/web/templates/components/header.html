@@ -5,7 +5,7 @@
         <!-- Logo -->
         <a
             class="svx-header-brand"
-            href="{{ url_for('dashboard', lang=language) }}"
+            href="{{ url_for('public_dashboard_page', lang=language) }}"
         >
 
             <img
@@ -28,6 +28,36 @@
             </span>
 
 
+            <!-- Home pubblica -->
+
+            <a
+                class="svx-header-button"
+                href="{{ url_for(
+                    'public_dashboard_page',
+                    lang=language
+                ) }}"
+                aria-label="{{ t('HOME') }}"
+                title="{{ t('HOME') }}"
+            >
+                <i class="fa-solid fa-house"></i>
+            </a>
+
+
+            <!-- Dashboard di controllo -->
+
+            <a
+                class="svx-header-button"
+                href="{{ url_for(
+                    'dashboard',
+                    lang=language
+                ) }}"
+                aria-label="{{ t('CONTROL_DASHBOARD') }}"
+                title="{{ t('CONTROL_DASHBOARD') }}"
+            >
+                <i class="fa-solid fa-gauge-high"></i>
+            </a>
+
+
             <!-- Commutatore vista standard / vista operativa -->
 
             {% if request.endpoint == "operational_monitor" %}
@@ -38,8 +68,8 @@
                         'dashboard',
                         lang=language
                     ) }}"
-                    aria-label="{{ t('DASHBOARD') }}"
-                    title="{{ t('DASHBOARD') }}"
+                    aria-label="{{ t('CONTROL_DASHBOARD') }}"
+                    title="{{ t('CONTROL_DASHBOARD') }}"
                 >
 
                     <i class="fa-solid fa-table-columns"></i>
