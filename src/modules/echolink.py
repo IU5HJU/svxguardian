@@ -110,6 +110,12 @@ class EchoLinkMonitor(BaseMonitor):
         self._recent_log_inode: int | None = None
         self._recent_log_size = 0
 
+        # Immutable reverse-log snapshot used only during one
+        # check() cycle.  It prevents repeated physical reads of
+        # the same SvxLink logfile while preserving the existing
+        # analysis logic and stopping conditions.
+        self._log_lines_snapshot: tuple[str, ...] | None = None
+
     def check(self, state: NodeState) -> None:
         """
         Update all EchoLink runtime information.
@@ -128,23 +134,31 @@ class EchoLinkMonitor(BaseMonitor):
         state.echolink_transmitting_station = ""
         state.echolink_recent_connections = []
 
-        self._update_directory_status(state)
-        self._update_connected_stations(state)
-        self._update_recent_connections(state)
-        self._update_connection_stability(state)
-        self._update_transmission_state(state)
+        self._log_lines_snapshot = tuple(
+            self._read_lines_reverse_from_file()
+        )
 
-        # A deactivated EchoLink module cannot have active
-        # EchoLink stations.  This is the final authoritative
-        # consistency rule for the operational state.
-        if self._is_module_deactivated():
-            state.echolink_connected_stations = []
-            state.echolink_station_names = {}
-            state.echolink_connection_started = {}
-            state.echolink_unstable_stations = []
-            state.echolink_connection_count = 0
-            state.echolink_transmitting = False
-            state.echolink_transmitting_station = ""
+        try:
+            self._update_directory_status(state)
+            self._update_connected_stations(state)
+            self._update_recent_connections(state)
+            self._update_connection_stability(state)
+            self._update_transmission_state(state)
+
+            # A deactivated EchoLink module cannot have active
+            # EchoLink stations.  This is the final authoritative
+            # consistency rule for the operational state.
+            if self._is_module_deactivated():
+                state.echolink_connected_stations = []
+                state.echolink_station_names = {}
+                state.echolink_connection_started = {}
+                state.echolink_unstable_stations = []
+                state.echolink_connection_count = 0
+                state.echolink_transmitting = False
+                state.echolink_transmitting_station = ""
+
+        finally:
+            self._log_lines_snapshot = None
 
     def _is_module_deactivated(self) -> bool:
         """
@@ -1482,6 +1496,23 @@ class EchoLinkMonitor(BaseMonitor):
     ) -> Iterator[str]:
         """
         Read the SvxLink log backwards, one line at a time.
+
+        During check(), reuse the immutable snapshot captured at
+        the beginning of the cycle.  Outside check(), read the
+        logfile directly as before.
+        """
+
+        if self._log_lines_snapshot is not None:
+            yield from self._log_lines_snapshot
+            return
+
+        yield from self._read_lines_reverse_from_file()
+
+    def _read_lines_reverse_from_file(
+        self,
+    ) -> Iterator[str]:
+        """
+        Physically read the SvxLink logfile backwards.
         """
 
         if not self.log_file.is_file():
