@@ -12,11 +12,14 @@ from src.modules.reflector import ReflectorMonitor
 def test_read_lines_reverse_without_bound_reads_whole_file(tmp_path):
     log_file = tmp_path / "svxlink.log"
 
+    # No trailing newline: the last written line is the logfile's
+    # oldest, genuinely incomplete-looking final fragment, exactly
+    # like a real logfile between two writes.
     log_file.write_text(
         (
             "line one\n"
             "line two\n"
-            "line three\n"
+            "line three"
         ),
         encoding="utf-8",
     )
@@ -45,7 +48,7 @@ def test_read_lines_reverse_stops_at_byte_budget(tmp_path):
             "old filler line 02\n"
             "old filler line 03\n"
             "recent line four\n"
-            "recent line five\n"
+            "recent line five"
         ),
         encoding="utf-8",
     )
@@ -53,6 +56,11 @@ def test_read_lines_reverse_stops_at_byte_budget(tmp_path):
     monitor = ReflectorMonitor(
         log_file=log_file
     )
+
+    # A small read-block size makes a small byte budget meaningful
+    # even for a short test fixture; production uses 8192-byte
+    # blocks against a multi-megabyte budget, same mechanism.
+    monitor.READ_BLOCK_SIZE = 8
 
     lines = list(
         monitor._read_lines_reverse(
@@ -66,22 +74,22 @@ def test_read_lines_reverse_stops_at_byte_budget(tmp_path):
     ]
 
     # The scan stopped before reaching the start of the file: no
-    # truncated fragment of an older line is yielded.
+    # fragment of an older line is yielded.
     assert "old filler line 03" not in lines
     assert "old filler line 02" not in lines
     assert "old filler line 01" not in lines
 
 
-def test_read_lines_reverse_yields_leftover_only_at_real_start(tmp_path):
+def test_read_lines_reverse_never_yields_a_truncated_fragment(tmp_path):
     """
-    A tiny budget that stops mid-block must not emit a truncated
-    fragment of the oldest line as if it were a complete one.
+    Stopping at the byte budget must never emit a truncated fragment
+    of an older line as if it were a complete one.
     """
 
     log_file = tmp_path / "svxlink.log"
 
     log_file.write_text(
-        "abcdefghij\n" * 5,
+        ("abcdefghij\n" * 5).rstrip("\n"),
         encoding="utf-8",
     )
 
@@ -89,11 +97,15 @@ def test_read_lines_reverse_yields_leftover_only_at_real_start(tmp_path):
         log_file=log_file
     )
 
+    monitor.READ_BLOCK_SIZE = 4
+
     lines = list(
         monitor._read_lines_reverse(
-            max_bytes=5
+            max_bytes=15
         )
     )
+
+    assert lines
 
     for line in lines:
         assert line == "abcdefghij"
