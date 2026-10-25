@@ -1,0 +1,21 @@
+# SVX Guardian — SvxLink logfile rotation
+#
+# ReflectorMonitor and EchoLinkMonitor reconstruct the current
+# node state by scanning this logfile backwards. Without rotation
+# it grows without bound and every dashboard request scans further
+# into the past, degrading the whole dashboard (see
+# src/modules/reflector.py::MAX_BACKWARD_SCAN_BYTES for the
+# matching bound on the application side).
+#
+# copytruncate keeps the same inode SvxLink already has open, so
+# no SvxLink restart or log-reopen signal is required here.
+
+@SVXGUARDIAN_SVXLINK_LOG@ {
+    size @SVXGUARDIAN_LOGROTATE_SIZE@
+    rotate @SVXGUARDIAN_LOGROTATE_ROTATE@
+    compress
+    delaycompress
+    missingok
+    notifempty
+    copytruncate
+}
