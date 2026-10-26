@@ -30,11 +30,11 @@ they have actually been developed and tested.
                          │
                   Guardian Engine
                          │
-          ┌──────────────┼──────────────┐
+          ┌─────────────┌─────────────┐
           │              │              │
       Configuration   NodeState      Node Info
                          │
-        ┌────────────────┼────────────────┐
+        ┌─────────────────┌─────────────────┐
         │                │                │
  SystemMonitor     SvxLinkMonitor   EchoLinkMonitor
                                          │
@@ -324,6 +324,16 @@ repository.
 
 Frequently executed functions must not cause complete and repeated
 logfile scans when incremental reading can be used.
+
+`ReflectorMonitor`'s backward scan is additionally bounded by
+`MAX_BACKWARD_SCAN_BYTES` (`src/modules/reflector.py`), so a missing
+or failed logfile rotation does not bring the dashboard back to
+multi-second response times. OS-level logfile rotation is documented
+in:
+
+```text
+docs/installation/LOGROTATE.md
+```
 
 ### Compatibility
 
