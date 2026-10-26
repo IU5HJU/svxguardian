@@ -30,11 +30,11 @@ finché non saranno effettivamente sviluppate e collaudate.
                          │
                   Guardian Engine
                          │
-          ┌──────────────┼──────────────┐
+          ┌─────────────┌─────────────┐
           │              │              │
      Configurazione   NodeState      Node Info
                          │
-        ┌────────────────┼────────────────┐
+        ┌─────────────────┌─────────────────┐
         │                │                │
  SystemMonitor     SvxLinkMonitor   EchoLinkMonitor
                                          │
@@ -331,6 +331,16 @@ nel repository Git.
 Le funzioni eseguite frequentemente non devono provocare scansioni
 complete e ripetitive dei logfile quando può essere utilizzata una
 lettura incrementale.
+
+La scansione all'indietro di `ReflectorMonitor` è inoltre limitata
+da `MAX_BACKWARD_SCAN_BYTES` (`src/modules/reflector.py`), così che
+una rotazione del logfile mancante o fallita non riporti la
+dashboard a tempi di risposta di vari secondi. La rotazione del
+logfile a livello di sistema operativo è documentata in:
+
+```text
+docs/it/installation/LOGROTATE.md
+```
 
 ### Compatibilità
 
