@@ -42,13 +42,57 @@
     let currentRangeHours = 24;
 
 
+    function formatTick(
+        isoTimestamp,
+        rangeHours
+    ) {
+
+        /*
+         * Timestamps are naive local-time ISO strings
+         * ("YYYY-MM-DDTHH:MM:SS"), so they are parsed
+         * manually instead of through Date() to avoid any
+         * implicit timezone shift.
+         */
+
+        const [
+            datePart,
+            timePart,
+        ] = isoTimestamp.split("T");
+
+        const time =
+            (timePart || "")
+                .slice(0, 5);
+
+        if (rangeHours <= 24) {
+            return time;
+        }
+
+        const dateFields =
+            (datePart || "")
+                .split("-");
+
+        const day =
+            dateFields[2] || "";
+
+        const month =
+            dateFields[1] || "";
+
+        return `${day}/${month} ${time}`;
+    }
+
+
     function buildChart(
-        samples
+        samples,
+        rangeHours
     ) {
 
         const labels =
             samples.map(
-                (sample) => sample.timestamp
+                (sample) =>
+                    formatTick(
+                        sample.timestamp,
+                        rangeHours
+                    )
             );
 
         const cpuTempData =
@@ -66,6 +110,15 @@
             samples.map(
                 (sample) =>
                     sample.reflector_connection_count
+            );
+
+        const fullTimestamps =
+            samples.map(
+                (sample) =>
+                    sample.timestamp.replace(
+                        "T",
+                        " "
+                    )
             );
 
         const datasets = [
@@ -120,6 +173,24 @@
                     interaction: {
                         mode: "index",
                         intersect: false,
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                title: (items) => {
+
+                                    const index =
+                                        items[0]
+                                            ?.dataIndex;
+
+                                    return (
+                                        fullTimestamps[
+                                            index
+                                        ] || ""
+                                    );
+                                },
+                            },
+                        },
                     },
                     scales: {
                         x: {
@@ -182,7 +253,8 @@
                 await response.json();
 
             buildChart(
-                data.samples || []
+                data.samples || [],
+                hours
             );
 
         } catch (error) {
