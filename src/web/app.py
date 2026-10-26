@@ -6,7 +6,9 @@ and REST API.
 """
 
 from copy import deepcopy
+from datetime import datetime, timedelta
 import json
+import os
 from pathlib import Path
 import secrets
 from threading import RLock
@@ -34,6 +36,10 @@ from ..modules.reflector import ReflectorMonitor
 from ..modules.svxlink import SvxLinkMonitor
 from ..modules.system import SystemMonitor
 from ..services.logfile import IncrementalLogReader
+from ..services.temperature_log import (
+    TemperatureLogger,
+    TemperatureSample,
+)
 from .auth import (
     AUTH_FILE,
     authenticate,
@@ -178,6 +184,78 @@ operational_log = IncrementalLogReader(
     history_limit=1000,
     initial_lines=200,
 )
+
+
+# ============================================================
+# Temperature / activity logger
+# ============================================================
+#
+# Groundwork for a future cooling-fan control policy: samples
+# cpu_temp together with the EchoLink/Reflector activity signals
+# needed to later correlate thermal load with transmission
+# activity. This module only collects and persists data; it does
+# not control any hardware.
+#
+# The background sampler only starts when explicitly enabled by
+# the deployment environment (see
+# install/systemd/svxguardian.service.template). This keeps
+# `pytest` runs fully deterministic: no background thread
+# competes with tests that monkeypatch Guardian.run().
+
+TEMPERATURE_LOG_ENABLED = (
+    os.environ.get(
+        "SVXGUARDIAN_ENABLE_TEMPERATURE_LOG"
+    )
+    == "1"
+)
+
+temperature_logger = TemperatureLogger(
+    log_file=(
+        guardian.config.STATE_DIRECTORY
+        / "temperature_log.csv"
+    ),
+    sample_interval=15.0,
+    retention=timedelta(days=7),
+)
+
+
+def _sample_temperature() -> TemperatureSample | None:
+    """
+    Sample the current node temperature and activity state.
+
+    Reuses the normal Guardian monitoring cycle so the sampled
+    EchoLink/Reflector fields are always consistent with what the
+    dashboard itself would show at that moment.
+    """
+
+    with guardian_lock:
+        guardian.run()
+
+        state = guardian.state
+
+        return TemperatureSample(
+            timestamp=datetime.now(),
+            cpu_temp=state.cpu_temp,
+            echolink_connection_count=(
+                state.echolink_connection_count
+            ),
+            echolink_transmitting=(
+                state.echolink_transmitting
+            ),
+            reflector_connection_count=(
+                state.reflector_connection_count
+            ),
+            reflector_transmitting=(
+                state.reflector_transmitting
+            ),
+        )
+
+
+if TEMPERATURE_LOG_ENABLED:
+    temperature_logger.start(
+        _sample_temperature
+    )
+
 
 # ============================================================
 # Project paths
@@ -643,6 +721,24 @@ def system_page():
     return render_template(
         "dashboard/system.html",
         **build_page_context(),
+    )
+
+
+@app.route("/temperature")
+def temperature_page():
+    """
+    Render the CPU temperature and activity history page.
+    """
+
+    context = build_page_context()
+
+    context["temperature_log_available"] = (
+        temperature_logger.available
+    )
+
+    return render_template(
+        "dashboard/temperature.html",
+        **context,
     )
 
 
@@ -1248,6 +1344,58 @@ def api_system():
 
             "uptime":
                 state_snapshot.uptime,
+        }
+    )
+
+
+@app.route("/api/temperature")
+def api_temperature():
+    """
+    Return recorded temperature/activity history as JSON.
+
+    This endpoint only reads the already-logged, retention-bounded
+    CSV history produced by the background sampler. It never
+    executes Guardian.run().
+    """
+
+    hours_value = request.args.get(
+        "hours",
+        "24",
+    )
+
+    try:
+        hours = max(
+            1,
+            min(
+                24 * 7,
+                int(hours_value),
+            ),
+        )
+
+    except (
+        TypeError,
+        ValueError,
+    ):
+        hours = 24
+
+    since = (
+        datetime.now()
+        - timedelta(hours=hours)
+    )
+
+    samples = temperature_logger.read_samples(
+        since=since
+    )
+
+    return jsonify(
+        {
+            "available":
+                temperature_logger.available,
+
+            "samples": [
+                sample.to_dict()
+                for sample in samples
+            ],
         }
     )
 

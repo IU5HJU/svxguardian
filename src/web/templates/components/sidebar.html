@@ -34,6 +34,21 @@
 
         <a
             class="svx-sidebar-link
+            {% if request.endpoint == 'temperature_page' %}
+                active
+            {% endif %}"
+            href="{{ url_for('temperature_page', lang=language) }}"
+        >
+            <i class="fa-solid fa-chart-line"></i>
+
+            <span>
+                {{ t("TEMPERATURE") }}
+            </span>
+        </a>
+
+
+        <a
+            class="svx-sidebar-link
             {% if request.endpoint == 'svxlink_page' %}
                 active
             {% endif %}"

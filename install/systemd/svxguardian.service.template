@@ -27,6 +27,7 @@ Restart=on-failure
 RestartSec=5
 
 Environment=PYTHONUNBUFFERED=1
+Environment=SVXGUARDIAN_ENABLE_TEMPERATURE_LOG=1
 
 StandardOutput=journal
 StandardError=journal

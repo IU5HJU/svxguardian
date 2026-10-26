@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="svx-dashboard-layout">
+
+    {% include "components/sidebar.html" %}
+
+
+    <section
+        class="svx-dashboard-content"
+        data-temperature-chart
+        data-temperature-endpoint="{{ url_for('api_temperature') }}"
+        data-label-cpu-temp="{{ t('CPU_TEMP') }}"
+        data-label-echolink="{{ t('ECHOLINK_CONNECTION_COUNT') }}"
+        data-label-reflector="{{ t('REFLECTOR_CONNECTION_COUNT') }}"
+    >
+
+        <div class="row g-4">
+
+            <div class="col-12">
+
+                <div class="card">
+
+                    <div
+                        class="
+                            card-header
+                            d-flex
+                            align-items-center
+                            justify-content-between
+                            flex-wrap
+                            gap-2
+                        "
+                    >
+
+                        <span>
+                            <i class="fa-solid fa-chart-line"></i>
+                            {{ t("CPU_TEMP_HISTORY") }}
+                        </span>
+
+
+                        {% if temperature_log_available %}
+
+                            <div
+                                class="btn-group"
+                                role="group"
+                            >
+
+                                <button
+                                    type="button"
+                                    class="btn btn-sm btn-outline-secondary active"
+                                    data-temperature-range="24"
+                                >
+                                    {{ t("TEMPERATURE_RANGE_24H") }}
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="btn btn-sm btn-outline-secondary"
+                                    data-temperature-range="168"
+                                >
+                                    {{ t("TEMPERATURE_RANGE_7D") }}
+                                </button>
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="card-body">
+
+                        {% if temperature_log_available %}
+
+                            <canvas
+                                data-temperature-canvas
+                                height="100"
+                            ></canvas>
+
+                        {% else %}
+
+                            <p class="text-muted mb-0">
+                                {{ t("TEMPERATURE_LOG_UNAVAILABLE") }}
+                            </p>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+{% if temperature_log_available %}
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+
+    <script
+        src="{{ url_for(
+            'static',
+            filename='js/temperature-chart.js'
+        ) }}"
+    ></script>
+
+{% endif %}
+
+{% endblock %}
