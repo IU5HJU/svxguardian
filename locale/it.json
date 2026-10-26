@@ -98,8 +98,11 @@
     "LAST_EVENTS": "Ultimi eventi",
     "GUARDIAN_STARTED": "SVX Guardian avviato",
 
+    "TEMPERATURE": "Temperatura",
     "CPU_TEMP_HISTORY": "Storico temperatura CPU",
-    "HISTORICAL_CHART_SOON": "Grafico storico disponibile prossimamente",
+    "TEMPERATURE_RANGE_24H": "Ultime 24 ore",
+    "TEMPERATURE_RANGE_7D": "Ultimi 7 giorni",
+    "TEMPERATURE_LOG_UNAVAILABLE": "Registrazione non ancora disponibile su questa installazione",
 
     "CALLSIGN": "Nominativo",
     "NODE": "Nodo",

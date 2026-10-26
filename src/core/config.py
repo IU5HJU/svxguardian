@@ -36,6 +36,7 @@ class PathConfig:
     log_directory: Path = Path("/var/log")
     cache_directory: Path = Path("/var/cache/svxguardian")
     runtime_directory: Path = Path("/run/svxguardian")
+    state_directory: Path = Path("/var/lib/svxguardian")
 
 
 @dataclass(frozen=True)
@@ -360,3 +361,22 @@ class ConfigManager:
         """
 
         return self.paths.runtime_directory
+
+    @property
+    def STATE_DIRECTORY(self) -> Path:
+        """
+        Return the persistent state directory.
+
+        This matches the systemd StateDirectory= declared by the
+        SVX Guardian service unit. Data that must survive restarts,
+        such as the temperature/activity log, is stored here.
+        """
+
+        environment_value = os.getenv(
+            "SVXGUARDIAN_STATE_DIRECTORY"
+        )
+
+        if environment_value:
+            return Path(environment_value)
+
+        return self.paths.state_directory
