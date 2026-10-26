@@ -26,6 +26,16 @@ class ReflectorMonitor(BaseMonitor):
     LOG_FILE = Path("/var/log/svxlink")
     READ_BLOCK_SIZE = 8192
 
+    # Upper bound on how far check() and _reconstruct_connected_nodes()
+    # scan the logfile backwards looking for the most recent connection
+    # marker. Without this bound, a logfile that has never been rotated
+    # turns every single dashboard request into a full-file scan: the
+    # cost grows without limit as the file grows, instead of staying
+    # proportional to recent activity. 2 MiB comfortably covers several
+    # days of typical SvxLink logging while keeping the worst case fast
+    # even on a Raspberry Pi.
+    MAX_BACKWARD_SCAN_BYTES = 2 * 1024 * 1024
+
     CONNECTING_PATTERN = re.compile(
         r"ReflectorLogic: Connecting to service"
     )
@@ -117,7 +127,9 @@ class ReflectorMonitor(BaseMonitor):
         connection_state_found = False
         previous_disconnect_found = False
 
-        for line in self._read_lines_reverse():
+        for line in self._read_lines_reverse(
+            max_bytes=self.MAX_BACKWARD_SCAN_BYTES
+        ):
             if state.reflector_tg == 0:
                 talkgroup = self._extract_talkgroup(line)
 
@@ -187,7 +199,9 @@ class ReflectorMonitor(BaseMonitor):
 
         events: list[tuple[str, str]] = []
 
-        for line in self._read_lines_reverse():
+        for line in self._read_lines_reverse(
+            max_bytes=self.MAX_BACKWARD_SCAN_BYTES
+        ):
             connected_nodes = self._extract_connected_nodes(
                 line
             )
@@ -272,9 +286,19 @@ class ReflectorMonitor(BaseMonitor):
         except ValueError:
             return None
 
-    def _read_lines_reverse(self) -> Iterator[str]:
+    def _read_lines_reverse(
+        self,
+        max_bytes: int | None = None,
+    ) -> Iterator[str]:
         """
         Read the SvxLink log backwards, one line at a time.
+
+        When max_bytes is set, reading stops once that many bytes
+        have been scanned from the end of the file, even if the
+        start of the file has not been reached. A neglected or
+        oversized logfile (no rotation configured) must not turn
+        every dashboard request into a multi-second full-file scan;
+        callers accept a bounded, most-recent window instead.
         """
 
         if not self.log_file.is_file():
@@ -285,8 +309,16 @@ class ReflectorMonitor(BaseMonitor):
                 log_file.seek(0, 2)
                 position = log_file.tell()
                 buffer = b""
+                scanned = 0
+                reached_start = False
 
                 while position > 0:
+                    if (
+                        max_bytes is not None
+                        and scanned >= max_bytes
+                    ):
+                        break
+
                     block_size = min(
                         self.READ_BLOCK_SIZE,
                         position,
@@ -296,6 +328,7 @@ class ReflectorMonitor(BaseMonitor):
                     log_file.seek(position)
 
                     block = log_file.read(block_size)
+                    scanned += len(block)
                     buffer = block + buffer
 
                     lines = buffer.split(b"\n")
@@ -306,8 +339,14 @@ class ReflectorMonitor(BaseMonitor):
                             "utf-8",
                             errors="ignore",
                         )
+                else:
+                    reached_start = True
 
-                if buffer:
+                # A buffer left over after stopping at max_bytes is a
+                # fragment of an older line, not a complete one: it
+                # must only be yielded once the real start of the
+                # file was reached.
+                if buffer and reached_start:
                     yield buffer.decode(
                         "utf-8",
                         errors="ignore",
