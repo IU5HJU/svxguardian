@@ -2,6 +2,14 @@
 
 set -euo pipefail
 
+SCRIPT_DIRECTORY="$(
+    cd "$(dirname "${BASH_SOURCE[0]}")"
+    pwd
+)"
+
+# shellcheck source=install/ssl/ssl-common.sh
+source "${SCRIPT_DIRECTORY}/ssl-common.sh"
+
 
 echo
 echo "SVX Guardian SSL Certificate Installer"
@@ -65,15 +73,13 @@ echo
 echo "Checking certificate hostname..."
 echo
 
-if openssl x509 \
-    -in "${SOURCE_CERTIFICATE}" \
-    -noout \
-    -checkhost "${HOSTNAME}" \
-    >/dev/null 2>&1
+if ssl_certificate_matches_hostname "${SOURCE_CERTIFICATE}" "${HOSTNAME}"
 then
     echo "[OK] Certificate matches hostname: ${HOSTNAME}"
 else
     echo "[ERROR] Certificate does not match hostname: ${HOSTNAME}"
+    echo "        (the PEM file must start with the server certificate,"
+    echo "        followed by the intermediate chain)"
     echo "SSL_CERTIFICATE_INSTALL_STATUS=FAILED"
     exit 1
 fi
@@ -205,11 +211,7 @@ echo
 echo "Performing final verification..."
 echo
 
-if ! openssl x509 \
-    -in "${DESTINATION_CERTIFICATE}" \
-    -noout \
-    -checkhost "${HOSTNAME}" \
-    >/dev/null 2>&1
+if ! ssl_certificate_matches_hostname "${DESTINATION_CERTIFICATE}" "${HOSTNAME}"
 then
     echo
     echo "ERROR: installed certificate failed hostname verification."
