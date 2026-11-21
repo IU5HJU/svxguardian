@@ -29,6 +29,9 @@ SCRIPT_DIRECTORY="$(
     pwd
 )"
 
+# shellcheck source=install/ssl/ssl-common.sh
+source "${SCRIPT_DIRECTORY}/ssl-common.sh"
+
 CREATE_CSR_SCRIPT="${SCRIPT_DIRECTORY}/create-csr.sh"
 VERIFY_CERTIFICATE_SCRIPT="${SCRIPT_DIRECTORY}/verify-certificate.sh"
 INSTALL_CERTIFICATE_SCRIPT="${SCRIPT_DIRECTORY}/install-certificate.sh"
@@ -171,13 +174,11 @@ case "${SELECTION}" in
         echo
 
 
-        if ! openssl x509 \
-            -in "${SOURCE_PEM}" \
-            -noout \
-            -checkhost "${HOSTNAME}" \
-            >/dev/null 2>&1
+        if ! ssl_certificate_matches_hostname "${SOURCE_PEM}" "${HOSTNAME}"
         then
             echo "[ERROR] Certificate does not match ${HOSTNAME}"
+            echo "        (the PEM file must start with the server certificate,"
+            echo "        followed by the intermediate chain)"
             echo "HTTPS_SETUP_STATUS=FAILED"
             exit 1
         fi

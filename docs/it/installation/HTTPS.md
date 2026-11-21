@@ -263,12 +263,20 @@ install/ssl/create-csr.sh
 install/ssl/verify-certificate.sh
 install/ssl/install-certificate.sh
 install/ssl/setup-https.sh
+install/ssl/ssl-common.sh
 
 install/apache/configure-apache.sh
 install/apache/svxguardian.conf.template
 ```
 
 ---
+
+`ssl-common.sh` non si esegue direttamente: lo caricano gli altri script e
+contiene il controllo del nome. `openssl x509 -checkhost` scrive "does match"
+oppure "does NOT match" ma esce con codice 0 in entrambi i casi, quindi gli
+script leggono il testo che scrive, non il codice di uscita. Il file PEM deve
+**cominciare con il certificato del server**, seguito dalla catena intermedia:
+un file che comincia con la catena viene rifiutato.
 
 ## create-csr.sh
 
@@ -368,7 +376,8 @@ Lo script di configurazione Apache:
 4. verifica il backend Gunicorn;
 5. verifica la presenza del certificato e della chiave privata;
 6. abilita i moduli Apache necessari;
-7. crea un backup della configurazione SVX Guardian esistente;
+7. se il sito Apache di SVX Guardian già presente serve un **hostname diverso**, mostra un avviso e chiede conferma prima di sostituirlo (di base: no);
+   poi crea un backup della configurazione SVX Guardian esistente;
 8. genera la configurazione Apache dal template;
 9. aggiunge una direttiva `Listen` se viene utilizzata una porta locale non standard;
 10. esegue `apache2ctl configtest`;

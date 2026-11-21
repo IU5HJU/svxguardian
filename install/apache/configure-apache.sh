@@ -24,6 +24,9 @@ SCRIPT_DIRECTORY="$(
     pwd
 )"
 
+# shellcheck source=install/ssl/ssl-common.sh
+source "${SCRIPT_DIRECTORY}/../ssl/ssl-common.sh"
+
 TEMPLATE_FILE="${SCRIPT_DIRECTORY}/svxguardian.conf.template"
 
 APACHE_SITE_AVAILABLE="/etc/apache2/sites-available/svxguardian.conf"
@@ -108,11 +111,7 @@ fi
 echo
 echo "Checking certificate hostname..."
 
-if ! openssl x509 \
-    -in "${CERTIFICATE_FILE}" \
-    -noout \
-    -checkhost "${HOSTNAME}" \
-    >/dev/null 2>&1
+if ! ssl_certificate_matches_hostname "${CERTIFICATE_FILE}" "${HOSTNAME}"
 then
     echo "[ERROR] Certificate does not match ${HOSTNAME}"
     exit 1
@@ -125,6 +124,7 @@ echo
 echo "Checking backend..."
 
 if curl \
+    --noproxy '*' \
     --silent \
     --fail \
     --max-time 5 \
@@ -151,6 +151,47 @@ a2enmod headers >/dev/null
 
 
 if [[ -f "${APACHE_SITE_AVAILABLE}" ]]; then
+
+    # The site file is always called svxguardian.conf: configuring a
+    # different hostname replaces the site that is already there. Ask
+    # before doing it, so that a second hostname does not silently take
+    # over the first one.
+    EXISTING_HOSTNAME="$(
+        awk '
+            /^[[:space:]]*ServerName[[:space:]]+/ {
+                print $2
+                exit
+            }
+        ' "${APACHE_SITE_AVAILABLE}"
+    )"
+
+    if [[ -n "${EXISTING_HOSTNAME}" \
+        && "${EXISTING_HOSTNAME}" != "${HOSTNAME}" ]]
+    then
+        echo
+        echo "WARNING: the existing SVX Guardian Apache site serves:"
+        echo "    ${EXISTING_HOSTNAME}"
+        echo
+        echo "You are configuring:"
+        echo "    ${HOSTNAME}"
+        echo
+        echo "Continuing REPLACES the existing site (a backup is made)."
+        echo
+
+        read -r -p "Replace the existing site? [y/N]: " REPLACE_SITE \
+            || REPLACE_SITE=""
+
+        case "${REPLACE_SITE}" in
+            y|Y|yes|YES)
+                ;;
+            *)
+                echo
+                echo "Cancelled: the existing Apache site was not changed."
+                exit 1
+                ;;
+        esac
+    fi
+
     TIMESTAMP="$(date '+%Y%m%d-%H%M%S')"
 
     BACKUP_FILE="${APACHE_SITE_AVAILABLE}.backup-${TIMESTAMP}"
@@ -239,6 +280,7 @@ echo
 echo "Testing local HTTPS endpoint..."
 
 if curl \
+    --noproxy '*' \
     --silent \
     --fail \
     --max-time 10 \
